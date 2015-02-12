@@ -3,12 +3,14 @@ html
   head
     meta(charset='utf-8')
     title Data-Driven
-    link(href='/app/css/reveal.css')
-    script(src='/app/js/reveal.js')
-    script(src='/app/plugin/markdown/markdown.js')
-    script(src='/app/js/app.js')
+    link(rel='stylesheet', href='/app/css/reveal.css')
+    link(rel='stylesheet', href='/app/css/simple.css', id='theme')
   body
     h1 Data-Driven
     .reveal
       .slides
-        section(data-markdown='/app/md/test1.md',data-seperator="^\n- - -\n")
+        section(data-markdown='/app/md/test1.md', data-separator="---")
+    script(src='/app/js/reveal.js')
+    script(src='/app/plugin/markdown/marked.js')
+    script(src='/app/plugin/markdown/markdown.js')
+    script(src='/app/js/app.js')
