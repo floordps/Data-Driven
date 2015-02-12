@@ -11,5 +11,8 @@
   "license": " ",
   "dependencies": {
     "express": "^4.11.2"
+  },
+  "engines": {
+    "node": "0.10.33"
   }
 }
