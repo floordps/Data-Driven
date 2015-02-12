@@ -1,7 +1,10 @@
 Reveal.initialize({
   loop: true,
-  slideNumber: true,
   controls: true,
   autoSlide: 3000,
-  keyboard: true
+  keyboard: true,
+  width: 960,
+  height: 700,
+  margin: 0.1,
+  progress: false
 });
