@@ -10,6 +10,10 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl : 'partials/master.jade',
       controller : 'masterCtrl'
     })
+    .when('/login', {
+      templateUrl : 'partials/login.jade',
+      controller : 'clientCtrl'
+    })
     .otherwise({
       redirectTo: '/'
     });
