@@ -9,7 +9,7 @@ Reveal.initialize({
   multiplex: {
     secret: null,
     id: '1',
-    url: '127.0.0.1:5000'
+    url: ''
   },
   dependencies: [
     { src: '/socket.io/socket.io.js', async: true },
