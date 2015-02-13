@@ -1,11 +1,14 @@
 Reveal.initialize({
-  loop: true,
   controls: true,
   keyboard: true,
   width: 960,
   height: 700,
   margin: 0.1,
-  progress: false,
+  progress: true,
+  transition: 'fade',
+  transitionSpeed: 'slow',
+  mouseWheel: true,
+  autoSlide: 5000,
   multiplex: {
     secret: null,
     id: '1',
