@@ -1,14 +1,16 @@
 doctype html
-html
+html(ng-app='data-driven')
   head
     meta(charset='utf-8')
     title Data-Driven
     link(rel='stylesheet', href='/app/css/reveal.css')
     link(rel='stylesheet', href='/app/css/simple.css', id='theme')
-  body
-    .reveal
-      .slides
-        section(data-markdown='/app/md/test1.md', data-separator="^---$")
-    script(src='/app/js/head.min.js')
-    script(src='/app/js/reveal.js')
-    script(src='/app/js/app.js')
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css')
+    script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js')
+    script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js')
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular-route.min.js")
+    script(src='/app/app.js')
+    script(src='/app/controller/controllers.js')
+
+  body(ng-view)

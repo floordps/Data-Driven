@@ -1,4 +1,5 @@
-Reveal.initialize({
+$(function(){
+  Reveal.initialize({
   controls: true,
   keyboard: true,
   width: 960,
@@ -8,7 +9,6 @@ Reveal.initialize({
   transition: 'fade',
   transitionSpeed: 'slow',
   mouseWheel: true,
-  autoSlide: 5000,
   multiplex: {
     secret: null,
     id: '1',
@@ -21,4 +21,5 @@ Reveal.initialize({
     { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
     { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
   ]
+  });
 });

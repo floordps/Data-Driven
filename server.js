@@ -14,9 +14,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', function(req, res, next) {
   res.render('index');
 });
-app.get('/master', function(req, res, next) {
-  res.render('master');
+app.get('/partials/:id', function(req, res, next) {
+  res.render('partials/' + req.params.id);
 });
+/*app.get('/master', function(req, res, next) {
+  res.render('master');
+});*/
+
 app.use('/app', express.static(__dirname + '/app'));
 io.sockets.on('connection', function(socket) {
   socket.on('slidechanged', function(data) {
