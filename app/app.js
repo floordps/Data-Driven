@@ -14,6 +14,10 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl : 'partials/login.jade',
       controller : 'clientCtrl'
     })
+    .when('/editor', {
+      templateUrl : 'partials/editor.jade',
+      controller : 'editorCtrl'
+    })
     .otherwise({
       redirectTo: '/'
     });
