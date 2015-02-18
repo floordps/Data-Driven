@@ -6,7 +6,7 @@ $(function(){
   height: 700,
   margin: 0.1,
   progress: true,
-  transition: 'fade',
+  transition: 'zoom',
   transitionSpeed: 'slow',
   mouseWheel: true,
   multiplex: {
