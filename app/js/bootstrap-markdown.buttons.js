@@ -25,6 +25,9 @@ $(function() {
           toggle: false,
           icon: 'fa fa-line-chart',
           callback: function(e) {
+            $('#tableModal').modal({
+              show: true
+            });
           }
         }]
       }, {
@@ -35,6 +38,9 @@ $(function() {
           toggle: false,
           icon: 'fa fa-table',
           callback: function(e) {
+            $('#tableModal').modal({
+              show: true
+            });
           }
         }]
       }]
