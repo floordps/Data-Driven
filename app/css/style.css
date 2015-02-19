@@ -2,3 +2,11 @@
   width: 25%;
   margin-left: 25%;
 }
+
+form[name=tableForm] input.ng-dirty.ng-invalid  {
+  border-color: red;
+}
+
+form[name=tableForm] input.ng-dirty.ng-valid  {
+  border-color: green;
+}
