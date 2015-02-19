@@ -3,6 +3,7 @@ $(function() {
     iconlibrary: 'fa',
     hiddenButtons: 'cmdPreview',
     disabledButtons: 'cmdPreview',
+    width: '600',
     additionalButtons: [
       [{
         name: 'slideButton',
@@ -25,7 +26,7 @@ $(function() {
           toggle: false,
           icon: 'fa fa-line-chart',
           callback: function(e) {
-            $('#tableModal').modal({
+            $('#graphModal').modal({
               show: true
             });
           }
@@ -40,6 +41,26 @@ $(function() {
           callback: function(e) {
             $('#tableModal').modal({
               show: true
+            });
+            $('#createTable').on('click', function() {
+              var rows = document.getElementById('rows').value;
+              var columns = document.getElementById('columns').value;
+              var table = '\n';
+              rows++;
+              for(var i = 0; i < rows; i++) {
+                table = table + '|';
+                for (var j = 0; j < columns; j++) {
+                  if (i == 1) {
+                    table = table + '------|';
+                  } else {
+                    table = table + '      |';
+                  }
+                }
+                table = table + '\n';
+              }
+              e.replaceSelection(table);
+              e.setSelection(getSelection(), getSelection()+table.length);
+              $('#tableModal').modal('hide');
             });
           }
         }]
