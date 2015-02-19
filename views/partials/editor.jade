@@ -3,7 +3,7 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
 .container
   .row
     form
-      textarea#text-editor(name='content')
+      textarea#text-editor(name='content', rows='20')
 #graphModal.modal.fade(role='dialog')
   .modal-content
     .modal-header
@@ -17,8 +17,15 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
   .modal-content
     .modal-header
       button.close(type='button', data-dismiss='modal', aria-label='close')
-      h3 Table
+      h4 Table
     .modal-body
-      form here
+      form.form-horizontal(name='tableForm', novalidate)
+        .row
+          .form-group.col-xs-6.col-sm-6.col-md-6.col-lg-6
+            input#rows.form-control.col-xs-offset-6.col-sm-offset-6.col-md-offset-6.col-lg-offset-6(type='number', name='rows', placeholder='# of rows', min=1, ng-model='rows', required)
+        .row
+          .form-group.col-xs-6.col-sm-6.col-md-6.col-lg-6
+            input#columns.form-control.col-xs-offset-6.col-sm-offset-6.col-md-offset-6.col-lg-offset-6(type='number', name='columns', placeholder='# of columns', min=1, ng-model='columns', required)
     .modal-footer
-      button.btn.btn-primary(type='button') Create Table
+      button#createTable.btn.btn-primary(type='button', ng-disabled='!tableForm.$valid') Create Table
+      button.btn.btn-default(type='button', data-dismiss='modal') Close
