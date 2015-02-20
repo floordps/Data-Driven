@@ -5,12 +5,11 @@ app.controller('clientCtrl', function($scope, $timeout, $compile) {
                 }];
                 Reveal.addEventListener('ready', function(event) {
                   $compile($('.graph'))($scope);
-                  console.log('ready');
                 });
 });
 
 app.controller('editorCtrl', function($scope) {
-  
+
 });
 
 app.controller('graph', function($scope) {
