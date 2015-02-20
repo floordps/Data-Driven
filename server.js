@@ -22,6 +22,7 @@ app.get('/partials/:id', function(req, res, next) {
 });*/
 
 app.use('/app', express.static(__dirname + '/app'));
+app.use('/bower', express.static(__dirname + '/bower_components'));
 io.sockets.on('connection', function(socket) {
   socket.on('slidechanged', function(data) {
     socket.broadcast.emit(data.socketId, data);
