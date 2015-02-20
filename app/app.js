@@ -1,4 +1,4 @@
-var app = angular.module('data-driven', ['ngRoute']);
+var app = angular.module('data-driven', ['ngRoute', 'nvd3ChartDirectives']);
 
 app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
