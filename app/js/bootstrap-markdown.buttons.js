@@ -42,24 +42,31 @@ $(function() {
             $('#tableModal').modal({
               show: true
             });
-            $('#createTable').on('click', function() {
+            $('#createTable').one('click', function() {
               var rows = document.getElementById('rows').value;
               var columns = document.getElementById('columns').value;
               var table = '\n';
-              rows++;
-              for(var i = 0; i < rows; i++) {
+              if (document.getElementById('headers').checked) {
+                table = table + '|';
+                for (var i = 0; i < columns; i++) {
+                  table = table + '      |';
+                }
+                table = table + '\n';
                 table = table + '|';
                 for (var j = 0; j < columns; j++) {
-                  if (i == 1) {
-                    table = table + '------|';
-                  } else {
-                    table = table + '      |';
-                  }
+                  table = table + '------|';
                 }
                 table = table + '\n';
               }
+              for(var k = 0; k < rows; k++) {
+                table = table + '|';
+                for (var m = 0; m < columns; m++) {
+                  table = table + '      |';
+                }
+                table = table + '\n';
+              }
+              e.setSelection(e.getSelection(), e.getSelection()+table.length);
               e.replaceSelection(table);
-              e.setSelection(getSelection(), getSelection()+table.length);
               $('#tableModal').modal('hide');
             });
           }
