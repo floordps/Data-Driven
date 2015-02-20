@@ -10,3 +10,4 @@ text 2
 |  a     |  bc    |
 ---
 # done
+<!-- .element: class="graph" nvd3-line-chart="x" data="exampleData" width="600" height="350"-->
