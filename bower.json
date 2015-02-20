@@ -1,0 +1,21 @@
+{
+  "name": "Data-Driven",
+  "version": "0.0.1",
+  "homepage": "https://github.com/floordps/Data-Driven",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.5.5",
+    "nvd3": "~1.7.1",
+    "angularjs-nvd3-directives": "~0.0.7"
+  }
+}
