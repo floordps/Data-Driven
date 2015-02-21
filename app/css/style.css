@@ -10,3 +10,14 @@ form[name=tableForm] input.ng-dirty.ng-invalid  {
 form[name=tableForm] input.ng-dirty.ng-valid  {
   border-color: green;
 }
+
+.graph {
+  width: 600px;
+  height: 350px;
+}
+
+.graph svg {
+  margin: auto;
+  width: auto;
+  height: auto;
+}
