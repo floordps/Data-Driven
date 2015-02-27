@@ -2,13 +2,10 @@ $(function() {
   Reveal.initialize({
     controls: true,
     keyboard: true,
-    width: 960,
-    height: 700,
     margin: 0.1,
     progress: true,
-    transition: 'fade',
+    transition: 'zoom',
     transitionSpeed: 'slow',
-    mouseWheel: true,
     multiplex: {
       secret: 'secret123',
       id: '1',
