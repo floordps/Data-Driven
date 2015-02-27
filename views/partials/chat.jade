@@ -17,4 +17,4 @@
         .input-group
           input.form-control.input-md(type='text', placeholder='Type your message here...', ng-model='message', required)
           span.input-group-btn
-            button.btn.btn-success(ng-click='sendMessage()') Send
+            button.btn.btn-success(ng-click='sendMessage()', ng-disabled='!chatMessage.$valid') Send
