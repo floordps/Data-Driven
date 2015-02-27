@@ -12,9 +12,13 @@ app.config(['$routeProvider', function($routeProvider) {
     })
     .when('/login', {
       templateUrl : 'partials/login.jade',
-      controller : 'clientCtrl'
+      controller : ''
     })
     .when('/editor', {
+      templateUrl : 'partials/editor.jade',
+      controller : 'editorCtrl'
+    })
+    .when('/editor/:id', {
       templateUrl : 'partials/editor.jade',
       controller : 'editorCtrl'
     })
