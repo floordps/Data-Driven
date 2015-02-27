@@ -8,7 +8,7 @@ app.config(['$routeProvider', function($routeProvider) {
     })
     .when('/master', {
       templateUrl : 'partials/master.jade',
-      controller : 'masterCtrl'
+      controller : 'clientCtrl'
     })
     .when('/login', {
       templateUrl : 'partials/login.jade',
