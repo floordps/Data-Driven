@@ -1,0 +1,20 @@
+#chat-panel.container-fluid.row-fluid.col-xs-2.col-sm.2.col-md-2.col-lg-2
+  .panel.panel-primary
+    .panel-heading
+      span.fa.fa-comments 
+      strong &nbsp Chat
+    .panel-body
+      ul.chat
+        li.left.clearfix(ng-repeat='message in messages track by $index')
+          span.pull-left 
+            .chat-body.clearfix
+              .header
+                strong {{message.user}}: 
+              p
+                | {{message.text}}
+    .panel-footer
+      form.form-inline(name='chatMessage', novalidate)
+        .input-group
+          input.form-control.input-md(type='text', placeholder='Type your message here...', ng-model='message', required)
+          span.input-group-btn
+            button.btn.btn-success(ng-click='sendMessage()') Send
