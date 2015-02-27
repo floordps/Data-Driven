@@ -3,12 +3,18 @@
   margin-left: 25%;
 }
 
+/* Editor modal form validator */
 form[name=tableForm] input.ng-dirty.ng-invalid  {
   border-color: red;
 }
 
 form[name=tableForm] input.ng-dirty.ng-valid  {
   border-color: green;
+}
+
+/* NVD3 Graph */
+.reveal p {
+  margin: auto;
 }
 
 .graph {
@@ -20,4 +26,49 @@ form[name=tableForm] input.ng-dirty.ng-valid  {
   margin: auto;
   width: auto;
   height: auto;
+}
+
+/* Reveal */
+.slides {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.controls {
+  left: 10px !important;
+}
+
+/* Chat */
+.panel {
+  height: 100%;
+}
+
+.chat {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chat li {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px dotted #B3A9A9;
+}
+
+.chat-body {
+  word-break: break-all;
+}
+
+.chat li .chat-body p {
+  margin: 0;
+  color: #777;
+}
+
+.panel-body {
+  overflow-y: auto;
+  height: 90%;
+}
+
+#chat-panel {
+  height: 100%;
 }
