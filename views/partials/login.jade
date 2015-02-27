@@ -1,18 +1,6 @@
 .container
   .row
-    form.form-horizontal(novalidate)
-      .form-group
-        label.col-sm-1.col-md-1.col-xs-1.col-lg-1(for='inputUsername') Username
-        .col-sm-4.col-md-4.col-xs-4.col-lg-4
-          input.form-control#inputUsername(type='text', placeholder='Useranme')
-
-      .form-group
-        label.col-sm-1.col-md-1.col-xs-1.col-lg-1(for='inputPassword') Password
-        .col-sm-4.col-md-4.col-xs-4.col-lg-4
-          input.form-control#inputPassword(type='password', placeholder='Password')
+    form(action='/auth/google', method='post', novalidate).form-horizontal
       .form-group
         .col-sm-offset-1.col-md-offset-1.col-xs-offset-1.col-lg-offset-1.col-md-3.col-sm-3.col-xs-3.col-lg-3
           button.btn.btn-default(type='submit') Login
-  .row
-    p.col-sm-offset-1.col-md-offset-1.col-xs-offset-1.col-lg-offset-1
-      |No Account? Sign Up Now!
