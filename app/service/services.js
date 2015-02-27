@@ -18,6 +18,7 @@ app.factory('socket', function($rootScope) {
           }
         });
       });
+      $('.panel-body').animate({ scrollTop: $('.panel-body')[0].scrollHeight}, 1000);
     }
   };
 });
