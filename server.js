@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var server = app.listen(process.env.PORT || 5000);
 var io = require('socket.io')(server);
+var socket = require('./routes/socket.js');
 var bodyParser = require('body-parser');
 var jsforce = require('jsforce');
 
@@ -18,9 +19,7 @@ app.get('/', function(req, res, next) {
 app.get('/partials/:id', function(req, res, next) {
   res.render('partials/' + req.params.id);
 });
-/*app.get('/master', function(req, res, next) {
-  res.render('master');
-});*/
+
 var js = require('./jsConnect.json');
 app.post('/report/:id', function(req, res, next) {
   var conn = new jsforce.Connection({
@@ -43,8 +42,4 @@ app.post('/report/:id', function(req, res, next) {
 
 app.use('/app', express.static(__dirname + '/app'));
 app.use('/bower', express.static(__dirname + '/bower_components'));
-io.sockets.on('connection', function(socket) {
-  socket.on('slidechanged', function(data) {
-    socket.broadcast.emit(data.socketId, data);
-  });
-});
+io.sockets.on('connection', socket);
