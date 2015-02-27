@@ -16,8 +16,19 @@ app.controller('clientCtrl', function($scope, $timeout, $compile, $http) {
   });
 });
 
-app.controller('editorCtrl', function($scope) {
-
+app.controller('editorCtrl', function($scope, $routeParams, $http) {
+  var reportId = $routeParams.id;
+  $http.get('/editor/' + reportId).success(function(data) {
+    if(data) {
+      $('#text-editor').text(data.slides);
+    }
+  });
+  $('#editorSubmit').on('click', function(e) {
+    e.preventDefault();
+    $http.post('/editor/' + reportId, { id: reportId, slides: $('#text-editor').val() }).success(function(data) {
+      console.log('done');
+    });
+  });
 });
 
 app.controller('graph', function($scope) {
