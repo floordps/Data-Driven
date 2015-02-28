@@ -23,6 +23,15 @@ app.controller('clientCtrl', function($scope, socket) {
 
     $scope.message = '';
   };
+
+  $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
+    if (!(document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement)) {
+          $('#chat-panel').show();
+        }
+  });
 });
 
 app.controller('editorCtrl', function($scope) {
