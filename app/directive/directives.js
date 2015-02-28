@@ -5,6 +5,15 @@ app.directive('chat', function() {
   };
 });
 
+app.directive('drag', function() {
+  return {
+    restrict: 'A',
+    link:  function(scope, elem, attr) {
+      elem.draggable();
+    }
+  };
+});
+
 app.directive('audience', function($compile, $http) {
   return {
     restrict: 'E',
