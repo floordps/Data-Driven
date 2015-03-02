@@ -76,12 +76,11 @@ form[name=tableForm] input.ng-dirty.ng-valid  {
 }
 
 #chat-panel {
-  height: 50vh;
+  height: 50%;
   position: absolute;
   bottom: 10px;
   margin-right: 10px;
-  width: 300px;
+  width: 15%;
   z-index: 1000;
   right: 0px;
-  display: block;
 }
