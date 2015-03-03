@@ -27,8 +27,8 @@ app.directive('audience', function($compile, $http) {
           $http.post('/report/'+id).success(function(data) {
             var arr = data.factMap['T!T'].rows;
             var obj = [{
-              key: id,
-              values: arr.map(function(val, i) { return [ i, +new Date(val.dataCells[6].value) ]; })
+              key: "Report: " + id,
+              values: arr.map(function(val, i) { return [ val.dataCells[1].value, val.dataCells[2].value ]; })
             }];
             scope.graph[id] = obj;
           });
