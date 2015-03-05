@@ -112,7 +112,7 @@ form[name=tableForm] input.ng-dirty.ng-valid  {
 
 /* Reveal */
 .slides {
-  width: 100% !important;
+  width8100% !important;
   height: 100% !important;
 }
 
@@ -125,12 +125,15 @@ form[name=tableForm] input.ng-dirty.ng-valid  {
   width: 90%;
   margin: 0 auto;
   background-color: #FFF;
-  margin-top: 25px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px;
   border: 1px solid #8B4513;
+  height: 80%;
+  position: absolute;
+  bottom: 0;
+  right: 15px;
 }
 
 .chatHeading {
@@ -144,7 +147,7 @@ form[name=tableForm] input.ng-dirty.ng-valid  {
 }
 
 .chatBody {
-  height: 800px;
+  height: 80%;
   overflow-y: auto;
 }
 
@@ -170,6 +173,8 @@ form[name=tableForm] input.ng-dirty.ng-valid  {
 }
 
 .chatFooter {
+  position: absolute;
+  bottom: 0;
   height: 45px;
   border-top: 2px solid #8B4513;
 }
