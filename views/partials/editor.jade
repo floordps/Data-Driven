@@ -10,7 +10,12 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
       button.close(type='button', data-dismiss='modal', aria-label='close')
       h3 Graph
     .modal-body
-      form here
+      form
+        .row
+          .form-inline
+            .form-group
+              input.form-control(type='text', min='18', ng-model='reportId', placeholder='Enter Report ID.')
+              button.btn.btn-primary(type='button') Check Report
     .modal-footer
       button.btn.btn-primary(type='button') Create Graph
 #tableModal.modal.fade(role='dialog')
