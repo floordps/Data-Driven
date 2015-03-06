@@ -32,6 +32,7 @@ app.post('/report/:id', function(req, res, next) {
   conn.login(js.username, js.password, function(err, user) {
     if(err) return res.status(500).send(err);
     conn.analytics.reports(function(err, reports) {
+      if(err) return res.status(501).send(err);
       var id = req.params.id;
       conn.analytics.report(id).execute({ details: true }, function(err, result) {
         res.json(result);
@@ -52,6 +53,7 @@ app.post('/report/:id/desc', function(req, res, next) {
     conn.analytics.reports(function(err, reports) {
       var id = req.params.id;
       conn.analytics.report(id).describe(function(err, result) {
+        if(err) return res.status(501).send(err);
         var details = result.reportExtendedMetadata.detailColumnInfo;
         var ret = {
           cols: [],
