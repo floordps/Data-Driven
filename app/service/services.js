@@ -3,7 +3,7 @@ app.factory('socket', function($rootScope) {
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function () {
-        $('.chatBody').stop(true, true).animate({ scrollTop: $('.chatBody')[0].scrollHeight}, 1000);
+        $('.chatBody').stop(true, true).animate({ scrollTop: $('.chatBody')[0].scrollHeight}, 300);
         var args = arguments;
         $rootScope.$apply(function () {
           callback.apply(socket, args);
@@ -19,7 +19,7 @@ app.factory('socket', function($rootScope) {
           }
         });
       });
-      $('.chatBody').stop(true, true).animate({ scrollTop: $('.chatBody')[0].scrollHeight}, 1000);
+      $('.chatBody').stop(true, true).animate({ scrollTop: $('.chatBody')[0].scrollHeight}, 300);
     }
   };
 });
