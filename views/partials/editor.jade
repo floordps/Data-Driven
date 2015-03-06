@@ -10,32 +10,64 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
       button.close(type='button', data-dismiss='modal', aria-label='close')
       h3 Graph
     .modal-body
-      form
-        .row
-          .form-inline
-            .form-group
-              input.form-control(type='text', min='18', ng-model='reportId', placeholder='Enter Report ID.')
-              button.btn.btn-primary(type='button') Check Report
+      form.form-inline(name='checkReport', novalidate)
+        .form-group
+          input.form-control(type='text', ng-model='reportId', placeholder='Enter Report ID.', pattern='.{18,18}', required)
+          button.btn.btn-primary(type='button', ng-disabled='!checkReport.$valid') Check Report
+      .graphOption(ng-hide='!checkReport.$valid')    
+        form
+          .form-group
+            select.form-control(ng-model='graphType', required)
+              option(value='' disabled selected) Select a Graph
+              option Multi-Bar Chart
+              option Line Chart
+              option Pie Chart
+        form.form-inline(name='graphForm', novalidate)
+          .form-group
+            select.form-control(ng-model='xValue', required)
+              option(value='', disabled selected) Select X Column
+              option 1
+              option 2
+              option 3
+            select.form-control(ng-model='yValue', required)
+              option(value='', disabled selected) Select Y Column
+              option 1
+              option 2
+              option 3
+            .row
+              .checkbox
+                label
+                  input(type='checkbox')
+                  | X Date Format
+                label
+                  input(type='checkbox')
+                  | Y Date Format
+            .row
+              .checkbox
+                label
+                  input(type='checkbox')
+                  | X Axis
+                label
+                  input(type='checkbox')
+                  | Y Axis
+          
     .modal-footer
-      button.btn.btn-primary(type='button') Create Graph
+      button.btn.btn-primary(type='button', ng-disabled='(!checkReport.$valid && !graphForm.$valid)') Create Graph
 #tableModal.modal.fade(role='dialog')
   .modal-content
     .modal-header
       button.close(type='button', data-dismiss='modal', aria-label='close')
       h4 Table
     .modal-body
-      form.form-horizontal(name='tableForm', novalidate)
-        .row
-          .form-group.col-xs-6.col-sm-6.col-md-6.col-lg-6
-            input#rows.form-control.col-xs-offset-6.col-sm-offset-6.col-md-offset-6.col-lg-offset-6(type='number', name='rows', placeholder='# of rows', min=1, ng-model='rows', required)
-        .row
-          .form-group.col-xs-6.col-sm-6.col-md-6.col-lg-6
-            input#columns.form-control.col-xs-offset-6.col-sm-offset-6.col-md-offset-6.col-lg-offset-6(type='number', name='columns', placeholder='# of columns', min=1, max=10, ng-model='columns', required)
-        .row
-          .checkbox.col-xs-offset-3.col-sm-offset-3.col-md-offset-3.col-lg-offset-3
-            label
-              input#headers(type='checkbox')
-              | Headers
+      form(name='tableForm', novalidate)
+        .form-group
+          input.form-control(type='number', name='rows', placeholder='# of rows', min=1, ng-model='rows', required)
+        .form-group    
+          input.form-control(type='number', name='columns', placeholder='# of columns', min=1, max=10, ng-model='columns', required)
+        .checkbox
+          label
+            input(type='checkbox')
+            | Headers
     .modal-footer
       button#createTable.btn.btn-primary(type='button', ng-disabled='!tableForm.$valid') Create Table
       button.btn.btn-default(type='button', data-dismiss='modal') Close

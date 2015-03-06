@@ -86,11 +86,15 @@ nav {
   margin-left: 25%;
 }
 
-form[name=tableForm] input.ng-dirty.ng-invalid  {
+form[name=tableForm] input.ng-dirty.ng-invalid,
+form[name=checkReport] input.ng-dirty.ng-invalid,
+form[name=graphForm] input.ng-dirty.ng-invalid {
   border-color: red;
 }
 
-form[name=tableForm] input.ng-dirty.ng-valid  {
+form[name=tableForm] input.ng-dirty.ng-valid,
+form[name=checkReport] input.ng-dirty.ng-valid,
+form[name=graphForm] input.ng-dirty.ng-valid {
   border-color: green;
 }
 
