@@ -3602,7 +3602,7 @@
 				// two-spot, semicolon, b, period, Logitech presenter tools "black screen" button
 				case 58: case 59: case 66: case 190: case 191: togglePause(); break;
 				// f
-				case 70: enterFullscreen(); $('#chat-panel').hide(); break;
+				case 70: enterFullscreen(); break;
 				// a
 				case 65: if ( config.autoSlideStoppable ) toggleAutoSlide( autoSlideWasPaused ); break;
 				default:
