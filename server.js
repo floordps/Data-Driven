@@ -39,6 +39,32 @@ app.post('/report/:id', function(req, res, next) {
     });
   });
 });
+app.post('/report/:id/desc', function(req, res, next) {
+  var conn = new jsforce.Connection({
+    oauth2: {
+      clientId: js.clientId,
+      clientSecret: js.clientSecret,
+      redirectUri: js.redirectUri
+    }
+  });
+  conn.login(js.username, js.password, function(err, user) {
+    if(err) return res.status(500).send(err);
+    conn.analytics.reports(function(err, reports) {
+      var id = req.params.id;
+      conn.analytics.report(id).describe(function(err, result) {
+        var details = result.reportExtendedMetadata.detailColumnInfo;
+        var ret = {
+          cols: [],
+          name: result.reportMetadata.name
+        };
+        for(var o in details) {
+          ret.cols.push(details[o]);
+        }
+        res.json(ret);
+      });
+    });
+  });
+});
 
 app.use('/app', express.static(__dirname + '/app'));
 app.use('/bower', express.static(__dirname + '/bower_components'));

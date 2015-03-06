@@ -1,7 +1,7 @@
-app.controller('clientCtrl', function($scope, socket) {
+app.controller('clientCtrl', function($rootScope, $scope, socket) {
   $scope.messages = [];
   socket.on('init', function (data) {
-    $scope.name = data.name;
+    $rootScope.name = data.name;
   });
 
   socket.on('send:message', function (message) {
@@ -17,7 +17,7 @@ app.controller('clientCtrl', function($scope, socket) {
     });
 
     $scope.messages.push({
-      user: $scope.name,
+      user: $rootScope.name,
       text: $scope.message
     });
 
@@ -25,8 +25,16 @@ app.controller('clientCtrl', function($scope, socket) {
   };
 });
 
-app.controller('editorCtrl', function($scope) {
-
+app.controller('editorCtrl', function($scope, $http) {
+  $scope.checkReport = function () {
+    $http.post('/report/' + $scope.reportId + '/desc').success(function(data) {
+      if(data) {
+        $('#graphModal .modal-body').append(JSON.stringify(data));
+      } else {
+        $('#graphModal .modal-body').append('check err');
+      }
+    });
+  };
 });
 
 app.controller('graph', function($scope) {

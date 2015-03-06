@@ -10,11 +10,11 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
       button.close(type='button', data-dismiss='modal', aria-label='close')
       h3 Graph
     .modal-body
-      form.form-inline(name='checkReport', novalidate)
+      form.form-inline(name='checkReportForm', novalidate)
         .form-group
-          input.form-control(type='text', ng-model='reportId', placeholder='Enter Report ID.', pattern='.{18,18}', required)
-          button.btn.btn-primary(type='button', ng-disabled='!checkReport.$valid') Check Report
-      .graphOption(ng-hide='!checkReport.$valid')    
+          input.form-control(type='text', ng-model='reportId', placeholder='Enter Report ID.', pattern='.{8,18}', required)
+          button.btn.btn-primary(type='button', ng-disabled='!checkReportForm.$valid', ng-click='checkReport()') Check Report
+      .graphOption(ng-hide='!checkReportForm.$valid')    
         form
           .form-group
             select.form-control(ng-model='graphType', required)
@@ -52,7 +52,7 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
                   | Y Axis
           
     .modal-footer
-      button.btn.btn-primary(type='button', ng-disabled='(!checkReport.$valid && !graphForm.$valid)') Create Graph
+      button.btn.btn-primary(type='button', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
 #tableModal.modal.fade(role='dialog')
   .modal-content
     .modal-header
