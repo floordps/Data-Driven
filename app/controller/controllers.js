@@ -39,3 +39,5 @@ app.controller('editorCtrl', function($scope, $http) {
 
 app.controller('graph', function($scope) {
 });
+
+app.controller('loginCtrl', function(){});

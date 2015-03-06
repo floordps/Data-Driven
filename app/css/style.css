@@ -1,3 +1,24 @@
+/* Login */
+#login {
+  top: 50%;
+  left: 50%;
+  height: 300px;
+  width: 450px;
+  margin-top: -150px;
+  margin-left: -225px;
+  position: fixed;
+}
+
+#login a:nth-child(3) {
+  margin-right: 30px;
+  margin-left: 30px;
+
+}
+
+#login form {
+  margin-top: 20px;
+}
+
 /* Toggle Panel */
 nav {
   background-color: #4682B4;
