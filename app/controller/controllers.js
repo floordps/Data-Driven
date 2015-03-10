@@ -26,10 +26,36 @@ app.controller('clientCtrl', function($rootScope, $scope, socket) {
 });
 
 app.controller('editorCtrl', function($scope, $http) {
+  $scope.reportDetails = true;
+  $scope.showGraphType = function(e) {
+    if (e == 'rID') {
+      $scope.reportDetails = false;
+    } else {
+      $scope.reportDetails = true;
+    }
+  };
+
+  $scope.gTypes = [
+    {type: 'Line Charts'},
+    {type: 'Stacked Area Charts'},
+    {type: 'Multi Bar Charts'},
+    {type: 'Multi Bar Horizontal Charts'},
+    {type: 'Discrete Bar Charts'},
+    {type: 'Pie Charts'},
+    {type: 'Scatter Charts'},
+    {type: 'Sparkline  Charts'},
+    {type: 'Cumulative Line Charts'},
+    {type: 'Line with Focus Charts'}
+  ];
+
+  $scope.labels = [];
+
   $scope.checkReport = function () {
     $http.post('/report/' + $scope.reportId + '/desc').success(function(data) {
       if(data) {
-        $('#graphModal .modal-body').append(JSON.stringify(data));
+        data.cols.forEach(function(data) {
+          $scope.labels.push(data.label);
+        });
       } else {
         $('#graphModal .modal-body').append('check err');
       }

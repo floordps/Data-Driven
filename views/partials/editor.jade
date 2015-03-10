@@ -8,9 +8,14 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
   .modal-content
     .modal-header
       button.close(type='button', data-dismiss='modal', aria-label='close')
-      h3 Graph
+      h3 Creating Graph
     .modal-body
-      form.form-inline(name='checkReportForm', novalidate)
+      form.form-inline(name='reportTypeForm', novalidate)
+        input(type='radio', ng-model='reportType', value='rID', id='rID', ng-change='showGraphType(reportType)')
+        label.btn.btn-primary(for='rID') Report ID
+        input(type='radio', ng-model='reportType', value='sob', id='sob', ng-change='showGraphType(reportType)')
+        label.btn.btn-primary(for='sob') SObject
+      form.form-inline(name='checkReportForm', novalidate, ng-hide='reportDetails')
         .form-group
           input.form-control(type='text', ng-model='reportId', placeholder='Enter Report ID.', pattern='.{8,18}', required)
           button.btn.btn-primary(type='button', ng-disabled='!checkReportForm.$valid', ng-click='checkReport()') Check Report
@@ -19,21 +24,15 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
           .form-group
             select.form-control(ng-model='graphType', required)
               option(value='' disabled selected) Select a Graph
-              option Multi-Bar Chart
-              option Line Chart
-              option Pie Chart
+              option(ng-repeat='type in gTypes', value='{{type.type}}') {{type.type}}
         form.form-inline(name='graphForm', novalidate)
           .form-group
             select.form-control(ng-model='xValue', required)
               option(value='', disabled selected) Select X Column
-              option 1
-              option 2
-              option 3
+              option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
             select.form-control(ng-model='yValue', required)
               option(value='', disabled selected) Select Y Column
-              option 1
-              option 2
-              option 3
+              option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
             .row
               .checkbox
                 label

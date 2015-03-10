@@ -101,7 +101,7 @@ nav {
 }
 
 
-/* Editor modal form validator */
+/* Editor */
 .modal-content {
   width: 25%;
   margin-left: 25%;
@@ -117,6 +117,23 @@ form[name=tableForm] input.ng-dirty.ng-valid,
 form[name=checkReport] input.ng-dirty.ng-valid,
 form[name=graphForm] input.ng-dirty.ng-valid {
   border-color: green;
+}
+
+input[type='radio'] {
+  display: none;
+}
+
+input[type='radio'] + label {
+  width: 150px;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+
+input[type='radio']:checked + label {
+  background-color: #FFD700;
+  color: #FFF;
+  border-color: #FFD700;
 }
 
 /* NVD3 Graph */
