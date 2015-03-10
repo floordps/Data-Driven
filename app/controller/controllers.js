@@ -35,6 +35,19 @@ app.controller('editorCtrl', function($scope, $http) {
     }
   };
 
+  $scope.options = [
+    {option: 'X Axis Data Format'},
+    {option: 'Y Axis Date Format'},
+    {option: 'Show X Axis'},
+    {option: 'Show Y Axis'},
+    {option: 'Is Area'},
+    {option: 'Interactive'},
+    {option: 'Interactive Guide Line'},
+    {option: 'Tooltips'},
+    {option: 'Clip Edge'},
+    {option: 'Clip Voronoi'}
+  ];
+
   $scope.gTypes = [
     {type: 'Line Charts'},
     {type: 'Stacked Area Charts'},
@@ -54,7 +67,7 @@ app.controller('editorCtrl', function($scope, $http) {
     $http.post('/report/' + $scope.reportId + '/desc').success(function(data) {
       if(data) {
         data.cols.forEach(function(data) {
-          $scope.labels.push(data.label);
+        $scope.labels.push(data.label);
         });
       } else {
         $('#graphModal .modal-body').append('check err');

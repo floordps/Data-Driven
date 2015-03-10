@@ -33,22 +33,13 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
             select.form-control(ng-model='yValue', required)
               option(value='', disabled selected) Select Y Column
               option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
-            .row
-              .checkbox
+            h3 Select Group Options:
+            ul#groupOp
+              li(ng-repeat='option in options track by $index')
                 label
                   input(type='checkbox')
-                  | X Date Format
-                label
-                  input(type='checkbox')
-                  | Y Date Format
-            .row
-              .checkbox
-                label
-                  input(type='checkbox')
-                  | X Axis
-                label
-                  input(type='checkbox')
-                  | Y Axis
+                  | &nbsp{{option.option}}
+
 
     .modal-footer
       button.btn.btn-primary(type='button', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph

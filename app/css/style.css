@@ -103,8 +103,9 @@ nav {
 
 /* Editor */
 .modal-content {
-  width: 25%;
-  margin-left: 25%;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 form[name=tableForm] input.ng-dirty.ng-invalid,
@@ -134,6 +135,14 @@ input[type='radio']:checked + label {
   background-color: #FFD700;
   color: #FFF;
   border-color: #FFD700;
+}
+
+ul#groupOp {
+  list-style: none;
+  -webkit-column-count: 2;
+  -moz-column-count: 2;
+  -o-column-count: 2;
+  column-count: 2;
 }
 
 /* NVD3 Graph */
