@@ -42,7 +42,7 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
 
 
     .modal-footer
-      button.btn.btn-primary(type='button', ng-click='createGraph()', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
+      button#createGraph.btn.btn-primary(type='button', ng-click='createGraph()', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
 #tableModal.modal.fade(role='dialog')
   .modal-content
     .modal-header
