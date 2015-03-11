@@ -76,15 +76,9 @@ app.controller('editorCtrl', function($scope, $http) {
     });
   };
 
-  $scope.createGraph = function() {
-    var str = '&nbsp;<!-- .element: class="graph center-block" '
-      + 'nvd3-' + $scope.graph.graphType + '="x" '
-      + 'data="graph[\''+ $scope.graph.reportId +'\']"';
-    for(var o in $scope.graph.options) {
-      str += ' ' + o + '="'+ $scope.graph.options[o] +'"';
-    }
-    str += ' -->';
-  };
+  $scope.$watch('graph', function() {
+    $('#graphModal').data('graph', $scope.graph);
+  }, true);
 });
 
 app.controller('graph', function($scope) {
