@@ -29,6 +29,22 @@ $(function() {
             $('#graphModal').modal({
               show: true
             });
+            var str = '',
+              graph = $('#graphModal').data('graph'),
+              end = e.getContent().length;
+            $('#createGraph').one('click', function() {
+              str = '&nbsp;<!-- .element: class="graph center-block" '
+                + 'nvd3-' + graph.graphType + '="x" '
+                + 'data="graph[\''+ graph.reportId +'\']"';
+              for(var o in graph.options) {
+                str += ' ' + o + '="'+ graph.options[o] +'"';
+              }
+              str += ' -->';
+              e.setSelection(end, end);
+              e.replaceSelection(str);
+              //TODO: Flush form fields
+              $('#graphModal').modal('hide');
+            });
           }
         }]
       }, {
