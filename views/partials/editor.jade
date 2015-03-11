@@ -17,32 +17,32 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
         label.btn.btn-primary(for='sob') SObject
       form.form-inline(name='checkReportForm', novalidate, ng-hide='reportDetails')
         .form-group
-          input.form-control(type='text', ng-model='reportId', placeholder='Enter Report ID.', pattern='.{8,18}', required)
+          input.form-control(type='text', ng-model='graph.reportId', placeholder='Enter Report ID.', pattern='.{8,18}', required)
           button.btn.btn-primary(type='button', ng-disabled='!checkReportForm.$valid', ng-click='checkReport()') Check Report
       .graphOption(ng-hide='!checkReportForm.$valid')
         form
           .form-group
-            select.form-control(ng-model='graphType', required)
+            select.form-control(ng-model='graph.graphType', required)
               option(value='' disabled selected) Select a Graph
-              option(ng-repeat='type in gTypes', value='{{type.type}}') {{type.type}}
+              option(ng-repeat='type in gTypes', value='{{type.name}}') {{type.type}}
         form.form-inline(name='graphForm', novalidate)
           .form-group
-            select.form-control(ng-model='xValue', required)
+            select.form-control(ng-model='graph.xValue', required)
               option(value='', disabled selected) Select X Column
               option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
-            select.form-control(ng-model='yValue', required)
+            select.form-control(ng-model='graph.yValue', required)
               option(value='', disabled selected) Select Y Column
               option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
             h3 Select Group Options:
             ul#groupOp
               li(ng-repeat='option in options track by $index')
                 label
-                  input(type='checkbox')
+                  input(type='checkbox', ng-model='graph.options[option.name]')
                   | &nbsp{{option.option}}
 
 
     .modal-footer
-      button.btn.btn-primary(type='button', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
+      button.btn.btn-primary(type='button', ng-click='createGraph()', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
 #tableModal.modal.fade(role='dialog')
   .modal-content
     .modal-header
