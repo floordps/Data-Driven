@@ -16,7 +16,8 @@
   "dependencies": {
     "d3": "~3.5.5",
     "nvd3": "~1.7.1",
-    "angularjs-nvd3-directives": "~0.0.7"
+    "angularjs-nvd3-directives": "~0.0.7",
+    "angular-ladda": "~0.2.2"
   },
   "resolutions": {
     "d3": "~3.4.1",

@@ -26,6 +26,7 @@ app.controller('clientCtrl', function($rootScope, $scope, socket) {
 });
 
 app.controller('editorCtrl', function($scope, $http) {
+  $scope.showDetails = true;
   $scope.reportDetails = true;
   $scope.graph = {};
   $scope.showGraphType = function(e) {
@@ -65,14 +66,18 @@ app.controller('editorCtrl', function($scope, $http) {
   $scope.labels = [];
 
   $scope.checkReport = function () {
+    $scope.load = true;
     $http.post('/report/' + $scope.graph.reportId + '/desc').success(function(data) {
       if(data) {
         data.cols.forEach(function(data) {
         $scope.labels.push(data.label);
+        $scope.showDetails = false;
         });
       } else {
         $('#graphModal .modal-body').append('check err');
+        $scope.showDetails = true;
       }
+      $scope.load = false;
     });
   };
 

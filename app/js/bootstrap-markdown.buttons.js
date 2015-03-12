@@ -42,7 +42,9 @@ $(function() {
               str += ' -->';
               e.setSelection(end, end);
               e.replaceSelection(str);
-              //TODO: Flush form fields
+              $('#graphModal input[type="checkbox"]:checked').removeAttr('checked');
+              $('#graphModal select').val(null);
+              $('#graphModal').data('graph', '');
               $('#graphModal').modal('hide');
             });
           }
