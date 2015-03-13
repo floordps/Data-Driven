@@ -1,7 +1,7 @@
 app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl : 'partials/index.jade',
+      templateUrl : 'partials/slide.jade',
       controller : 'clientCtrl'
     })
     .when('/view/:username', {
@@ -11,6 +11,10 @@ app.config(['$routeProvider', function($routeProvider) {
     .when('/view/:username/:slidename', {
       templateUrl : 'partials/slide.jade',
       controller : 'clientCtrl'
+    })
+    .when('/login', {
+      templateUrl : 'partials/login.jade',
+      controller : 'loginCtrl'
     })
     .otherwise({
       redirectTo: '/'
