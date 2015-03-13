@@ -8,7 +8,7 @@ var jsforce = require('jsforce');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google').Strategy;
 var mongoose = require('mongoose');
-var viewRouter = require('./routes/editor').Router();
+var viewRouter = require('./routes/view').Router();
 var User = require('./models/user');
 
 app.set('views', __dirname + '/views');
@@ -45,8 +45,8 @@ passport.use(new GoogleStrategy({
       }
       if (!user) {
         var u = new User({ openId: identifier });
-        u.save(function(err) {
-          return done(err, user);
+        u.save(function(err, u) {
+          return done(err, u);
         });
       } else {
         return done(err, user);
@@ -55,11 +55,11 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-app.post('/auth/google', passport.authenticate('google'));
+app.get('/auth/google', passport.authenticate('google'));
 app.get('/auth/google/return',
   passport.authenticate('google', {
-    successRedirect: '/',
-    failureRedirect: '/login'
+    successRedirect: '/account',
+    failureRedirect: '/'
   })
 );
 
