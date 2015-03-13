@@ -49,13 +49,13 @@ passport.use(new GoogleStrategy({
     returnURL: 'http://localhost:5000/auth/google/return',
     realm: 'http://localhost:5000'
   },
-  function(token, refreshToken, profile, done) {
+  function(token, profile, done) {
     User.findOne({ openId: token }, function(err, user) {
       if (err) {
           return done(err);
       }
       if (!user) {
-        var u = new User({ openId: token, name: profile.name });
+        var u = new User({ openId: token, profile: profile });
         u.save(function(err, u) {
           return done(err, u);
         });
@@ -88,7 +88,7 @@ app.get('/', function(req, res, next) {
   res.render('index');
 });
 app.get('/account', isAuth, function(req, res, next) {
-  res.render('account');
+  res.render('account', { user: req.user.profile });
 });
 app.get('/partials/:id', function(req, res, next) {
   res.render('partials/' + req.params.id);
