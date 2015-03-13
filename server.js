@@ -5,6 +5,11 @@ var io = require('socket.io')(server);
 var socket = require('./routes/socket.js');
 var bodyParser = require('body-parser');
 var jsforce = require('jsforce');
+var passport = require('passport');
+var GoogleStrategy = require('passport-google').Strategy;
+var mongoose = require('mongoose');
+var viewRouter = require('./routes/editor').Router();
+var User = require('./models/user');
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -12,7 +17,55 @@ app.locals.pretty = true;
 app.locals.basedir = __dirname;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
+/*
+* MongoDB Connect
+*/
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/data-driven');
+
+/*
+* Setup Authentication
+*/
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+passport.use(new GoogleStrategy({
+    returnURL: 'http://localhost:5000/auth/google/return',
+    realm: 'http://localhost:5000'
+  },
+  function(identifier, profile, done) {
+    User.findOne({ openId: identifier }, function(err, user) {
+      if (err) {
+          return done(err);
+      }
+      if (!user) {
+        var u = new User({ openId: identifier });
+        u.save(function(err) {
+          return done(err, user);
+        });
+      } else {
+        return done(err, user);
+      }
+    });
+  }
+));
+
+app.post('/auth/google', passport.authenticate('google'));
+app.get('/auth/google/return',
+  passport.authenticate('google', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  })
+);
+
+/*
+* Routes
+*/
 app.get('/', function(req, res, next) {
   res.render('index');
 });
@@ -73,4 +126,5 @@ app.post('/report/:id/desc', function(req, res, next) {
 
 app.use('/app', express.static(__dirname + '/app'));
 app.use('/bower', express.static(__dirname + '/bower_components'));
+app.use('/view', viewRouter);
 io.sockets.on('connection', socket);
