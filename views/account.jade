@@ -6,6 +6,8 @@ html(ng-app='data-driven')
     link(rel='stylesheet', href='/app/css/reveal.css')
     link(rel='stylesheet', href='/app/css/simple.css', id='theme')
     link(rel='stylesheet', href='/app/css/style.css')
+    script.
+      window.userProfile = !{JSON.stringify(user)};
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
     link(rel='stylesheet', href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css')
     script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js')

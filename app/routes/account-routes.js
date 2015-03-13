@@ -16,3 +16,4 @@ app.config(['$routeProvider', function($routeProvider) {
       redirectTo: '/'
     });
 }]);
+app.value('userProfile', window.userProfile);
