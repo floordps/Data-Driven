@@ -1,0 +1,33 @@
+chat
+//TODO: Add settings directive
+#account-wrap.container
+  .row
+    span.h1 Name
+    .pull-right
+      button#newSlideshow.btn.btn-danger New Slideshow
+  .row
+    a#editToken(href='#') Edit Token
+  .row
+    table.table
+      thead
+        tr
+          th Slideshow
+          th Created Date
+          th Author
+          th Action
+          th Token
+      tbody
+        tr(ng-repeat='slide in slideshows')
+          td {{slide.name}}
+          td {{slide.date}}
+          td {{slide.author}}
+          td
+            a(href='/account') Play
+            a(href='/account') Edit
+            a(href='/account') Delete
+          td
+            select
+              option(ng-repeat='token in tokens')
+
+//TODO: #newSlideshow modal
+//TODO: #editToken modal
