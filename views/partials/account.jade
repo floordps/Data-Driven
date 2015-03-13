@@ -1,12 +1,16 @@
 chat
-//TODO: Add settings directive
+.dropdown.pull-right
+  span.fa.fa-bars.fa-3x.dropdown-toggle(data-toggle='dropdown')
+  ul.dropdown-menu.dropdown-menu-right(role='menu')
+    li(role='presentation')
+      a(role='menuitem') Login
 #account-wrap.container
   .row
     span.h1 Name
     .pull-right
-      button#newSlideshow.btn.btn-danger New Slideshow
+      button#newSlideshow.btn.btn-danger(data-toggle='modal', data-target='#newSlideshowModal') New Slideshow
   .row
-    a#editToken(href='#') Edit Token
+    a#editToken(data-toggle='modal', data-target='#editTokenModal') Edit Token
   .row
     table.table
       thead
@@ -17,7 +21,7 @@ chat
           th Action
           th Token
       tbody
-        tr(ng-repeat='slide in slideshows')
+        tr(ng-repeat='slide in slideShows')
           td {{slide.name}}
           td {{slide.date}}
           td {{slide.author}}
@@ -30,4 +34,45 @@ chat
               option(ng-repeat='token in tokens')
 
 //TODO: #newSlideshow modal
+#newSlideshowModal.modal(role='dialog')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(data-dismiss='modal')
+        h3 New SlideShow
+      .modal-body
+        form.form-inline.form-group
+          input.form-control(type='text', placeholder='SlideShow Name')
+          button.btn.btn-primary Verify
+      .modal-footer
+        button.btn.btn-primary Create
+        button.btn.btn-default(data-dismiss='modal') Close
+        
 //TODO: #editToken modal
+#editTokenModal.modal(role='dialog')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(data-dismiss='modal')
+        h3 Token Settings
+      .modal-body
+        button.btn.btn-warning.btn-sm.pull-right Add Token
+        table.table
+          thead
+            tr
+              th Slideshow
+              th Created Date
+              th Author
+              th Action
+              th Token
+          tbody
+            tr(ng-repeat='slide in slideShows')
+              td {{slide.name}}
+              td {{slide.date}}
+              td {{slide.author}}
+              td
+                a(href='/account') Play
+                a(href='/account') Edit
+                a(href='/account') Delete
+      .modal-footer
+        button.btn.btn-default(data-dismiss='modal') Close

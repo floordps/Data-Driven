@@ -2,7 +2,7 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
     .when('/', {
       templateUrl : 'partials/account.jade',
-      controller : 'clientCtrl'
+      controller : 'userCtrl'
     })
     .when('/:slidename', {
       templateUrl : 'partials/master.jade',
