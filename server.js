@@ -16,6 +16,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', function(req, res, next) {
   res.render('index');
 });
+app.get('/account', function(req, res, next) {
+  res.render('account');
+});
 app.get('/partials/:id', function(req, res, next) {
   res.render('partials/' + req.params.id);
 });
