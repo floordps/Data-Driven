@@ -1,0 +1,22 @@
+chat
+.dropdown.pull-right
+  span.fa.fa-bars.fa-3x.dropdown-toggle(data-toggle='dropdown')
+  ul.dropdown-menu.dropdown-menu-right(role='menu')
+    li(role='presentation')
+      a(role='menuitem') Login
+h1.text-center Data - Driven
+.container
+  table.table
+    thead
+      tr
+        th SlideShow
+        th Created Date
+        th Author
+        th Action
+    tbody
+      tr(ng-repeat='slide in slideShows')
+        td {{slide.name}}
+        td {{slide.date}}
+        td {{slide.author}}
+        td
+          a(href='/') {{slide.play}}

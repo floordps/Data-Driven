@@ -23,6 +23,12 @@ app.controller('clientCtrl', function($rootScope, $scope, socket) {
 
     $scope.message = '';
   };
+
+  $scope.slideShows = [
+    {name: 'test1', date: '3-15-2015', author: 'Data-Driven', play: 'Play'},
+    {name: 'test2', date: '3-15-2015', author: 'Data-Driven', play: 'Play'},
+    {name: 'test3', date: '3-15-2015', author: 'Data-Driven', play: 'Play'}
+  ];
 });
 
 app.controller('editorCtrl', function($scope, $http) {
@@ -90,3 +96,11 @@ app.controller('graph', function($scope) {
 });
 
 app.controller('loginCtrl', function(){});
+
+app.controller('userCtrl', function($scope) {
+  $scope.slideShows = [
+    {name: 'test1', date: '3-15-2015', author: 'Data-Driven', play: 'Play'},
+    {name: 'test2', date: '3-15-2015', author: 'Data-Driven', play: 'Play'},
+    {name: 'test3', date: '3-15-2015', author: 'Data-Driven', play: 'Play'}
+  ];
+});
