@@ -10,6 +10,8 @@ var GoogleStrategy = require('passport-google').Strategy;
 var mongoose = require('mongoose');
 var viewRouter = require('./routes/view').Router();
 var User = require('./models/user');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -17,7 +19,14 @@ app.locals.pretty = true;
 app.locals.basedir = __dirname;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(session({
+   secret: 'foobar',
+   resave: false,
+   saveUninitialized: false
+}));
 app.use(passport.initialize());
+app.use(passport.session());
 
 /*
 * MongoDB Connect
@@ -28,23 +37,25 @@ mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/data-driven');
 * Setup Authentication
 */
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  done(null, user.id);
 });
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
 });
 
 passport.use(new GoogleStrategy({
     returnURL: 'http://localhost:5000/auth/google/return',
     realm: 'http://localhost:5000'
   },
-  function(identifier, profile, done) {
-    User.findOne({ openId: identifier }, function(err, user) {
+  function(token, refreshToken, profile, done) {
+    User.findOne({ openId: token }, function(err, user) {
       if (err) {
           return done(err);
       }
       if (!user) {
-        var u = new User({ openId: identifier });
+        var u = new User({ openId: token, name: profile.name });
         u.save(function(err, u) {
           return done(err, u);
         });
@@ -63,13 +74,20 @@ app.get('/auth/google/return',
   })
 );
 
+function isAuth(req, res, next) {
+  if(req.isAuthenticated()){
+    return next();
+  }
+  res.redirect('/#login');
+}
+
 /*
 * Routes
 */
 app.get('/', function(req, res, next) {
   res.render('index');
 });
-app.get('/account', function(req, res, next) {
+app.get('/account', isAuth, function(req, res, next) {
   res.render('account');
 });
 app.get('/partials/:id', function(req, res, next) {
