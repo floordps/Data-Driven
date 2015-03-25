@@ -10,7 +10,7 @@ app.config(['$routeProvider', function($routeProvider) {
     })
     .when('/view/:username', {
       templateUrl : 'partials/username.jade',
-      controller : 'clientCtrl'
+      controller : 'userSlidesCtrl'
     })
     .when('/view/:username/:slidename', {
       templateUrl : 'partials/slide.jade',

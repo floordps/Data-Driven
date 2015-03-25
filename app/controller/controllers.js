@@ -1,4 +1,31 @@
-app.controller('clientCtrl', function($rootScope, $scope, socket) {
+app.controller('clientCtrl', function($rootScope, $scope, socket, $http, $routeParams) {
+  var uname = $routeParams.username,
+    sname = $routeParams.slidename;
+  $http.get('/view/' + uname + '/' + sname).success(function(data) {
+    $('#slideMd').html(data.slides);
+      Reveal.initialize({
+      controls: true,
+      keyboard: true,
+      margin: 0.1,
+      progress: true,
+      transition: 'zoom',
+      transitionSpeed: 'slow',
+      multiplex: {
+        secret: null,
+        id: '1',
+        url: ''
+      },
+      dependencies: [
+        { src: '/socket.io/socket.io.js', async: true },
+        { src: '/app/plugin/multiplex/client.js', async: true },
+        { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
+      ]
+      });
+
+  });
+  
   $scope.messages = [];
   socket.on('init', function (data) {
     $rootScope.name = data.name;
@@ -31,7 +58,7 @@ app.controller('clientCtrl', function($rootScope, $scope, socket) {
   ];
 });
 
-app.controller('editorCtrl', function($scope, $http) {
+app.controller('editorCtrl', function($scope, $http, $routeParams) {
   $scope.showDetails = true;
   $scope.reportDetails = true;
   $scope.graph = {};
@@ -90,17 +117,39 @@ app.controller('editorCtrl', function($scope, $http) {
   $scope.$watch('graph', function() {
     $('#graphModal').data('graph', $scope.graph);
   }, true);
+
+  $http.get('/account/slide/' + $routeParams.slidename).success(function(data) {
+    if(data) {
+      $('#text-editor').text(data.slides);
+    }
+  });
+  $scope.updateMarkdown = function() {
+    var md = $('#text-editor').val();
+    $http.post('/account/slide/' + $routeParams.slidename, { slides: md }).success(function(data) {
+      if(data && !data.success) {
+        alert('fail');
+      }
+    });
+  };
 });
 
 app.controller('graph', function($scope) {
 });
 app.controller('loginCtrl', function(){});
 
-app.controller('userCtrl', function($scope, userProfile) {
+app.controller('userCtrl', function($scope, $http, userProfile) {
   $scope.username = userProfile.displayName;
-  $scope.slideShows = [
-    {name: 'test1', date: '3-15-2015', author: 'Data-Driven', play: 'Play'},
-    {name: 'test2', date: '3-15-2015', author: 'Data-Driven', play: 'Play'},
-    {name: 'test3', date: '3-15-2015', author: 'Data-Driven', play: 'Play'}
-  ];
+  $scope.slideShows = [];
+  $http.get('/account/slide').success(function(data) {
+    $scope.slideShows = data;
+  });
+});
+
+app.controller('userSlidesCtrl', function($scope, $routeParams, $http) {
+  //$scope.username = userProfile.displayName;
+  $scope.slideShows = [];
+  var uname = $routeParams.username;
+  $http.get('/view/' + uname).success(function(data) {
+    $scope.slideShows = data;
+  });
 });
