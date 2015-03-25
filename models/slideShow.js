@@ -9,5 +9,5 @@ var slideShowSchema = new mongoose.Schema({
 slideShowSchema.virtual('action.play').get(function() {
   return '#/view/' + this.author + '/' + this.slideName;
 });
-slideShowSchema.set('toJSON', { virtuals: true })
+slideShowSchema.set('toJSON', { virtuals: true });
 module.exports = mongoose.model('SlideShow', slideShowSchema, 'slideShows');
