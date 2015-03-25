@@ -1,7 +1,13 @@
 var mongoose = require('mongoose');
 var slideShowSchema = new mongoose.Schema({
   //options: String,
-  id: String,
+  author: String,
+  date: Date,
+  slideName: String,
   slides: String
 }, { collection: 'slideShows' } );
-module.exports = mongoose.model('SlideShow', slideShowSchema, 'slideShows');
+slideShowSchema.virtual('action.play').get(function() {
+  return '#/view/' + this.author + '/' + this.slideName;
+});
+slideShowSchema.set('toJSON', { virtuals: true })
+module.exports = mongoose.model('SlideShow', slideShowSchema, 'slideShows');
