@@ -8,8 +8,10 @@ var jsforce = require('jsforce');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google').Strategy;
 var mongoose = require('mongoose');
-var viewRouter = require('./routes/view').Router();
 var User = require('./models/user');
+var SlideShow = require('./models/slideShow');
+var viewRouter = require('./routes/view').Router(SlideShow);
+var accountRouter = require('./routes/account').Router(SlideShow);
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 
@@ -54,7 +56,7 @@ passport.use(new GoogleStrategy({
       if (err) {
           return done(err);
       }
-      if (!user) {
+      if (!user && profile) {
         var u = new User({ openId: token, profile: profile });
         u.save(function(err, u) {
           return done(err, u);
@@ -145,4 +147,5 @@ app.post('/report/:id/desc', function(req, res, next) {
 app.use('/app', express.static(__dirname + '/app'));
 app.use('/bower', express.static(__dirname + '/bower_components'));
 app.use('/view', viewRouter);
+app.use('/account/slide', accountRouter);
 io.sockets.on('connection', socket);
