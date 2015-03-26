@@ -6,7 +6,7 @@ app.config(['$routeProvider', function($routeProvider) {
     })
     .when('/:slidename', {
       templateUrl : 'partials/master.jade',
-      controller : 'editorCtrl'
+      controller : 'masterCtrl'
     })
     .when('/:slidename/editor', {
       templateUrl : 'partials/editor.jade',
