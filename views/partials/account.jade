@@ -26,9 +26,9 @@ chat
           td {{slide.date}}
           td {{slide.author}}
           td
-            a(href='/account') Play
-            a(href='/account') Edit
-            a(href='/account') Delete
+            a(href='/account#/{{slide.slideName}}') Play
+            a(href='/account#/{{slide.slideName}}/editor') Edit
+            a(ng-click='deleteSlide(slide.slideName)') Delete
           td
             select
               option(ng-repeat='token in tokens')
