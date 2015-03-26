@@ -146,6 +146,6 @@ app.post('/report/:id/desc', function(req, res, next) {
 
 app.use('/app', express.static(__dirname + '/app'));
 app.use('/bower', express.static(__dirname + '/bower_components'));
-app.use('/view', viewRouter);
-app.use('/account/slide', accountRouter);
+app.use('/api/view', viewRouter);
+app.use('/api/account', accountRouter);
 io.sockets.on('connection', socket);
