@@ -31,7 +31,7 @@ chat
             a(ng-click='deleteSlide(slide.slideName)') Delete
           td
             select
-              option(ng-repeat='token in tokens')
+              option
 
 //TODO: #newSlideshow modal
 #newSlideshowModal.modal(role='dialog')
@@ -41,13 +41,12 @@ chat
         button.close(data-dismiss='modal')
         h3 New SlideShow
       .modal-body
-        form.form-inline.form-group
-          input.form-control(type='text', placeholder='SlideShow Name')
-          button.btn.btn-primary Verify
+        form.form-inline.form-group(novalidate, name='newSlideForm')
+          input.form-control(type='text', placeholder='SlideShow Name', ng-model='newSlideName', ng-change='checkSlideShowName(newSlideName)', required)
       .modal-footer
-        button.btn.btn-primary Create
+        a.btn.btn-primary(ng-disabled='newSlideForm.$invalid || checkSlideShowName(newSlideName)', ng-href='/account#/{{newSlideName}}/editor') Create
         button.btn.btn-default(data-dismiss='modal') Close
-        
+
 //TODO: #editToken modal
 #editTokenModal.modal(role='dialog')
   .modal-dialog
@@ -56,23 +55,6 @@ chat
         button.close(data-dismiss='modal')
         h3 Token Settings
       .modal-body
-        button.btn.btn-warning.btn-sm.pull-right Add Token
-        table.table
-          thead
-            tr
-              th Slideshow
-              th Created Date
-              th Author
-              th Action
-              th Token
-          tbody
-            tr(ng-repeat='slide in slideShows')
-              td {{slide.name}}
-              td {{slide.date}}
-              td {{slide.author}}
-              td
-                a(href='/account') Play
-                a(href='/account') Edit
-                a(href='/account') Delete
+        a.btn.btn-warning.btn-sm.pull-right(href='/oauth2/auth') Add Token
       .modal-footer
         button.btn.btn-default(data-dismiss='modal') Close

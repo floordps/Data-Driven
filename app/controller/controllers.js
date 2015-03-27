@@ -190,6 +190,11 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
   $http.get('/api/account').success(function(data) {
     $scope.slideShows = data;
   });
+  $scope.checkSlideShowName = function(a) {
+    return typeof(a) !== 'undefined' && $.grep($scope.slideShows, function(obj, i) {
+      return obj.slideName === a;
+    }, true).length === 0;
+  };
 });
 
 app.controller('userSlidesCtrl', function($scope, $routeParams, $http) {
