@@ -14,6 +14,10 @@ var userSchema = new mongoose.Schema({
       type: String
     }]
   },
+  tokens: [{
+    accessToken: String,
+    refreshToken: String
+  }],
   slideShows: [SlideShow]
 }, { collection: 'users' } );
 userSchema.virtual('username').get(function() {

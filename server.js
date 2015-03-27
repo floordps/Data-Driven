@@ -144,6 +144,39 @@ app.post('/report/:id/desc', function(req, res, next) {
   });
 });
 
+/*
+* Retrieve Token
+**/
+var oauth2 = new jsforce.OAuth2({
+    clientId: js.clientId,
+    clientSecret: js.clientSecret,
+    redirectUri: js.redirectUri
+});
+app.get('/oauth2/auth', isAuth, function(req, res) {
+  res.redirect(oauth2.getAuthorizationUrl({ scope : 'api id web refresh_token' }));
+});
+
+app.get('/oauth2/callback', function(req, res) {
+  var conn = new jsforce.Connection({ oauth2 : oauth2 });
+  var code = req.query.code;
+  conn.authorize(code, function(err, userInfo) {
+    if (err) { return console.error('err:'+err); }
+    User.findOne({ openId: req.user.openId }, function(err, user) {
+      if(err) { return; }
+      if(user) {
+        var tokens = user.tokens || [];
+        tokens.push({
+          accessToken: conn.accessToken,
+          refreshToken: conn.refreshToken
+        });
+        user.tokens = tokens;
+        user.save();
+        res.redirect('/account');
+      }
+    });
+  });
+});
+
 app.use('/app', express.static(__dirname + '/app'));
 app.use('/bower', express.static(__dirname + '/bower_components'));
 app.use('/api/view', viewRouter);
