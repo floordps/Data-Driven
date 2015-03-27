@@ -176,8 +176,9 @@ app.controller('graph', function($scope) {
 app.controller('loginCtrl', function(){});
 
 app.controller('userCtrl', function($scope, $http, userProfile) {
-  $scope.username = userProfile.displayName;
+  $scope.username = userProfile.profile.displayName;
   $scope.slideShows = [];
+  $scope.tokens = userProfile.tokens;
   $scope.deleteSlide = function(sname) {
     $http.delete('/api/account/' + sname).success(function(data) {
       if(data && data.success) {
@@ -188,6 +189,7 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
     });
   };
   $http.get('/api/account').success(function(data) {
+    console.log(data)
     $scope.slideShows = data;
   });
   $scope.checkSlideShowName = function(a) {

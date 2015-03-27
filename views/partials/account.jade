@@ -31,7 +31,7 @@ chat
             a(ng-click='deleteSlide(slide.slideName)') Delete
           td
             select
-              option
+              option(ng-repeat='token in tokens track by $index') {{token.accessToken}}
 
 //TODO: #newSlideshow modal
 #newSlideshowModal.modal(role='dialog')
@@ -56,5 +56,13 @@ chat
         h3 Token Settings
       .modal-body
         a.btn.btn-warning.btn-sm.pull-right(href='/oauth2/auth') Add Token
+        .row
+          table.table
+            thead
+              tr
+                th Access Token
+            tbody
+              tr(ng-repeat='token in tokens track by $index')
+                td {{token.accessToken}}
       .modal-footer
         button.btn.btn-default(data-dismiss='modal') Close

@@ -90,7 +90,7 @@ app.get('/', function(req, res, next) {
   res.render('index');
 });
 app.get('/account', isAuth, function(req, res, next) {
-  res.render('account', { user: req.user.profile });
+  res.render('account', { user: req.user });
 });
 app.get('/partials/:id', function(req, res, next) {
   res.render('partials/' + req.params.id);
@@ -116,7 +116,6 @@ app.post('/report/:id', function(req, res, next) {
     });
   });
 });
-
 app.post('/report/:id/desc', function(req, res, next) {
   var conn = new jsforce.Connection({
     oauth2: {
