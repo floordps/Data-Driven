@@ -188,7 +188,9 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
       }
     });
   };
-  $scope.changeToken = function(sname, token,i ) {
+  $scope.changeToken = function(slide) {
+    var sname = slide.slideName,
+      token = slide.token;
     $http.post('/api/account/' + sname, { token: token }).success(function(data) {
     });
   };
@@ -196,6 +198,7 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
     $scope.slideShows = data;
   });
   $scope.checkSlideShowName = function(a) {
+    if(!$scope.slideShows.length) return false;
     return typeof(a) !== 'undefined' && $.grep($scope.slideShows, function(obj, i) {
       return obj.slideName === a;
     }, true).length === 0;

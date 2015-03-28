@@ -26,7 +26,7 @@ menu
             a(href='/account#/{{slide.slideName}}/editor') Edit
             a(ng-click='deleteSlide(slide.slideName)') Delete
           td
-            select(ng-options='token as token.accessToken for token in tokens', ng-model='slideShows[$index].token', ng-change='changeToken(slide.slideName, slideToken)')
+            select(ng-options='token as token.accessToken for token in tokens', ng-model='slideShows[$index].token', ng-change='changeToken(slideShows[$index])')
 
 //TODO: #newSlideshow modal
 #newSlideshowModal.modal(role='dialog')
