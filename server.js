@@ -177,6 +177,19 @@ app.get('/oauth2/callback', function(req, res) {
   });
 });
 
+/* Login Status */
+app.get('/loggedIn', function(req, res, next) {
+  if (req.isAuthenticated()) {
+    res.end('true');
+  }
+  res.end('false');
+});
+
+app.get('/logout', function(req, res, next) {
+  req.logout();
+  res.redirect('/');
+});
+
 app.use('/app', express.static(__dirname + '/app'));
 app.use('/bower', express.static(__dirname + '/bower_components'));
 app.use('/api/view', viewRouter);

@@ -61,3 +61,32 @@ app.directive('master', function($compile, $http) {
     }
   };
 });
+
+app.directive('menu', function($http) {
+  return {
+    restrict: 'E',
+    link: function(scope, elem, attr) {
+      $http.get('/loggedIn').success(function(data) {
+        if (data === 'true') {
+          var menuOptions = [{name: 'Home', link: '/'},
+                             {name: 'My Account', link: '/account'},
+                             {name: 'Logout', link: 'logout'}];
+          var menuOption = '';
+          menuOptions.forEach(function(menu) {
+            menuOption = menuOption + '<li role=\'presentation\'>'+
+              '<a role=\'menuitem\' href=\'' + menu.link + '\'>' + menu.name + '</a>'+
+            '</li>';
+          });
+          elem.html('<div class=\'dropdown pull-right\'>'+
+                    '<span class=\'fa fa-bars fa-3x dropdown-toggle\' data-toggle=\'dropdown\'></span>'+
+                    '<ul class=\'dropdown-menu dropdown-menu-right\' role=\'menu\'>'+
+                      menuOption +
+                    '</ul>'+
+                  '</div>');
+         } else {
+          elem.html('<div id=\'menu\' class=\'pull-right\'><a class=\'btn btn-primary\' href=\'/auth/google\'><span class=\'fa fa-google-plus\'> &nbspLog In</span></a></div>');
+        }
+      });
+    }
+  };
+});
