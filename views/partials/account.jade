@@ -22,11 +22,14 @@ menu
           td {{slide.date}}
           td {{slide.author}}
           td
-            a(href='/account#/{{slide.slideName}}') Play
-            a(href='/account#/{{slide.slideName}}/editor') Edit
-            a(ng-click='deleteSlide(slide.slideName)') Delete
+            a.btn.btn-info.btn-sm(href='/account#/{{slide.slideName}}') PLAY&nbsp
+              i.fa.fa-play
+            a.btn.btn-warning.btn-sm(href='/account#/{{slide.slideName}}/editor') Edit&nbsp
+              i.fa.fa-pencil-square-o
+            a.btn.btn-danger.btn-sm(ng-click='deleteSlide(slide.slideName)') Delete&nbsp
+              i.fa.fa-trash-o
           td
-            select(ng-options='token as token.accessToken for token in tokens', ng-model='slideShows[$index].token', ng-change='changeToken(slide.slideName, slideToken)')
+            select#tokens(ng-options='token as token.accessToken for token in tokens', ng-model='slideShows[$index].token', ng-change='changeToken(slide.slideName, slideToken)')
 
 //TODO: #newSlideshow modal
 #newSlideshowModal.modal(role='dialog')
