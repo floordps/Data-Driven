@@ -188,8 +188,11 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
       }
     });
   };
+  $scope.changeToken = function(sname, token,i ) {
+    $http.post('/api/account/' + sname, { token: token }).success(function(data) {
+    });
+  };
   $http.get('/api/account').success(function(data) {
-    console.log(data)
     $scope.slideShows = data;
   });
   $scope.checkSlideShowName = function(a) {

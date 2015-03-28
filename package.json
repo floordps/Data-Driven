@@ -16,7 +16,7 @@
     "express-session": "^1.10.3",
     "jade": "^1.9.2",
     "jsforce": "^1.4.0",
-    "mongoose": "^3.8.23",
+    "mongoose": "~3.8.23",
     "passport": "^0.2.1",
     "passport-google": "^0.3.0",
     "passport-openid": "^0.3.1",
