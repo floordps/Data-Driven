@@ -173,7 +173,6 @@ app.controller('editorCtrl', function($scope, $http, $routeParams) {
 
 app.controller('graph', function($scope) {
 });
-app.controller('loginCtrl', function(){});
 
 app.controller('userCtrl', function($scope, $http, userProfile) {
   $scope.username = userProfile.profile.displayName;
