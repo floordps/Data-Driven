@@ -4,10 +4,6 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl : 'partials/home.jade',
       controller : 'clientCtrl'
     })
-    .when('/login', {
-      templateUrl : 'partials/login.jade',
-      controller : 'loginCtrl'
-    })
     .when('/view/:username', {
       templateUrl : 'partials/username.jade',
       controller : 'userSlidesCtrl'
@@ -15,10 +11,6 @@ app.config(['$routeProvider', function($routeProvider) {
     .when('/view/:username/:slidename', {
       templateUrl : 'partials/slide.jade',
       controller : 'clientCtrl'
-    })
-    .when('/login', {
-      templateUrl : 'partials/login.jade',
-      controller : 'loginCtrl'
     })
     .otherwise({
       redirectTo: '/'

@@ -14,6 +14,7 @@ h1.text-center Data - Driven
         td {{slide.slideName}}
         td {{slide.date}}
         td
-          a(href='/#/view/{{slide.username}}') {{slide.author}}
+          a(href='/#/view/{{slide.username}}') {{slide.author | uppercase}}
         td
-          a(href='/#/view/{{slide.username}}/{{slide.slideName}}') Play
+          a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
+            i.fa.fa-play
