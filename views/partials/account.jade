@@ -30,8 +30,7 @@ chat
             a(href='/account#/{{slide.slideName}}/editor') Edit
             a(ng-click='deleteSlide(slide.slideName)') Delete
           td
-            select
-              option(ng-repeat='token in tokens track by $index') {{token.accessToken}}
+            select(ng-options='token as token.accessToken for token in tokens', ng-model='slideShows[$index].token', ng-change='changeToken(slide.slideName, slideToken)')
 
 //TODO: #newSlideshow modal
 #newSlideshowModal.modal(role='dialog')
