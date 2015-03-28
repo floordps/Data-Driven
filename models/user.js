@@ -9,10 +9,7 @@ var userSchema = new mongoose.Schema({
       givenName: String,
       middleName: String
     },
-    email: [{
-      value: String,
-      type: String
-    }]
+    email: String
   },
   tokens: [{
     accessToken: String,
@@ -21,7 +18,7 @@ var userSchema = new mongoose.Schema({
   slideShows: [SlideShow]
 }, { collection: 'users' } );
 userSchema.virtual('username').get(function() {
-  return this.profile.displayName.toLowerCase().replace(/\s/, '');
+  return this.profile.email.toLowerCase().replace(/@.*$/, '');
 });
 userSchema.set('toJSON', { virtuals: true });
 module.exports = mongoose.model('User', userSchema, 'users');

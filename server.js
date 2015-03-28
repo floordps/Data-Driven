@@ -57,6 +57,8 @@ passport.use(new GoogleStrategy({
           return done(err);
       }
       if (!user && profile) {
+        profile.email = profile.emails[0].value;
+        delete profile.emails;
         var u = new User({ openId: token, profile: profile });
         u.save(function(err, u) {
           return done(err, u);
@@ -161,7 +163,7 @@ app.get('/oauth2/callback', function(req, res) {
   var code = req.query.code;
   conn.authorize(code, function(err, userInfo) {
     if (err) { return console.error('err:'+err); }
-    User.findOne({ openId: req.user.openId }, function(err, user) {
+    User.findOne({ 'profile.email': req.user.profile.email }, function(err, user) {
       if(err) { return; }
       if(user) {
         var tokens = user.tokens || [];
