@@ -3,8 +3,10 @@ script(src='/app/js/bootstrap-markdown.buttons.js')
 .container
   .row
     form
-      textarea#text-editor(name='content', rows='20')
-      button.btn.btn-success(ng-click='updateMarkdown()') Save
+      textarea#text-editor(name='content', rows='20', data-provide='markdown')
+      #footer-editor
+        button.btn.btn-success(ng-click='updateMarkdown()') Save
+        a.btn.btn-default(href='/account') Go Back
 #graphModal.modal.fade(role='dialog')
   .modal-content
     .modal-header
