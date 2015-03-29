@@ -13,7 +13,8 @@ var userSchema = new mongoose.Schema({
   },
   tokens: [{
     accessToken: String,
-    refreshToken: String
+    refreshToken: String,
+    instanceUrl: String
   }],
   slideShows: [SlideShow]
 }, { collection: 'users' } );

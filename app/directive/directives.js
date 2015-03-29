@@ -24,7 +24,7 @@ app.directive('audience', function($compile, $http) {
         $compile($('.graph'))(scope);
         $('.graph').each(function() {
           var id = $(this).attr('reportId');
-          $http.post('/report/'+id).success(function(data) {
+          $http.post('/report/'+id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName }).success(function(data) {
             var arr = data.factMap['T!T'].rows;
             var obj = [{
               key: "Report: " + id,
@@ -48,7 +48,7 @@ app.directive('master', function($compile, $http) {
         $compile($('.graph'))(scope);
         $('.graph').each(function() {
           var id = $(this).attr('reportId');
-          $http.post('/report/'+id).success(function(data) {
+          $http.post('/report/'+id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName }).success(function(data) {
             var arr = data.factMap['T!T'].rows;
             var obj = [{
               key: "Report: " + id,

@@ -8,7 +8,8 @@ var slideShowSchema = new mongoose.Schema({
   slides: String,
   token: {
     accessToken: String,
-    refreshToken: String
+    refreshToken: String,
+    instanceUrl: String
   }
 }, { collection: 'slideShows' } );
 module.exports = mongoose.model('SlideShow', slideShowSchema, 'slideShows');

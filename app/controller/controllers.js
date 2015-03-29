@@ -8,6 +8,7 @@ app.controller('clientCtrl', function($rootScope, $scope, socket, $http, $locati
         $location.path('/view/'+uname);
         return;
       }
+      $scope.slideshow = data;
       $('#slideMd').html(data.slides);
         Reveal.initialize({
         controls: true,
@@ -71,6 +72,7 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams) {
       $location.path('/');
       return;
     }
+    $scope.slideshow = data;
     $('#slideMd').html(data.slides);
     Reveal.initialize({
       controls: true,

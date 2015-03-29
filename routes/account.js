@@ -23,9 +23,7 @@ module.exports.Router = function(SlideShow) {
         if(err) return res.json({success: false});
         if(slideshows) {
           for(var prop in req.body) {
-            console.log(prop);
             if(prop in slideshows) {
-            console.log('g');
               slideshows[prop] = req.body[prop];
             }
           }

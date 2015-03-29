@@ -100,15 +100,14 @@ app.get('/partials/:id', function(req, res, next) {
 
 var js = require('./jsConnect.json');
 app.post('/report/:id', function(req, res, next) {
-  var conn = new jsforce.Connection({
-    oauth2: {
-      clientId: js.clientId,
-      clientSecret: js.clientSecret,
-      redirectUri: js.redirectUri
-    }
-  });
-  conn.login(js.username, js.password, function(err, user) {
-    if(err) return res.status(500).send(err);
+  SlideShow.findOne({
+    username: req.body.username,
+    slideName: req.body.slidename
+  }, function(err, slideshow) {
+    var conn = new jsforce.Connection({
+      instanceUrl: slideshow.token.instanceUrl,
+      accessToken: slideshow.token.accessToken
+    });
     conn.analytics.reports(function(err, reports) {
       if(err) return res.status(501).send(err);
       var id = req.params.id;
@@ -169,7 +168,8 @@ app.get('/oauth2/callback', function(req, res) {
         var tokens = user.tokens || [];
         tokens.push({
           accessToken: conn.accessToken,
-          refreshToken: conn.refreshToken
+          refreshToken: conn.refreshToken,
+          instanceUrl: conn.instanceUrl
         });
         user.tokens = tokens;
         user.save();
