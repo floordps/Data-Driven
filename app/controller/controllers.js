@@ -10,7 +10,7 @@ app.controller('clientCtrl', function($rootScope, $scope, socket, $http, $locati
       }
       $scope.slideshow = data;
       $('#slideMd').html(data.slides);
-        Reveal.initialize({
+      Reveal.initialize({
         controls: true,
         keyboard: true,
         margin: 0.1,
@@ -19,7 +19,7 @@ app.controller('clientCtrl', function($rootScope, $scope, socket, $http, $locati
         transitionSpeed: 'slow',
         multiplex: {
           secret: null,
-          id: '1',
+          id: data.username + data.slideName,
           url: ''
         },
         dependencies: [
@@ -29,8 +29,7 @@ app.controller('clientCtrl', function($rootScope, $scope, socket, $http, $locati
           { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
           { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
         ]
-        });
-
+      });
     });
   } else {
     $http.get('/api/view/all').success(function(data) {
@@ -83,7 +82,7 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams) {
       transitionSpeed: 'slow',
       multiplex: {
         secret: 'secret123',
-        id: '1',
+        id: data.username + data.slideName,
         url: ''
       },
       dependencies: [
