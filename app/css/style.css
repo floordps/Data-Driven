@@ -122,6 +122,14 @@ nav {
 
 
 /* Editor */
+#footer-editor {
+  margin-top: 5px;
+}
+
+#footer-editor a {
+  margin-left: 10px;
+}
+
 .modal-content {
   width: 50%;
   margin-left: auto;
