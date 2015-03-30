@@ -97,7 +97,8 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams) {
 });
 
 
-app.controller('editorCtrl', function($scope, $http, $routeParams) {
+app.controller('editorCtrl', function($scope, $http, $routeParams, userProfile) {
+  $scope.slideshow = null;
   $scope.showDetails = true;
   $scope.reportDetails = true;
   $scope.graph = {};
@@ -139,7 +140,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams) {
 
   $scope.checkReport = function () {
     $scope.load = true;
-    $http.post('/report/' + $scope.graph.reportId + '/desc').success(function(data) {
+    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username, slidename: $routeParams.slidename }).success(function(data) {
       if(data) {
         data.cols.forEach(function(data) {
         $scope.labels.push(data.label);
@@ -159,6 +160,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams) {
 
   $http.get('/api/account/' + $routeParams.slidename).success(function(data) {
     if(data) {
+      $scope.slideshow = data;
       $('#text-editor').text(data.slides);
     }
   });

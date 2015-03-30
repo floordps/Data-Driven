@@ -30,14 +30,14 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-/*
-* MongoDB Connect
-*/
+/**
+ * MongoDB Connect
+ */
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/data-driven');
 
-/*
-* Setup Authentication
-*/
+/**
+ * Setup Authentication
+ */
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -85,11 +85,11 @@ function isAuth(req, res, next) {
   res.redirect('/#login');
 }
 
-/*
-* Routes
-*/
+/**
+ * Routes
+ */
 app.get('/', function(req, res, next) {
-  res.render('index');
+    res.render('index');
 });
 app.get('/account', isAuth, function(req, res, next) {
   res.render('account', { user: req.user });
@@ -98,6 +98,9 @@ app.get('/partials/:id', function(req, res, next) {
   res.render('partials/' + req.params.id);
 });
 
+/**
+ * Retrieve graph data
+ */
 var js = require('./jsConnect.json');
 app.post('/report/:id', function(req, res, next) {
   SlideShow.findOne({
@@ -118,15 +121,14 @@ app.post('/report/:id', function(req, res, next) {
   });
 });
 app.post('/report/:id/desc', function(req, res, next) {
-  var conn = new jsforce.Connection({
-    oauth2: {
-      clientId: js.clientId,
-      clientSecret: js.clientSecret,
-      redirectUri: js.redirectUri
-    }
-  });
-  conn.login(js.username, js.password, function(err, user) {
-    if(err) return res.status(500).send(err);
+  SlideShow.findOne({
+    username: req.body.username,
+    slideName: req.body.slidename
+  }, function(err, slideshow) {
+    var conn = new jsforce.Connection({
+      instanceUrl: slideshow.token.instanceUrl,
+      accessToken: slideshow.token.accessToken
+    });
     conn.analytics.reports(function(err, reports) {
       var id = req.params.id;
       conn.analytics.report(id).describe(function(err, result) {
@@ -143,11 +145,12 @@ app.post('/report/:id/desc', function(req, res, next) {
       });
     });
   });
+  //});
 });
 
-/*
-* Retrieve Token
-**/
+/**
+ * Retrieve Token
+ */
 var oauth2 = new jsforce.OAuth2({
     clientId: js.clientId,
     clientSecret: js.clientSecret,
@@ -179,7 +182,9 @@ app.get('/oauth2/callback', function(req, res) {
   });
 });
 
-/* Login Status */
+/**
+ * Login Status
+ */
 app.get('/loggedIn', function(req, res, next) {
   if (req.isAuthenticated()) {
     res.end('true');
