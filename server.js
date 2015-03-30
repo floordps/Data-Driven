@@ -200,5 +200,8 @@ app.get('/logout', function(req, res, next) {
 app.use('/app', express.static(__dirname + '/app'));
 app.use('/bower', express.static(__dirname + '/bower_components'));
 app.use('/api/view', viewRouter);
-app.use('/api/account', accountRouter);
+app.use('/api/account', function(req, res, next) {
+  if(req.isAuthenticated()) return next();
+  res.sendStatus(401);
+}, accountRouter);
 io.sockets.on('connection', socket);
