@@ -34,7 +34,10 @@ $(function() {
               end = e.getContent().length;
             $('#createGraph').one('click', function() {
               str = '&nbsp;<!-- .element: class="graph center-block" '
-                + 'nvd3-' + graph.graphType + '="x" '
+                + 'nvd3-' + graph.graphType + '="nvd3" '
+                + 'reportId="' + graph.reportId + '" '
+                + 'xValue="' + graph.xValue +'" '
+                + 'yValue="' + graph.yValue +'" '
                 + 'data="graph[\''+ graph.reportId +'\']"';
               for(var o in graph.options) {
                 str += ' ' + o + '="'+ graph.options[o] +'"';
