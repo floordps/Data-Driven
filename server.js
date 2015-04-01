@@ -102,14 +102,21 @@ app.get('/partials/:id', function(req, res, next) {
  * Retrieve graph data
  */
 var js = require('./jsConnect.json');
+var oauth2 = new jsforce.OAuth2({
+    clientId: js.clientId,
+    clientSecret: js.clientSecret,
+    redirectUri: js.redirectUri
+});
 app.post('/report/:id', function(req, res, next) {
   SlideShow.findOne({
     username: req.body.username,
     slideName: req.body.slidename
   }, function(err, slideshow) {
     var conn = new jsforce.Connection({
+      oauth2: oauth2,
       instanceUrl: slideshow.token.instanceUrl,
-      accessToken: slideshow.token.accessToken
+      accessToken: slideshow.token.accessToken,
+      refreshToken: slideshow.token.refreshToken
     });
     conn.analytics.reports(function(err, reports) {
       if(err) return res.status(501).send(err);
@@ -127,7 +134,8 @@ app.post('/report/:id/desc', function(req, res, next) {
   }, function(err, slideshow) {
     var conn = new jsforce.Connection({
       instanceUrl: slideshow.token.instanceUrl,
-      accessToken: slideshow.token.accessToken
+      accessToken: slideshow.token.accessToken,
+      refreshToken: slideshow.token.refreshToken
     });
     conn.analytics.reports(function(err, reports) {
       var id = req.params.id;
@@ -151,11 +159,6 @@ app.post('/report/:id/desc', function(req, res, next) {
 /**
  * Retrieve Token
  */
-var oauth2 = new jsforce.OAuth2({
-    clientId: js.clientId,
-    clientSecret: js.clientSecret,
-    redirectUri: js.redirectUri
-});
 app.get('/oauth2/auth', isAuth, function(req, res) {
   res.redirect(oauth2.getAuthorizationUrl({ scope : 'api id web refresh_token' }));
 });
