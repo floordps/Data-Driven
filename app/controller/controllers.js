@@ -1,4 +1,4 @@
-app.controller('clientCtrl', function($rootScope, $scope, socket, $http, $location, $routeParams) {
+app.controller('clientCtrl', function($rootScope, $scope, $http, $location, $routeParams) {
   var uname = $routeParams.username,
     sname = $routeParams.slidename;
   $scope.slideShows = [];
@@ -36,32 +36,6 @@ app.controller('clientCtrl', function($rootScope, $scope, socket, $http, $locati
       $scope.slideShows = data;
     });
   }
-
-  $scope.messages = [];
-  socket.on('init', function (data) {
-    $rootScope.name = data.name;
-  });
-
-  socket.on('send:message', function (message) {
-    $scope.messages.push({
-      user: message.user,
-      text: message.text,
-      });
-  });
-
-  $scope.sendMessage = function () {
-    socket.emit('send:message', {
-      message: $scope.message
-    });
-
-    $scope.messages.push({
-      user: $rootScope.name,
-      text: $scope.message
-    });
-
-    $scope.message = '';
-  };
-
 });
 
 app.controller('masterCtrl', function($scope, $http, $location, $routeParams) {
@@ -140,7 +114,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, userProfile) 
 
   $scope.checkReport = function () {
     $scope.load = true;
-    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username, slidename: $routeParams.slidename }).success(function(data) {
+    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.uname, slidename: $routeParams.slidename }).success(function(data) {
       if(data) {
         data.cols.forEach(function(data) {
         $scope.labels.push(data.label);
@@ -188,12 +162,6 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
           return obj.slideName === sname;
         }, true);
       }
-    });
-  };
-  $scope.changeToken = function(slide) {
-    var sname = slide.slideName,
-      token = slide.token;
-    $http.post('/api/account/' + sname, { token: token }).success(function(data) {
     });
   };
   $http.get('/api/account').success(function(data) {
