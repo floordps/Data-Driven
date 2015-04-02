@@ -38,6 +38,7 @@ $(function() {
                 + 'reportId="' + graph.reportId + '" '
                 + 'xValue="' + graph.xValue +'" '
                 + 'yValue="' + graph.yValue +'" '
+                + 'graphType="' + graph.graphType +'" '
                 + 'data="graph[\''+ graph.reportId +'\']"';
               for(var o in graph.options) {
                 str += ' ' + o + '="'+ graph.options[o] +'"';
