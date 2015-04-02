@@ -166,7 +166,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, userProfile) 
   });
   $scope.updateMarkdown = function() {
     var md = $('#text-editor').val();
-    $http.post('/api/account/' + $routeParams.slidename, { slides: md }).success(function(data) {
+    $http.post('/api/account/' + $routeParams.slidename, { token: userProfile.token, slides: md }).success(function(data) {
       if(data && !data.success) {
         alert('fail');
       }
@@ -178,7 +178,7 @@ app.controller('graph', function($scope) {
 });
 
 app.controller('userCtrl', function($scope, $http, userProfile) {
-  $scope.username = userProfile.profile.displayName;
+  $scope.username = userProfile.display_name;
   $scope.slideShows = [];
   $scope.tokens = userProfile.tokens;
   $scope.deleteSlide = function(sname) {

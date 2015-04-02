@@ -1,25 +1,21 @@
 var mongoose = require('mongoose');
 var SlideShow = require('./slideShow');
 var userSchema = new mongoose.Schema({
-  openId: String,
-  profile: {
-    displayName: String,
-    name: {
-      familyName: String,
-      givenName: String,
-      middleName: String
-    },
-    email: String
-  },
-  tokens: [{
+  user_id: String,
+  organization_id: String,
+  username: String,
+  display_name: String,
+  first_name: String,
+  last_name: String,
+  email: String,
+  token: {
     accessToken: String,
     refreshToken: String,
     instanceUrl: String
-  }],
-  slideShows: [SlideShow]
+  }
 }, { collection: 'users' } );
-userSchema.virtual('username').get(function() {
-  return this.profile.email.toLowerCase().replace(/@.*$/, '');
+userSchema.virtual('uname').get(function() {
+  return this.email.toLowerCase().replace(/@.*$/, '');
 });
 userSchema.set('toJSON', { virtuals: true });
 module.exports = mongoose.model('User', userSchema, 'users');

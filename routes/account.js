@@ -3,13 +3,13 @@ var express = require('express');
 module.exports.Router = function(SlideShow) {
   return express.Router()
     .get('/', function(req, res, next) {
-      SlideShow.find({ username: req.user.username }, function(err, slideShows) {
+      SlideShow.find({ username: req.session.user.uname }, function(err, slideShows) {
         res.json(slideShows);
       });
     })
     .get('/:slidename', function(req, res, next) {
       SlideShow.findOne({
-        username: req.user.username,
+        username: req.session.user.uname,
         slideName: req.params.slidename
       }, function(err, slideshows) {
         res.json(slideshows);
@@ -17,7 +17,7 @@ module.exports.Router = function(SlideShow) {
     })
     .post('/:slidename', function(req, res, next) {
       SlideShow.findOne({
-        username: req.user.username,
+        username: req.session.user.uname,
         slideName: req.params.slidename
       }, function(err, slideshows) {
         if(err) return res.json({success: false});
@@ -31,11 +31,12 @@ module.exports.Router = function(SlideShow) {
           slideshows.save();
         } else {
           new SlideShow({
-            author: req.user.profile.displayName,
-            username: req.user.username,
+            author: req.session.user.display_name,
+            username: req.session.user.uname,
             date: new Date(),
             slideName: req.params.slidename,
-            slides: req.body.slides
+            slides: req.body.slides,
+            token: req.body.token
           }).save();
         }
         res.json({success: true});
@@ -43,7 +44,7 @@ module.exports.Router = function(SlideShow) {
     })
     .delete('/:slidename', function(req, res, next) {
       SlideShow.findOneAndRemove({
-        username: req.user.username,
+        username: req.session.user.uname,
         slideName: req.params.slidename
       }, function(err, slideshows) {
         if(err) return res.json({success: false});

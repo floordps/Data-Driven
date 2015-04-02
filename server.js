@@ -5,8 +5,8 @@ var io = require('socket.io')(server);
 var socket = require('./routes/socket.js');
 var bodyParser = require('body-parser');
 var jsforce = require('jsforce');
-var passport = require('passport');
-var GoogleStrategy = require('passport-google').Strategy;
+//var passport = require('passport');
+//var GoogleStrategy = require('passport-google').Strategy;
 var mongoose = require('mongoose');
 var User = require('./models/user');
 var SlideShow = require('./models/slideShow');
@@ -27,8 +27,8 @@ app.use(session({
    resave: false,
    saveUninitialized: false
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.initialize());
+//app.use(passport.session());
 
 /**
  * MongoDB Connect
@@ -38,7 +38,7 @@ mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/data-driven');
 /**
  * Setup Authentication
  */
-passport.serializeUser(function(user, done) {
+/*passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 passport.deserializeUser(function(id, done) {
@@ -83,6 +83,11 @@ function isAuth(req, res, next) {
     return next();
   }
   res.redirect('/#login');
+}*/
+
+function isAuth(req, res, next) {
+  if(!req.session.accessToken || !req.session.instanceUrl) return res.redirect('/');
+  next();
 }
 
 /**
@@ -92,7 +97,7 @@ app.get('/', function(req, res, next) {
     res.render('index');
 });
 app.get('/account', isAuth, function(req, res, next) {
-  res.render('account', { user: req.user });
+  res.render('account', { user: req.session.user });
 });
 app.get('/partials/:id', function(req, res, next) {
   res.render('partials/' + req.params.id);
@@ -132,7 +137,9 @@ app.post('/report/:id/desc', function(req, res, next) {
     username: req.body.username,
     slideName: req.body.slidename
   }, function(err, slideshow) {
+    //TODO: desc on new slideshow (check reportId)
     var conn = new jsforce.Connection({
+      oauth2: oauth2,
       instanceUrl: slideshow.token.instanceUrl,
       accessToken: slideshow.token.accessToken,
       refreshToken: slideshow.token.refreshToken
@@ -159,7 +166,7 @@ app.post('/report/:id/desc', function(req, res, next) {
 /**
  * Retrieve Token
  */
-app.get('/oauth2/auth', isAuth, function(req, res) {
+app.get('/oauth2/auth', function(req, res) {
   res.redirect(oauth2.getAuthorizationUrl({ scope : 'api id web refresh_token' }));
 });
 
@@ -167,20 +174,24 @@ app.get('/oauth2/callback', function(req, res) {
   var conn = new jsforce.Connection({ oauth2 : oauth2 });
   var code = req.query.code;
   conn.authorize(code, function(err, userInfo) {
-    if (err) { return console.error('err:'+err); }
-    User.findOne({ 'profile.email': req.user.profile.email }, function(err, user) {
-      if(err) { return; }
-      if(user) {
-        var tokens = user.tokens || [];
-        tokens.push({
-          accessToken: conn.accessToken,
-          refreshToken: conn.refreshToken,
-          instanceUrl: conn.instanceUrl
-        });
-        user.tokens = tokens;
-        user.save();
+    if (err) return res.redirect(401, '/');
+    req.session.accessToken = conn.accessToken;
+    req.session.instanceUrl = conn.instanceUrl;
+    conn.identity(function(err, ret) {
+      User.findOne({ 'email': ret.email }, function(err, user) {
+        if(err) { return; }
+        var u = user || new User(ret);
+        if(!user) {
+          u.token = {
+            accessToken: conn.accessToken,
+            refreshToken: conn.refreshToken,
+            instanceUrl: conn.instanceUrl
+          };
+        }
+        req.session.user = u;
+        u.save();
         res.redirect('/account');
-      }
+      });
     });
   });
 });
@@ -189,14 +200,16 @@ app.get('/oauth2/callback', function(req, res) {
  * Login Status
  */
 app.get('/loggedIn', function(req, res, next) {
-  if (req.isAuthenticated()) {
+  if(req.session.accessToken && req.session.instanceUrl) {
     res.end('true');
   }
   res.end('false');
 });
 
 app.get('/logout', function(req, res, next) {
-  req.logout();
+  var conn = new jsforce.Connection();
+  conn.logout();
+  req.session.destroy();
   res.redirect('/');
 });
 
@@ -204,7 +217,7 @@ app.use('/app', express.static(__dirname + '/app'));
 app.use('/bower', express.static(__dirname + '/bower_components'));
 app.use('/api/view', viewRouter);
 app.use('/api/account', function(req, res, next) {
-  if(req.isAuthenticated()) return next();
+  if(req.session.accessToken && req.session.instanceUrl) return next();
   res.sendStatus(401);
 }, accountRouter);
 io.sockets.on('connection', socket);
