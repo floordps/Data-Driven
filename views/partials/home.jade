@@ -11,7 +11,7 @@ h1.text-center Data - Driven
     tbody
       tr(ng-repeat='slide in slideShows')
         td {{slide.slideName}}
-        td {{slide.date}}
+        td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
         td
           a(href='/#/view/{{slide.username}}') {{slide.author | uppercase}}
         td

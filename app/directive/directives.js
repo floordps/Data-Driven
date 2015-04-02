@@ -68,7 +68,7 @@ app.directive('menu', function($http) {
                     '</ul>'+
                   '</div>');
          } else {
-          elem.html('<div id=\'menu\' class=\'pull-right\'><a class=\'btn btn-primary\' href=\'/auth/google\'><span class=\'fa fa-google-plus\'> &nbspLog In</span></a></div>');
+          elem.html('<div id=\'menu\' class=\'pull-right\'><a class=\'btn btn-primary\' href=\'/oauth2/auth\' style=\'font-weight:bold;\'><span class=\'fa-stack\'><i class=\'fa fa-cloud fa-stack-2x\'></i><i class=\'fa fa-stack-1x\' style=\'color:#1E90FF;font-style:italic;font-weight:bold;\'>sf</i></span>&nbsp Log In</a></div>');
         }
       });
     }

@@ -3,9 +3,7 @@ menu
   .row
     span.h1 {{username}}
     .pull-right
-      button#newSlideshow.btn.btn-danger(data-toggle='modal', data-target='#newSlideshowModal') New Slideshow
-  .row
-    a#editToken(data-toggle='modal', data-target='#editTokenModal') Edit Token
+      button#newSlideshow.btn.btn-primary(data-toggle='modal', data-target='#newSlideshowModal') New Slideshow
   .row
     table.table
       thead
@@ -14,11 +12,10 @@ menu
           th Created Date
           th Author
           th Action
-          th Token
       tbody
         tr(ng-repeat='slide in slideShows')
           td {{slide.slideName}}
-          td {{slide.date}}
+          td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
           td {{slide.author}}
           td
             a.btn.btn-info.btn-sm(href='/account#/{{slide.slideName}}') PLAY&nbsp
@@ -27,10 +24,6 @@ menu
               i.fa.fa-pencil-square-o
             a.btn.btn-danger.btn-sm(ng-click='deleteSlide(slide.slideName)') Delete&nbsp
               i.fa.fa-trash-o
-          td
-            select#tokens(ng-options='token as token.accessToken for token in tokens', ng-model='slideShows[$index].token', ng-change='changeToken(slideShows[$index])')
-
-//TODO: #newSlideshow modal
 #newSlideshowModal.modal(role='dialog')
   .modal-dialog
     .modal-content
@@ -42,24 +35,4 @@ menu
           input.form-control(type='text', placeholder='SlideShow Name', ng-model='newSlideName', ng-change='checkSlideShowName(newSlideName)', required)
       .modal-footer
         a.btn.btn-primary(ng-disabled='newSlideForm.$invalid || checkSlideShowName(newSlideName)', ng-href='/account#/{{newSlideName}}/editor') Create
-        button.btn.btn-default(data-dismiss='modal') Close
-
-//TODO: #editToken modal
-#editTokenModal.modal(role='dialog')
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button.close(data-dismiss='modal')
-        h3 Token Settings
-      .modal-body
-        a.btn.btn-warning.btn-sm.pull-right(href='/oauth2/auth') Add Token
-        .row
-          table.table
-            thead
-              tr
-                th Access Token
-            tbody
-              tr(ng-repeat='token in tokens track by $index')
-                td {{token.accessToken}}
-      .modal-footer
         button.btn.btn-default(data-dismiss='modal') Close

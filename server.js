@@ -82,7 +82,7 @@ function isAuth(req, res, next) {
   if(req.isAuthenticated()){
     return next();
   }
-  res.redirect('/#login');
+  res.redirect('/');
 }
 
 /**
@@ -159,7 +159,7 @@ app.post('/report/:id/desc', function(req, res, next) {
 /**
  * Retrieve Token
  */
-app.get('/oauth2/auth', isAuth, function(req, res) {
+app.get('/oauth2/auth', function(req, res) {
   res.redirect(oauth2.getAuthorizationUrl({ scope : 'api id web refresh_token' }));
 });
 
