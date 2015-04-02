@@ -181,13 +181,11 @@ app.get('/oauth2/callback', function(req, res) {
       User.findOne({ 'email': ret.email }, function(err, user) {
         if(err) { return; }
         var u = user || new User(ret);
-        if(!user) {
-          u.token = {
-            accessToken: conn.accessToken,
-            refreshToken: conn.refreshToken,
-            instanceUrl: conn.instanceUrl
-          };
-        }
+        u.token = {
+          accessToken: conn.accessToken,
+          refreshToken: conn.refreshToken,
+          instanceUrl: conn.instanceUrl
+        };
         req.session.user = u;
         u.save();
         res.redirect('/account');
