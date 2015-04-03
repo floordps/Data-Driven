@@ -67,25 +67,32 @@ app.directive('menu', function($http) {
     restrict: 'E',
     link: function(scope, elem, attr) {
       $http.get('/loggedIn').success(function(data) {
+        var menuOption = '';
         if (data === 'true') {
           var menuOptions = [{name: 'Home', link: '/'},
                              {name: 'My Account', link: '/account'},
                              {name: 'Logout', link: '/logout'}];
-          var menuOption = '';
-          menuOptions.forEach(function(menu) {
+                                       menuOptions.forEach(function(menu) {
             menuOption = menuOption + '<li role=\'presentation\'>'+
               '<a role=\'menuitem\' href=\'' + menu.link + '\'>' + menu.name + '</a>'+
             '</li>';
           });
-          elem.html('<div class=\'dropdown pull-right\'>'+
-                    '<span class=\'fa fa-bars fa-3x dropdown-toggle\' data-toggle=\'dropdown\'></span>'+
-                    '<ul class=\'dropdown-menu dropdown-menu-right\' role=\'menu\'>'+
-                      menuOption +
-                    '</ul>'+
-                  '</div>');
          } else {
-          elem.html('<div id=\'menu\' class=\'pull-right\'><a class=\'btn btn-primary\' href=\'/oauth2/auth\' style=\'font-weight:bold;\'><span class=\'fa-stack\'><i class=\'fa fa-cloud fa-stack-2x\'></i><i class=\'fa fa-stack-1x\' style=\'color:#1E90FF;font-style:italic;font-weight:bold;\'>sf</i></span>&nbsp Log In</a></div>');
+           //elem.html('<div id=\'menu\' class=\'pull-right\'>
+           //<a data-toggle=\'modal\' href=\'#loginModal\' class=\'btn btn-primary\' style=\'font-weight:bold;\'>
+           //<span class=\'fa-stack\'><i class=\'fa fa-cloud fa-stack-2x\'></i><i class=\'fa fa-stack-1x\' style=\'color:#1E90FF;font-style:italic;font-weight:bold;\'>sf</i></span>&nbsp Log In</a></div>');
+           menuOption = '<h3>Login</h3><form ng-submit=\'login()\' name=\'loginForm\' novalidate>' +
+                          '<div class=\'form-group\'><input type=\'email\' placeholder=\'Salesforce Email\' ng-model=\'email\' class=\'form-control\'></div>' +
+                          '<div class=\'form-group\'><input type=\'password\' placeholder=\'Salesforce Password\' ng-model=\'password\' class=\'form-control\'></div>' +
+                          '<div class=\'form-group\'><input type=\'submit\' class=\'btn btn-primary form-control\' value=\'Login\'></div>' +
+                        '</form>';
         }
+        elem.html('<div class=\'dropdown pull-right\'>'+
+                  '<a class=\'btn btn-primary dropdown-toggle\' data-toggle=\'dropdown\'><span class=\'fa-stack\'><i class=\'fa fa-cloud fa-stack-2x\'></i><i class=\'fa fa-stack-1x\' style=\'color:#1E90FF;font-style:italic;font-weight:bold;\'>sf</i></span>&nbsp<i class=\'caret\' style=\'margin-left: 5px;\'></i></a>'+
+                  '<ul class=\'dropdown-menu dropdown-menu-right\' role=\'menu\'>'+
+                    menuOption +
+                  '</ul>'+
+                '</div>');
       });
     }
   };
