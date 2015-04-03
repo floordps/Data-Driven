@@ -5,11 +5,6 @@ var slideShowSchema = new mongoose.Schema({
   username: String,
   date: Date,
   slideName: String,
-  slides: String,
-  token: {
-    accessToken: String,
-    refreshToken: String,
-    instanceUrl: String
-  }
+  slides: String
 }, { collection: 'slideShows' } );
 module.exports = mongoose.model('SlideShow', slideShowSchema, 'slideShows');

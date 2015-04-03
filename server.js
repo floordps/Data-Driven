@@ -113,61 +113,52 @@ var oauth2 = new jsforce.OAuth2({
     redirectUri: js.redirectUri
 });
 app.post('/report/:id', function(req, res, next) {
-  SlideShow.findOne({
-    username: req.body.username,
-    slideName: req.body.slidename
-  }, function(err, slideshow) {
-    var conn = new jsforce.Connection({
-      oauth2: oauth2,
-      instanceUrl: slideshow.token.instanceUrl,
-      accessToken: slideshow.token.accessToken,
-      refreshToken: slideshow.token.refreshToken
-    });
-    conn.analytics.reports(function(err, reports) {
-      if(err) return res.status(501).send(err);
-      var id = req.params.id;
-      conn.analytics.report(id).execute({ details: true }, function(err, result) {
-        res.json(result);
+  User.findOne({
+    username: req.body.username
+  }, function(err, user) {
+    var conn = new jsforce.Connection();
+    conn.login(user.login.username , user.login.password, function(err, userInfo) {
+      conn.analytics.reports(function(err, reports) {
+        if(err) return res.status(501).send(err);
+        var id = req.params.id;
+        conn.analytics.report(id).execute({ details: true }, function(err, result) {
+          res.json(result);
+        });
       });
     });
   });
 });
 app.post('/report/:id/desc', function(req, res, next) {
-  SlideShow.findOne({
-    username: req.body.username,
-    slideName: req.body.slidename
-  }, function(err, slideshow) {
-    //TODO: desc on new slideshow (check reportId)
-    var conn = new jsforce.Connection({
-      oauth2: oauth2,
-      instanceUrl: slideshow.token.instanceUrl,
-      accessToken: slideshow.token.accessToken,
-      refreshToken: slideshow.token.refreshToken
-    });
-    conn.analytics.reports(function(err, reports) {
-      var id = req.params.id;
-      conn.analytics.report(id).describe(function(err, result) {
-        if(err) return res.status(501).send(err);
-        var details = result.reportExtendedMetadata.detailColumnInfo;
-        var ret = {
-          cols: [],
-          name: result.reportMetadata.name
-        };
-        for(var o in details) {
-          ret.cols.push(details[o]);
-        }
-        res.json(ret);
+  //TODO: desc on new slideshow (check reportId)
+  User.findOne({
+    username: req.body.username
+  }, function(err, user) {
+    var conn = new jsforce.Connection();
+    conn.login(user.login.username , user.login.password, function(err, userInfo) {
+      conn.analytics.reports(function(err, reports) {
+        var id = req.params.id;
+        conn.analytics.report(id).describe(function(err, result) {
+          if(err) return res.status(501).send(err);
+          var details = result.reportExtendedMetadata.detailColumnInfo;
+          var ret = {
+            cols: [],
+            name: result.reportMetadata.name
+          };
+          for(var o in details) {
+            ret.cols.push(details[o]);
+          }
+          res.json(ret);
+        });
       });
     });
   });
-  //});
 });
 
 /**
  * Retrieve Token
  */
-app.get('/oauth2/auth', function(req, res) {
-  res.redirect(oauth2.getAuthorizationUrl({ scope : 'api id web refresh_token' }));
+/*app.get('/oauth2/auth', function(req, res) {
+  res.redirect(oauth2.getAuthorizationUrl({ scope : 'api id refresh_token' }));
 });
 
 app.get('/oauth2/callback', function(req, res) {
@@ -189,6 +180,32 @@ app.get('/oauth2/callback', function(req, res) {
         req.session.user = u;
         u.save();
         res.redirect('/account');
+      });
+    });
+  });
+});*/
+
+/**
+ * Login
+ */
+app.post('/login', function(req, res, next) {
+  var conn = new jsforce.Connection();
+  conn.login(req.body.email, req.body.password, function(err, userInfo) {
+    if(err) return res.json({success: false });
+    req.session.accessToken = conn.accessToken;
+    req.session.instanceUrl = conn.instanceUrl;
+    conn.identity(function(err, ret) {
+      User.findOne({ 'email': ret.email }, function(err, user) {
+        if(err) { return; }
+        var u = user || new User(ret);
+        u.login = {
+          username: req.body.email,
+          password: req.body.password
+        };
+        u.save();
+        u.login = null;
+        req.session.user = u;
+        res.json({success: true });
       });
     });
   });
