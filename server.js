@@ -116,7 +116,7 @@ app.post('/report/:id', function(req, res, next) {
   User.findOne({
     username: req.body.username
   }, function(err, user) {
-    var conn = new jsforce.Connection();
+    var conn = new jsforce.Connection({ oauth2: oauth2 });
     conn.login(user.login.email, user.login.password, function(err, userInfo) {
       conn.analytics.reports(function(err, reports) {
         if(err) return res.status(501).send(err);
@@ -133,7 +133,7 @@ app.post('/report/:id/desc', function(req, res, next) {
   User.findOne({
     username: req.body.username
   }, function(err, user) {
-    var conn = new jsforce.Connection();
+    var conn = new jsforce.Connection({ oauth2: oauth2 });
     conn.login(user.login.email, user.login.password, function(err, userInfo) {
       conn.analytics.reports(function(err, reports) {
         var id = req.params.id;
@@ -189,7 +189,7 @@ app.get('/oauth2/callback', function(req, res) {
  * Login
  */
 app.post('/login', function(req, res, next) {
-  var conn = new jsforce.Connection();
+  var conn = new jsforce.Connection({ oauth2: oauth2 });
   conn.login(req.body.email, req.body.password, function(err, userInfo) {
     if(err) return res.json({success: false });
     req.session.accessToken = conn.accessToken;
@@ -222,7 +222,7 @@ app.get('/loggedIn', function(req, res, next) {
 });
 
 app.get('/logout', function(req, res, next) {
-  var conn = new jsforce.Connection();
+  var conn = new jsforce.Connection({ oauth2: oauth2 });
   conn.logout();
   req.session.destroy();
   res.redirect('/');
