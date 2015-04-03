@@ -1,4 +1,4 @@
-app.controller('clientCtrl', function($rootScope, $scope, $http, $location, $routeParams) {
+app.controller('clientCtrl', function($scope, $http, $routeParams) {
   var uname = $routeParams.username,
     sname = $routeParams.slidename;
   $scope.slideShows = [];

@@ -62,7 +62,7 @@ app.directive('master', function($compile, $http, charts) {
   };
 });
 
-app.directive('menu', function($http) {
+app.directive('menu', function($http, $location) {
   return {
     restrict: 'E',
     link: function(scope, elem, attr) {
@@ -81,10 +81,10 @@ app.directive('menu', function($http) {
            //elem.html('<div id=\'menu\' class=\'pull-right\'>
            //<a data-toggle=\'modal\' href=\'#loginModal\' class=\'btn btn-primary\' style=\'font-weight:bold;\'>
            //<span class=\'fa-stack\'><i class=\'fa fa-cloud fa-stack-2x\'></i><i class=\'fa fa-stack-1x\' style=\'color:#1E90FF;font-style:italic;font-weight:bold;\'>sf</i></span>&nbsp Log In</a></div>');
-           menuOption = '<h3>Login</h3><form ng-submit=\'login()\' name=\'loginForm\' novalidate>' +
+           menuOption = '<h3>Login</h3><form name=\'loginForm\' novalidate>' +
                           '<div class=\'form-group\'><input type=\'email\' placeholder=\'Salesforce Email\' ng-model=\'email\' class=\'form-control\'></div>' +
                           '<div class=\'form-group\'><input type=\'password\' placeholder=\'Salesforce Password\' ng-model=\'password\' class=\'form-control\'></div>' +
-                          '<div class=\'form-group\'><input type=\'submit\' class=\'btn btn-primary form-control\' value=\'Login\'></div>' +
+                          '<div class=\'form-group\'><input type=\'button\' class=\'btn btn-primary form-control\' value=\'Login\'></div>' +
                         '</form>';
         }
         elem.html('<div class=\'dropdown pull-right\'>'+
@@ -93,6 +93,16 @@ app.directive('menu', function($http) {
                     menuOption +
                   '</ul>'+
                 '</div>');
+        $('menu .dropdown .dropdown-menu form input[type="submit"]').on('click', function() {
+          var email = $('menu .dropdown .dropdown-menu form input[type="email"]').val();
+          var password = $('menu .dropdown .dropdown-menu form input[type="password"]').val();
+          $http.post('/login', {email: email, password: password}).success(function(data) {
+            console.log(data.success);
+            if (data.success) {
+              $location.path('/account');
+            }
+          });
+        });
       });
     }
   };
