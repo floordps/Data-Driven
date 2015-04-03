@@ -188,14 +188,18 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
         $scope.slideshow = data;
         $('#text-editor').val(data.slides);
         $('#editorModal').modal('show');
+      } else {
+        $scope.slideshow = { slideName: name };
+        $('#newSlideshowModal').modal('hide');
+        $('#editorModal').modal('show');
       }
     });
   };
   $scope.updateMarkdown = function() {
     var md = $('#text-editor').val();
     $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md }).success(function(data) {
-      if(data && !data.success) {
-        alert('fail');
+      if(data && data.success) {
+        if(data.slideshow) $scope.slideShows.push(data.slideshow);
       }
     });
   };

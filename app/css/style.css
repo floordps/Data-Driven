@@ -7,12 +7,21 @@ menu {
   margin-right: 20px;
 }
 
+.table-container, .table-container .table {
+  overflow: auto;
+  height: 80%;
+  width: 100%;
+}
+
 /* Account */
 #tokens {
   width: 200px;
   text-overflow: ellipsis;
 }
-
+#account-wrap {
+  height: 100%;
+  width: 100%;
+}
 #account-wrap table tbody tr td a:nth-child(2) {
   margin-right: 10px;
   margin-left: 10px;

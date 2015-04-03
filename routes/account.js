@@ -21,6 +21,7 @@ module.exports.Router = function(SlideShow) {
         slideName: req.params.slidename
       }, function(err, slideshows) {
         if(err) return res.json({success: false});
+        var slide = null;
         if(slideshows) {
           for(var prop in req.body) {
             if(prop in slideshows) {
@@ -30,16 +31,17 @@ module.exports.Router = function(SlideShow) {
           //slideshows.slides = req.body.slides;
           slideshows.save();
         } else {
-          new SlideShow({
+          slide = new SlideShow({
             author: req.session.user.display_name,
             username: req.session.user.username,
             date: new Date(),
             slideName: req.params.slidename,
             slides: req.body.slides,
             token: req.body.token
-          }).save();
+          });
+          slide.save();
         }
-        res.json({success: true});
+        res.json({slideshow: slide, success: true});
       });
     })
     .delete('/:slidename', function(req, res, next) {

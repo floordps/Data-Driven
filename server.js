@@ -191,6 +191,8 @@ app.get('/oauth2/callback', function(req, res) {
 app.post('/login', function(req, res, next) {
   var conn = new jsforce.Connection({ oauth2: oauth2 });
   conn.login(req.body.email, req.body.password, function(err, userInfo) {
+    //TODO: invalid_grant require token
+    // { [invalid_grant: authentication failure] name: 'invalid_grant' }
     if(err) return res.json({success: false });
     req.session.accessToken = conn.accessToken;
     req.session.instanceUrl = conn.instanceUrl;
