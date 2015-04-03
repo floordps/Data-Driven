@@ -117,7 +117,7 @@ app.post('/report/:id', function(req, res, next) {
     username: req.body.username
   }, function(err, user) {
     var conn = new jsforce.Connection();
-    conn.login(user.login.username , user.login.password, function(err, userInfo) {
+    conn.login(user.login.email, user.login.password, function(err, userInfo) {
       conn.analytics.reports(function(err, reports) {
         if(err) return res.status(501).send(err);
         var id = req.params.id;
@@ -134,7 +134,7 @@ app.post('/report/:id/desc', function(req, res, next) {
     username: req.body.username
   }, function(err, user) {
     var conn = new jsforce.Connection();
-    conn.login(user.login.username , user.login.password, function(err, userInfo) {
+    conn.login(user.login.email, user.login.password, function(err, userInfo) {
       conn.analytics.reports(function(err, reports) {
         var id = req.params.id;
         conn.analytics.report(id).describe(function(err, result) {

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var SlideShow = require('./slideShow');
 var userSchema = new mongoose.Schema({
   login: {
-    username: String,
+    email: String,
     password: String
   },
   user_id: String,
