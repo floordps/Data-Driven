@@ -62,7 +62,7 @@ app.directive('master', function($compile, $http, charts) {
   };
 });
 
-app.directive('menu', function($http, $location) {
+app.directive('menu', function($http, $window) {
   return {
     restrict: 'E',
     link: function(scope, elem, attr) {
@@ -84,7 +84,7 @@ app.directive('menu', function($http, $location) {
            menuOption = '<h3>Login</h3><form name=\'loginForm\' novalidate>' +
                           '<div class=\'form-group\'><input type=\'email\' placeholder=\'Salesforce Email\' ng-model=\'email\' class=\'form-control\'></div>' +
                           '<div class=\'form-group\'><input type=\'password\' placeholder=\'Salesforce Password\' ng-model=\'password\' class=\'form-control\'></div>' +
-                          '<div class=\'form-group\'><input type=\'button\' class=\'btn btn-primary form-control\' value=\'Login\'></div>' +
+                          '<div class=\'form-group\'><input type=\'submit\' class=\'btn btn-primary form-control\' value=\'Login\'></div>' +
                         '</form>';
         }
         elem.html('<div class=\'dropdown pull-right\'>'+
@@ -93,13 +93,13 @@ app.directive('menu', function($http, $location) {
                     menuOption +
                   '</ul>'+
                 '</div>');
-        $('menu .dropdown .dropdown-menu form input[type="submit"]').on('click', function() {
+        $('menu .dropdown .dropdown-menu form').on('submit', function(e) {
+          e.preventDefault();
           var email = $('menu .dropdown .dropdown-menu form input[type="email"]').val();
           var password = $('menu .dropdown .dropdown-menu form input[type="password"]').val();
           $http.post('/login', {email: email, password: password}).success(function(data) {
-            console.log(data.success);
             if (data.success) {
-              $location.path('/account');
+              $window.location.href = '/account';
             }
           });
         });
