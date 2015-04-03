@@ -3,6 +3,10 @@ a {
   cursor: pointer;
 }
 
+menu {
+  margin-right: 20px;
+}
+
 /* Account */
 #tokens {
   width: 200px;
