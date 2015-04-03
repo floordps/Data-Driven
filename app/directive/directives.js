@@ -62,7 +62,7 @@ app.directive('master', function($compile, $http, charts) {
   };
 });
 
-app.directive('menu', function($http, $window, $compile) {
+app.directive('menu', function($http, $window, $compile, $timeout) {
   return {
     restrict: 'E',
     link: function(scope, elem, attr) {
@@ -84,7 +84,7 @@ app.directive('menu', function($http, $window, $compile) {
            menuOption = '<h3>Login</h3><form name=\'loginForm\' ng-submit=\'login(email, password)\'novalidate>' +
                           '<div class=\'form-group\'><input type=\'email\' placeholder=\'Salesforce Email\' ng-model=\'email\' class=\'form-control\' required></div>' +
                           '<div class=\'form-group\'><input type=\'password\' placeholder=\'Salesforce Password\' ng-model=\'password\' class=\'form-control\' required></div>' +
-                          '<div class=\'form-group\'><input type=\'submit\' class=\'btn btn-primary form-control\' value=\'Login\' ng-disabled=\'loginForm.$invalid\'></div>' +
+                          '<div class=\'form-group\'><button type=\'submit\' ladda=\'load\' data-style=\'slide-left\' class=\'btn btn-primary form-control ladda-button\' ng-disabled=\'loginForm.$invalid\'>Login</button></div>' +
                         '</form>';
         }
         elem.html('<div class=\'dropdown pull-right\'>'+
@@ -95,11 +95,15 @@ app.directive('menu', function($http, $window, $compile) {
                 '</div>');
         $compile($('.dropdown-menu'))(scope);
         scope.login = function(email, password) {
+          scope.load = true;
           $http.post('/login', {email: email, password: password}).success(function(data) {
             if (data.success) {
               $window.location.href = '/account';
             }
-          }).error(function(data) {});
+            scope.load = false;
+          }).error(function(data) {
+            scope.load = false;
+          });
         };
         // $('menu .dropdown .dropdown-menu form').on('submit', function(e) {
         //   e.preventDefault();
