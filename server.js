@@ -114,7 +114,7 @@ var oauth2 = new jsforce.OAuth2({
 });
 app.post('/report/:id', function(req, res, next) {
   User.findOne({
-    username: req.body.username
+    uname: req.body.username
   }, function(err, user) {
     var conn = new jsforce.Connection({ oauth2: oauth2 });
     conn.login(user.login.email, user.login.password, function(err, userInfo) {
@@ -131,7 +131,7 @@ app.post('/report/:id', function(req, res, next) {
 app.post('/report/:id/desc', function(req, res, next) {
   //TODO: desc on new slideshow (check reportId)
   User.findOne({
-    username: req.body.username
+    uname: req.body.username
   }, function(err, user) {
     var conn = new jsforce.Connection({ oauth2: oauth2 });
     conn.login(user.login.email, user.login.password, function(err, userInfo) {
@@ -199,11 +199,10 @@ app.post('/login', function(req, res, next) {
         if(err) { return; }
         var u = user || new User(ret);
         u.login = {
-          username: req.body.email,
+          email: req.body.email,
           password: req.body.password
         };
         u.save();
-        u.login = null;
         req.session.user = u;
         res.json({success: true });
       });
