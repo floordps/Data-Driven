@@ -1,4 +1,4 @@
-app.controller('clientCtrl', function($scope, $http, $routeParams, $location) {
+app.controller('clientCtrl', function($scope, $http, $routeParams) {
   var uname = $routeParams.username,
     sname = $routeParams.slidename;
   $scope.slideShows = [];
@@ -36,6 +36,10 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $location) {
       $scope.slideShows = data;
     });
   }
+  $scope.setSearch = function(e) {
+    $scope.search = e;
+  };
+
 });
 
 app.controller('masterCtrl', function($scope, $http, $location, $routeParams) {
@@ -114,7 +118,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, userProfile) 
 
   $scope.checkReport = function () {
     $scope.load = true;
-    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username }).success(function(data) {
+    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.uname, slidename: $routeParams.slidename }).success(function(data) {
       if(data) {
         data.cols.forEach(function(data) {
         $scope.labels.push(data.label);

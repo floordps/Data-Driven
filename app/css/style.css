@@ -1,10 +1,6 @@
-/* menu */
-menu {
-  margin-right: 10px;
-}
-
-#menu {
-  display: inline-block;
+/* Home */
+a {
+  cursor: pointer;
 }
 
 /* Account */
