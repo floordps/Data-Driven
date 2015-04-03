@@ -114,7 +114,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, userProfile) 
 
   $scope.checkReport = function () {
     $scope.load = true;
-    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.uname, slidename: $routeParams.slidename }).success(function(data) {
+    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username }).success(function(data) {
       if(data) {
         data.cols.forEach(function(data) {
         $scope.labels.push(data.label);
