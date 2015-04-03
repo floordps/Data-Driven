@@ -179,7 +179,7 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
     if(!$scope.slideShows.length) return false;
     return typeof(a) !== 'undefined' && $.grep($scope.slideShows, function(obj, i) {
       return obj.slideName === a;
-    }, true).length === 0;
+    }).length === 0;
   };
   $scope.editSlide = function(name) {
     $('#text-editor').val(null);
