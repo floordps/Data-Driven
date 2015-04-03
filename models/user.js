@@ -5,6 +5,11 @@ var userSchema = new mongoose.Schema({
     email: String,
     password: String
   },
+  token: {
+    accessToken: String,
+    refreshToken: String,
+    instanceUrl: String
+  },
   user_id: String,
   organization_id: String,
   username: String,
@@ -13,8 +18,4 @@ var userSchema = new mongoose.Schema({
   last_name: String,
   email: String
 }, { collection: 'users' } );
-userSchema.virtual('uname').get(function() {
-  return this.email.toLowerCase().replace(/@.*$/, '');
-});
-userSchema.set('toJSON', { virtuals: true });
 module.exports = mongoose.model('User', userSchema, 'users');

@@ -8,13 +8,13 @@ module.exports.Router = function(SlideShow) {
       });
     })
     .get('/:username', function(req, res, next) {
-      SlideShow.find({ uname: req.params.username }, function(err, slideShows) {
+      SlideShow.find({ username: req.params.username }, function(err, slideShows) {
         res.json(slideShows);
       });
     })
     .get('/:username/:slidename', function(req, res, next) {
       SlideShow.findOne({
-        uname: req.params.username,
+        username: req.params.username,
         slideName: req.params.slidename
       }, function(err, slideShow) {
         res.json(slideShow);
