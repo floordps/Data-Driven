@@ -196,12 +196,14 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
     });
   };
   $scope.updateMarkdown = function() {
+    $scope.loading = true;
     var md = $('#text-editor').val();
     $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md }).success(function(data) {
+      $scope.loading = false;
       if(data && data.success) {
         if(data.slideshow) $scope.slideShows.push(data.slideshow);
       }
-    });
+    }).error(function(data) {$scope.loading=false;});
   };
   $scope.showGraphType = function(e) {
     if (e == 'rID') {
