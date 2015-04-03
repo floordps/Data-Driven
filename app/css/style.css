@@ -33,6 +33,11 @@ menu {
   margin-right: auto;
 }
 
+#editorModal textarea {
+  resize: none;
+  width: 100%;
+}
+
 form[name=tableForm] input.ng-dirty.ng-invalid,
 form[name=checkReport] input.ng-dirty.ng-invalid,
 form[name=graphForm] input.ng-dirty.ng-invalid {
