@@ -40,7 +40,7 @@ menu
         a.btn.btn-primary(ng-disabled='newSlideForm.$invalid || checkSlideShowName(newSlideName)', ng-href='/account#/{{newSlideName}}/editor') Create
         button.btn.btn-default(data-dismiss='modal') Close
 
-#editorModal.modal.fade(role='dialog')
+#editorModal.modal.fade(data-keyboard='false', data-backdrop='static', role='dialog')
   .modal-content
     .modal-header
       button.close(type='button', data-dismiss='modal', aria-label='close')
