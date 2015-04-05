@@ -1,31 +1,31 @@
-app.directive('audience', function($compile, $http) {
-  return {
-    restrict: 'E',
-    templateUrl: 'partials/audienceSlide.jade',
-    link: function(scope, elem, attr) {
-      Reveal.addEventListener('ready', function(event) {
-        scope.graph = {};
-        $compile($('.graph'))(scope);
-        $('.graph').each(function() {
-          var id = $(this).attr('reportId');
-          $http.post('/report/'+id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName }).success(function(data) {
-            var arr = data.factMap['T!T'].rows;
-            var obj = [{
-              key: "Report: " + id,
-              values: arr.map(function(val, i) { return [ val.dataCells[1].value, val.dataCells[2].value ]; })
-            }];
-            scope.graph[id] = obj;
-          });
-        });
-      });
-    }
-  };
-});
+// app.directive('audience', function($compile, $http) {
+//   return {
+//     restrict: 'E',
+//     templateUrl: 'partials/audienceSlide.jade',
+//     link: function(scope, elem, attr) {
+//       Reveal.addEventListener('ready', function(event) {
+//         scope.graph = {};
+//         $compile($('.graph'))(scope);
+//         $('.graph').each(function() {
+//           var id = $(this).attr('reportId');
+//           $http.post('/report/'+id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName }).success(function(data) {
+//             var arr = data.factMap['T!T'].rows;
+//             var obj = [{
+//               key: "Report: " + id,
+//               values: arr.map(function(val, i) { return [ val.dataCells[1].value, val.dataCells[2].value ]; })
+//             }];
+//             scope.graph[id] = obj;
+//           });
+//         });
+//       });
+//     }
+//   };
+// });
 
-app.directive('master', function($compile, $http, charts) {
+app.directive('slides', function($compile, $http, charts) {
   return {
     restrict: 'E',
-    templateUrl: 'partials/masterSlide.jade',
+    templateUrl: 'partials/slideShow.jade',
     link: function(scope, elem, attr) {
       Reveal.addEventListener('ready', function(event) {
         scope.graph = {};
