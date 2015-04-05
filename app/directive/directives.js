@@ -1,27 +1,3 @@
-// app.directive('audience', function($compile, $http) {
-//   return {
-//     restrict: 'E',
-//     templateUrl: 'partials/audienceSlide.jade',
-//     link: function(scope, elem, attr) {
-//       Reveal.addEventListener('ready', function(event) {
-//         scope.graph = {};
-//         $compile($('.graph'))(scope);
-//         $('.graph').each(function() {
-//           var id = $(this).attr('reportId');
-//           $http.post('/report/'+id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName }).success(function(data) {
-//             var arr = data.factMap['T!T'].rows;
-//             var obj = [{
-//               key: "Report: " + id,
-//               values: arr.map(function(val, i) { return [ val.dataCells[1].value, val.dataCells[2].value ]; })
-//             }];
-//             scope.graph[id] = obj;
-//           });
-//         });
-//       });
-//     }
-//   };
-// });
-
 app.directive('slides', function($compile, $http, charts) {
   return {
     restrict: 'E',
@@ -47,17 +23,21 @@ app.directive('slides', function($compile, $http, charts) {
               case 'multi-bar-chart' :
                 scope.graph[id] = charts.multiBarChart(id, row, xPos, yPos);
                 break;
+              case 'pie-chart' :
+                scope.graph[id] = charts.pieChart(id, row, xPos, yPos);
+                break;
               default :
                 break;
             }
-            // var obj = [{
-            //   key: "Report: " + id,
-            //   values: arr.map(function(val, i) { return [ val.dataCells[1].value, val.dataCells[2].value ]; })
-            // }];
-            // scope.graph[id] = obj;
           });
         });
       });
+      scope.yFunction = function() {
+        return function(d) {return d.y;};
+      };
+      scope.xFunction = function() {
+        return function(d) {return d.key;};
+      };
     }
   };
 });
@@ -78,9 +58,6 @@ app.directive('menu', function($http, $window, $compile, $timeout) {
             '</li>';
           });
          } else {
-           //elem.html('<div id="menu" class="pull-right">
-           //<a data-toggle="modal" href="#loginModal" class="btn btn-primary" style="font-weight:bold;">
-           //<span class="fa-stack"><i class="fa fa-cloud fa-stack-2x"></i><i class="fa fa-stack-1x" style="color:#1E90FF;font-style:italic;font-weight:bold;">sf</i></span>&nbsp Log In</a></div>');
            menuOption = '<h3>Login</h3><form name="loginForm" ng-submit="login(email, password, token)"novalidate>' +
                           '<div class="form-group"><input type="email" placeholder="Salesforce Email" ng-model="email" class="form-control" required></div>' +
                           '<div class="form-group"><input type="password" placeholder="Salesforce Password" ng-model="password" class="form-control" required></div>' +
@@ -111,16 +88,6 @@ app.directive('menu', function($http, $window, $compile, $timeout) {
             scope.load = false;
           });
         };
-        // $('menu .dropdown .dropdown-menu form').on('submit', function(e) {
-        //   e.preventDefault();
-        //   var email = $('menu .dropdown .dropdown-menu form input[type="email"]').val();
-        //   var password = $('menu .dropdown .dropdown-menu form input[type="password"]').val();
-        //   $http.post('/login', {email: email, password: password}).success(function(data) {
-        //     if (data.success) {
-        //       $window.location.href = '/account';
-        //     }
-        //   });
-        // });
       });
     }
   };

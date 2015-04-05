@@ -9,6 +9,10 @@ app.factory('charts', function() {
                  ];
                })
              }];
+    }, pieChart: function(id, row, xPos, yPos) {
+      return row.map(function(val, i) {
+        return {key: val.dataCells[xPos].value, y: val.dataCells[yPos].value};
+      });
     }
   };
 });
