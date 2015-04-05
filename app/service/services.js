@@ -13,6 +13,16 @@ app.factory('charts', function() {
       return row.map(function(val, i) {
         return {key: val.dataCells[xPos].value, y: val.dataCells[yPos].value};
       });
+    }, lineChart: function(id, row, xPos, yPos) {
+        return [{key: "Report: " + id,
+                 values: row.map(function(val, i) {
+                   return [
+                     //Needs to be number
+                     val.dataCells[xPos].value,
+                     val.dataCells[yPos].value
+                   ];
+                 })
+               }];
     }
   };
 });

@@ -26,6 +26,9 @@ app.directive('slides', function($compile, $http, charts) {
               case 'pie-chart' :
                 scope.graph[id] = charts.pieChart(id, row, xPos, yPos);
                 break;
+              case 'line-chart' :
+                scope.graph[id] = charts.lineChart(id, row, xPos, yPos);
+                break;
               default :
                 break;
             }
