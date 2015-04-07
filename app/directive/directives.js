@@ -82,7 +82,7 @@ app.directive('menu', function($http, $window, $compile, $timeout) {
         };
         scope.login = function(email, password, token) {
           scope.load = true;
-          $http.post('/login', {email: email, password: password}).success(function(data) {
+          $http.post('/login', {email: email, password: password, token: token || ''}).success(function(data) {
             if (data.success) {
               $window.location.href = '/account';
             }

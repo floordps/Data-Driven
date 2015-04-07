@@ -176,7 +176,7 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
     $scope.slideShows = data;
   });
   $scope.checkSlideShowName = function(a) {
-    if(!$scope.slideShows.length) return false;
+    if(!$scope.slideShows.length) return true;
     return typeof(a) !== 'undefined' && $.grep($scope.slideShows, function(obj, i) {
       return obj.slideName === a;
     }).length === 0;

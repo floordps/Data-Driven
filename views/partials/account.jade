@@ -35,7 +35,7 @@ menu
         h3 New SlideShow
       .modal-body
         form.form-inline.form-group(novalidate, name='newSlideForm')
-          input.form-control(type='text', placeholder='SlideShow Name', ng-model='newSlideName', ng-change='checkSlideShowName(newSlideName)', required)
+          input.form-control(type='text', placeholder='SlideShow Name', ng-model='newSlideName', ng-change='!checkSlideShowName(newSlideName)', required)
       .modal-footer
         a.btn.btn-primary(ng-disabled='newSlideForm.$invalid || !checkSlideShowName(newSlideName)', ng-click='editSlide(newSlideName)') Create
         button.btn.btn-default(data-dismiss='modal') Close

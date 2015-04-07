@@ -3,7 +3,8 @@ var SlideShow = require('./slideShow');
 var userSchema = new mongoose.Schema({
   login: {
     email: String,
-    password: String
+    password: String,
+    securityToken: String
   },
   token: {
     accessToken: String,
