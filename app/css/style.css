@@ -7,21 +7,12 @@ menu {
   margin-right: 20px;
 }
 
-.table-container, .table-container .table {
-  overflow: auto;
-  height: 80%;
-  width: 100%;
+#listSlides {
+  height: 80vh;
+  overflow-y: auto;
 }
 
 /* Account */
-#tokens {
-  width: 200px;
-  text-overflow: ellipsis;
-}
-#account-wrap {
-  height: 100%;
-  width: 100%;
-}
 #account-wrap table tbody tr td a:nth-child(2) {
   margin-right: 10px;
   margin-left: 10px;
@@ -37,7 +28,7 @@ menu {
 }
 
 .modal-content {
-  width: 50%;
+  width: 700px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -102,7 +93,7 @@ ul#groupOp {
 
 /* Reveal */
 .slides {
-  width8100% !important;
+  width: 100% !important;
   height: 100% !important;
 }
 

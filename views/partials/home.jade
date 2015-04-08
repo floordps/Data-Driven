@@ -5,20 +5,21 @@ h1.text-center Data - Driven
     .form-group
       label(for='searchFilter') Filter By
       input.form-control#searchFilter(type='text' style='width: 200px;' ng-model='search')
-.container.table-container
-  table.table
-    thead
-      tr
-        th SlideShow
-        th Created Date
-        th Author
-        th Action
-    tbody
-      tr(ng-repeat='slide in slideShows | filter:search')
-        td {{slide.slideName}}
-        td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
-        td
-          a(ng-click='setSearch(slide.author)') {{slide.author | uppercase}}
-        td
-          a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
-            i.fa.fa-play
+.container
+  #listSlides
+    table.table.table-striped.table-hover(data-toggle='table')
+      thead
+        tr
+          th SlideShow
+          th Created Date
+          th Author
+          th Action
+      tbody
+        tr(ng-repeat='slide in slideShows | filter:search')
+          td {{slide.slideName}}
+          td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
+          td
+            a(ng-click='setSearch(slide.author)') {{slide.author | uppercase}}
+          td
+            a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
+              i.fa.fa-play

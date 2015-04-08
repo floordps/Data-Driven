@@ -6,27 +6,28 @@ menu
     span.h1 {{username}}
     .pull-right
       button#newSlideshow.btn.btn-primary(data-toggle='modal', data-target='#newSlideshowModal') New Slideshow
-  .row.table-container
-    table.table
-      thead
-        tr
-          th Slideshow
-          th Created Date
-          th Author
-          th Action
-      tbody
-        tr(ng-repeat='slide in slideShows')
-          td {{slide.slideName}}
-          td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
-          td {{slide.author}}
-          td
-            a.btn.btn-info.btn-sm(href='/account#/{{slide.slideName}}') PLAY&nbsp
-              i.fa.fa-play
-            //a.btn.btn-warning.btn-sm(href='/account#/{{slide.slideName}}/editor') Edit&nbsp
-            a.btn.btn-warning.btn-sm(ng-click='editSlide(slide.slideName)') Edit&nbsp
-              i.fa.fa-pencil-square-o
-            a.btn.btn-danger.btn-sm(ng-click='deleteSlide(slide.slideName)') Delete&nbsp
-              i.fa.fa-trash-o
+  .row
+    #listSlides
+      table.table.table-striped.table-hover(data-toggle='table')
+        thead
+          tr
+            th SlideShow
+            th Created Date
+            th Author
+            th Action
+        tbody
+          tr(ng-repeat='slide in slideShows | filter:search')
+            td {{slide.slideName}}
+            td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
+            td
+              a(ng-click='setSearch(slide.author)') {{slide.author | uppercase}}
+            td
+              a.btn.btn-info.btn-sm(href='/account#/{{slide.slideName}}') PLAY&nbsp
+                i.fa.fa-play
+              a.btn.btn-warning.btn-sm(ng-click='editSlide(slide.slideName)') Edit&nbsp
+                i.fa.fa-pencil-square-o
+              a.btn.btn-danger.btn-sm(ng-click='deleteSlide(slide.slideName)') Delete&nbsp
+                i.fa.fa-trash-o
 #newSlideshowModal.modal(role='dialog')
   .modal-dialog
     .modal-content
