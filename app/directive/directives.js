@@ -7,10 +7,11 @@ app.directive('slides', function($compile, $http, charts) {
         scope.graph = {};
         $compile($('.graph'))(scope);
         $('.graph').each(function() {
-          var id = $(this).attr('reportId');
-          var x = $(this).attr('xValue');
-          var y = $(this).attr('yValue');
-          var graphType = $(this).attr('graphType');
+          var id = $(this).attr('reportId'),
+            x = $(this).attr('xValue'),
+            y = $(this).attr('yValue'),
+            graphType = $(this).attr('graphType'),
+            graphData = id + graphType + x + y;
           $http.post('/report/'+id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName }).success(function(data) {
             var row = data.factMap['T!T'].rows;
             var column = data.reportExtendedMetadata.detailColumnInfo;
@@ -21,13 +22,13 @@ app.directive('slides', function($compile, $http, charts) {
             });
             switch(graphType) {
               case 'multi-bar-chart' :
-                scope.graph[id] = charts.multiBarChart(id, row, xPos, yPos);
+                scope.graph[graphData] = charts.multiBarChart(id, row, xPos, yPos);
                 break;
               case 'pie-chart' :
-                scope.graph[id] = charts.pieChart(id, row, xPos, yPos);
+                scope.graph[graphData] = charts.pieChart(id, row, xPos, yPos);
                 break;
               case 'line-chart' :
-                scope.graph[id] = charts.lineChart(id, row, xPos, yPos);
+                scope.graph[graphData] = charts.lineChart(id, row, xPos, yPos);
                 break;
               default :
                 break;

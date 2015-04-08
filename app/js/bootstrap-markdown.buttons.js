@@ -39,7 +39,11 @@ $(function() {
                 + 'xValue="' + graph.xValue +'" '
                 + 'yValue="' + graph.yValue +'" '
                 + 'graphType="' + graph.graphType +'" '
-                + 'data="graph[\''+ graph.reportId +'\']"';
+                + 'data="graph[\''+ graph.reportId + graph.graphType + graph.xValue + graph.yValue +'\']"';
+                console.log(graph.graphType)
+              if (graph.graphType === 'pie-chart') {
+                str += ' x="xFunction()" ' + 'y="yFunction()"';
+              }
               for(var o in graph.options) {
                 str += ' ' + o + '="'+ graph.options[o] +'"';
               }

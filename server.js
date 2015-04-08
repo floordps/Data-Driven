@@ -128,7 +128,7 @@ app.post('/report/:id/desc', function(req, res, next) {
   User.findOne({
     username: req.body.username
   }, function(err, user) {
-    var conn = new jsforce.Connection();
+    var conn = new jsforce.Connection({instanceUrl: 'https://na1.salesforce.com'});
     conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
       conn.analytics.reports(function(err, reports) {
         var id = req.params.id;
