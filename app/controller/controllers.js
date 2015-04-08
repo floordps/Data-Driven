@@ -74,87 +74,6 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams) {
   });
 });
 
-
-/*app.controller('editorCtrl', function($scope, $http, $routeParams, userProfile) {
-  $scope.slideshow = null;
-  $scope.showDetails = true;
-  $scope.reportDetails = true;
-  $scope.graph = {};
-  $scope.showGraphType = function(e) {
-    if (e == 'rID') {
-      $scope.reportDetails = false;
-    } else {
-      $scope.reportDetails = true;
-    }
-  };
-
-  $scope.options = [
-    {name: 'xAxisFmt', option: 'X Axis Data Format'},
-    {name: 'yAxisFmt', option: 'Y Axis Date Format'},
-    {name: 'showYAxis', option: 'Show X Axis'},
-    {name: 'showXAxis', option: 'Show Y Axis'},
-    {name: 'isArea', option: 'Is Area'},
-    {name: 'interactive', option: 'Interactive'},
-    {name: 'guideLine', option: 'Interactive Guide Line'},
-    {name: 'tooltips', option: 'Tooltips'},
-    {name: 'clipEdge', option: 'Clip Edge'},
-    {name: 'clipVoronoi', option: 'Clip Voronoi'}
-  ];
-
-  $scope.gTypes = [
-    {name: 'line-chart', type: 'Line Charts'},
-    {name: 'stacked-area-chart', type: 'Stacked Area Charts'},
-    {name: 'multi-bar-chart', type: 'Multi Bar Charts'},
-    {name: 'multi-bar-horizontal-chart', type: 'Multi Bar Horizontal Charts'},
-    {name: 'discrete-bar-chart', type: 'Discrete Bar Charts'},
-    {name: 'pie-chart', type: 'Pie Charts'},
-    {name: 'scatter-chart', type: 'Scatter Charts'},
-    {name: 'sparkline-chart', type: 'Sparkline  Charts'},
-    {name: 'cumulative-line-chart', type: 'Cumulative Line Charts'},
-    {name: 'line-with-focus-chart', type: 'Line with Focus Charts'}
-  ];
-
-  $scope.labels = [];
-
-  $scope.checkReport = function () {
-    $scope.load = true;
-    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.uname, slidename: $routeParams.slidename }).success(function(data) {
-      if(data) {
-        data.cols.forEach(function(data) {
-        $scope.labels.push(data.label);
-        $scope.showDetails = false;
-        });
-      } else {
-        $('#graphModal .modal-body').append('check err');
-        $scope.showDetails = true;
-      }
-      $scope.load = false;
-    });
-  };
-
-  $scope.$watch('graph', function() {
-    $('#graphModal').data('graph', $scope.graph);
-  }, true);
-
-  $http.get('/api/account/' + $routeParams.slidename).success(function(data) {
-    if(data) {
-      $scope.slideshow = data;
-      $('#text-editor').text(data.slides);
-    }
-  });
-  $scope.updateMarkdown = function() {
-    var md = $('#text-editor').val();
-    $http.post('/api/account/' + $routeParams.slidename, { token: userProfile.token, slides: md }).success(function(data) {
-      if(data && !data.success) {
-        alert('fail');
-      }
-    });
-  };
-});*/
-
-app.controller('graph', function($scope) {
-});
-
 app.controller('userCtrl', function($scope, $http, userProfile) {
   $scope.slideshow = null;
   $scope.showDetails = true;
@@ -223,7 +142,10 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
     {name: 'guideLine', option: 'Interactive Guide Line'},
     {name: 'tooltips', option: 'Tooltips'},
     {name: 'clipEdge', option: 'Clip Edge'},
-    {name: 'clipVoronoi', option: 'Clip Voronoi'}
+    {name: 'clipVoronoi', option: 'Clip Voronoi'},
+    {name: 'showLegend', option: 'Show Legend'},
+    {name: 'staggerLabels', option: 'Stagger Labels'},
+    {name: 'rotateLabels', option: 'Rotate Labels'}
   ];
 
   $scope.gTypes = [
@@ -260,12 +182,4 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
   $scope.$watch('graph', function() {
     $('#graphModal').data('graph', $scope.graph);
   }, true);
-});
-
-app.controller('userSlidesCtrl', function($scope, $routeParams, $http) {
-  $scope.slideShows = [];
-  var uname = $routeParams.username;
-  $http.get('/api/view/' + uname).success(function(data) {
-    $scope.slideShows = data;
-  });
 });

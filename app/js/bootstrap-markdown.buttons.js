@@ -40,14 +40,15 @@ $(function() {
                 + 'yValue="' + graph.yValue +'" '
                 + 'graphType="' + graph.graphType +'" '
                 + 'data="graph[\''+ graph.reportId + graph.graphType + graph.xValue + graph.yValue +'\']"';
-                console.log(graph.graphType)
-              if (graph.graphType === 'pie-chart') {
+              if (graph.graphType === 'pie-chart' || graph.graphType === 'scatter-chart'
+                  || graph.graphType === 'sparkline-chart' || graph.graphType === 'line-with-focus-chart') {
                 str += ' x="xFunction()" ' + 'y="yFunction()"';
               }
               for(var o in graph.options) {
-                str += ' ' + o + '="'+ graph.options[o] +'"';
+                if (o === 'rotateLabels') str += ' ' + o + '="60"';
+                else str += ' ' + o + '="'+ graph.options[o] +'"';
               }
-              str += ' -->';
+              str += ' width="600" height="350" -->';
               e.setSelection(end, end);
               e.replaceSelection(str);
               $('#graphModal input[type="checkbox"]:checked').removeAttr('checked');

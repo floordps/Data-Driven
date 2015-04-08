@@ -30,6 +30,27 @@ app.directive('slides', function($compile, $http, charts) {
               case 'line-chart' :
                 scope.graph[graphData] = charts.lineChart(id, row, xPos, yPos);
                 break;
+              case 'scatter-chart' :
+                scope.graph[graphData] = charts.scatterChart(id, row, xPos, yPos);
+                break;
+              case 'discrete-bar-chart' :
+                scope.graph[graphData] = charts.discreteBarChart(id, row, xPos, yPos);
+                break;
+              case 'stacked-area-chart' :
+                scope.graph[graphData] = charts.stackedAreaChart(id, row, xPos, yPos);
+                break;
+              case 'multi-bar-horizontal-chart' :
+                scope.graph[graphData] = charts.multiBarHorizontalChart(id, row, xPos, yPos);
+                break;
+              case 'sparkline-chart' :
+                scope.graph[graphData] = charts.sparklineChart(id, row, xPos, yPos);
+                break;
+              case 'cumulative-line-chart' :
+                scope.graph[graphData] = charts.cumulativeLineChart(id, row, xPos, yPos);
+                break;
+              case 'line-with-focus-chart' :
+                scope.graph[graphData] = charts.lineWithFocusChart(id, row, xPos, yPos);
+                break;
               default :
                 break;
             }
@@ -37,10 +58,10 @@ app.directive('slides', function($compile, $http, charts) {
         });
       });
       scope.yFunction = function() {
-        return function(d) {return d.y;};
+        return function(d) {return d.y || d[1];};
       };
       scope.xFunction = function() {
-        return function(d) {return d.key;};
+        return function(d) {return d.key || d.x || d[0];};
       };
     }
   };
