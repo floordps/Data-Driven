@@ -3,15 +3,24 @@ a {
   cursor: pointer;
 }
 
-menu {
-  margin-right: 20px;
-}
-
 #listSlides {
   height: 80vh;
   overflow-y: auto;
 }
 
+/* Menu */
+menu {
+  margin-right: 20px;
+}
+
+menu .dropdown .dropdown-menu {
+  width: 200px;
+  padding: 5px !important;
+}
+
+.alert {
+  padding: 2px !important;
+}
 /* Account */
 #account-wrap table tbody tr td a:nth-child(2) {
   margin-right: 10px;

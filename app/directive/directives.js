@@ -86,6 +86,8 @@ app.directive('menu', function($http, $window, $compile, $timeout) {
            menuOption = '<h3>Login</h3><form name="loginForm" ng-submit="login(email, password, token)"novalidate>' +
                           '<div class="form-group"><input type="email" placeholder="Salesforce Email" ng-model="email" class="form-control" required></div>' +
                           '<div class="form-group"><input type="password" placeholder="Salesforce Password" ng-model="password" class="form-control" required></div>' +
+                          '<div ng-hide="incorrectLogin" class="alert alert-danger alert-dismissable" role="alert"><button type="button" class="close" data-dismiss="alert"></button>Invalid Email / Password / Token</div>' +
+                          '<div ng-hide="noConnection" class="alert alert-danger alert-dismissable" role="alert"><button type="button" class="close" data-dismiss="alert"></button>Oops! Something went wrong. Please try again later.</div>' +
                           '<div class="form-group"><a ng-click="showTokenField()">Token (Optional)</label></a>' +
                           '<div class="form-group"><input type="text" placeholder="Security Token" ng-model="token" class="form-control" ng-hide="hideToken"></div>' +
                           '<div class="form-group"><button type="submit" ladda="load" data-style="slide-left" class="btn btn-primary form-control ladda-button" ng-disabled="loginForm.$invalid">Login</button></div>' +
@@ -99,17 +101,25 @@ app.directive('menu', function($http, $window, $compile, $timeout) {
                 '</div>');
         $compile($('.dropdown-menu'))(scope);
         scope.hideToken = true;
+        scope.noConnection = true;
+        scope.incorrectLogin = true;
         scope.showTokenField = function() {
           scope.hideToken = !scope.hideToken;
         };
         scope.login = function(email, password, token) {
           scope.load = true;
           $http.post('/login', {email: email, password: password, token: token}).success(function(data) {
-            if (data.success) {
+            if (data.success) {        scope.incorrectLogin = true;
+              scope.incorrectLogin = true;
+              scope.noConnection = true;
               $window.location.href = '/account';
+            } else {
+              scope.incorrectLogin = false;
             }
             scope.load = false;
           }).error(function(data) {
+            scope.incorrectLogin = true;
+            scope.noConnection = false;
             scope.load = false;
           });
         };
