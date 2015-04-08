@@ -164,11 +164,9 @@ app.post('/login', function(req, res, next) {
       req.session.instanceUrl = conn.instanceUrl;
       conn.identity(function(err, ret) {
         var u = user || new User(ret);
-        u.login = {
-          email: req.body.email,
-          password: req.body.password
-        };
-        if(req.body.token) u.login.securityToken = req.body.token;
+        u.login.email = req.body.email;
+        u.login.password = req.body.password;
+        if(!!req.body.token) u.login.securityToken = req.body.token;
         u.username = u.username.toLowerCase().replace(/@.*$/, '');
         u.save();
         req.session.user = u;
