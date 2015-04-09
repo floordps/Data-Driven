@@ -27,63 +27,13 @@ app.use(session({
    resave: false,
    saveUninitialized: false
 }));
-//app.use(passport.initialize());
-//app.use(passport.session());
 
 /**
  * MongoDB Connect
  */
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/data-driven');
 
-/**
- * Setup Authentication
- */
-/*passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
 
-passport.use(new GoogleStrategy({
-    returnURL: 'http://localhost:5000/auth/google/return',
-    realm: 'http://localhost:5000'
-  },
-  function(token, profile, done) {
-    User.findOne({ openId: token }, function(err, user) {
-      if (err) {
-          return done(err);
-      }
-      if (!user && profile) {
-        profile.email = profile.emails[0].value;
-        delete profile.emails;
-        var u = new User({ openId: token, profile: profile });
-        u.save(function(err, u) {
-          return done(err, u);
-        });
-      } else {
-        return done(err, user);
-      }
-    });
-  }
-));
-
-app.get('/auth/google', passport.authenticate('google'));
-app.get('/auth/google/return',
-  passport.authenticate('google', {
-    successRedirect: '/account',
-    failureRedirect: '/'
-  })
-);
-
-function isAuth(req, res, next) {
-  if(req.isAuthenticated()){
-    return next();
-  }
-  res.redirect('/#login');
-}*/
 
 function isAuth(req, res, next) {
   if(!req.session.accessToken || !req.session.instanceUrl) return res.redirect('/');
@@ -122,6 +72,7 @@ app.post('/report/:id', function(req, res, next) {
     });
   });
 });
+
 //TODO: add sobject request similar to /reportId
 app.post('/report/:id/desc', function(req, res, next) {
   //TODO: desc on new slideshow (check reportId)

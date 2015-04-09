@@ -78,6 +78,9 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
   $scope.slideshow = null;
   $scope.showDetails = true;
   $scope.reportDetails = true;
+  $scope.graphError = true;
+  $scope.saveEditorError = true;
+  $scope.saveEditorSuccess = true;
   $scope.graph = {};
   $scope.username = userProfile.display_name;
   $scope.slideShows = [];
@@ -94,6 +97,7 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
   $http.get('/api/account').success(function(data) {
     $scope.slideShows = data;
   });
+
   $scope.checkSlideShowName = function(a) {
     if(!$scope.slideShows.length) return true;
     return typeof(a) !== 'undefined' && $.grep($scope.slideShows, function(obj, i) {
@@ -116,13 +120,20 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
   };
   $scope.updateMarkdown = function() {
     $scope.loading = true;
+    $scope.saveEditorError = true;
+    $scope.saveEditorSuccess = true;
     var md = $('#text-editor').val();
     $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md }).success(function(data) {
       $scope.loading = false;
       if(data && data.success) {
         if(data.slideshow) $scope.slideShows.push(data.slideshow);
-      }
-    }).error(function(data) {$scope.loading=false;});
+        $scope.saveEditorSuccess = false;
+      } else $scope.saveEditorError = false;
+
+    }).error(function(data) {
+      $scope.loading=false;
+      $scope.saveEditorError = false;
+    });
   };
   $scope.showGraphType = function(e) {
     if (e == 'rID') {
@@ -165,6 +176,7 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
 
   $scope.checkReport = function () {
     $scope.load = true;
+    $scope.graphError = true;
     $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username, slidename: $scope.slideshow.slideName }).success(function(data) {
       if(data) {
         data.cols.forEach(function(data) {
@@ -172,10 +184,13 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
         $scope.showDetails = false;
         });
       } else {
-        $('#graphModal .modal-body').append('check err');
         $scope.showDetails = true;
+        $scope.graphError = false;
       }
       $scope.load = false;
+    }).error(function(data) {
+      $scope.load = false;
+      $scope.graphError = false;
     });
   };
 

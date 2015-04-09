@@ -47,6 +47,8 @@ menu
       button.close(type='button', data-dismiss='modal', aria-label='close')
       h3 Edit Slide
     .modal-body
+      .alert.alert-danger(role='alert', ng-hide='saveEditorError') Oops.. Something went wrong. Try Again!
+      .alert.alert-success(role='alert', ng-hide='saveEditorSuccess') SlideShow Saved!!
       form
         textarea#text-editor(name='content', rows='20', data-provide='markdown')
         #footer-editor
@@ -60,6 +62,7 @@ menu
       button.close(type='button', data-dismiss='modal', aria-label='close')
       h3 Creating Graph
     .modal-body
+      .alert.alert-danger(role='alert', ng-hide='graphError') Oops.. Something went wrong. Try Again!
       form.form-inline(name='reportTypeForm', novalidate)
         input(type='radio', ng-model='reportType', value='rID', id='rID', ng-change='showGraphType(reportType)', ng-init='reportType="rID"; showGraphType(reportType)')
         label.btn.btn-primary(for='rID') Report ID
