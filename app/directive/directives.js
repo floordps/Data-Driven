@@ -23,10 +23,22 @@ app.directive('slides', function($compile, $http, charts) {
                 if (column[key].label === y) {yPos = index;}
               });
             } else {
-              row = data.records.map(function(val, i) {
-                return val.
+              row = data.records.map(function(val) {
+                var k = Object.keys(val),
+                  arr = [];
+                xPos = 0;
+                yPos = 1;
+                k.shift();  // rem attr
+                k.forEach(function(v) {
+                  arr.push({
+                    label: val[v],
+                    value: val[v]
+                  });
+                });
+                return {
+                  dataCells: arr
+                };
               });
-              console.log(row)
             }
             switch(graphType) {
               case 'multi-bar-chart' :
