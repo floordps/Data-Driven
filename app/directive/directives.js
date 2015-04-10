@@ -7,19 +7,27 @@ app.directive('slides', function($compile, $http, charts) {
         scope.graph = {};
         $compile($('.graph'))(scope);
         $('.graph').each(function() {
-          var id = $(this).attr('reportId'),
+          var id = $(this).attr('reportId') || $(this).attr('sobId'),
             x = $(this).attr('xValue'),
             y = $(this).attr('yValue'),
             graphType = $(this).attr('graphType'),
-            graphData = id + graphType + x + y;
-          $http.post('/report/'+id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName }).success(function(data) {
-            var row = data.factMap['T!T'].rows;
-            var column = data.reportExtendedMetadata.detailColumnInfo;
-            var xPos, yPos;
-            Object.keys(column).forEach(function(key, index) {
-              if (column[key].label === x) {xPos = index;}
-              if (column[key].label === y) {yPos = index;}
-            });
+            graphData = id + graphType + x + y,
+            rid = $(this).attr('reportId');
+          $http.post((!!$(this).attr('reportId') ? '/report/' : '/sob/')+ id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName, xColumn: x, yColumn: y }).success(function(data) {
+            var row = [], column = [], xPos, yPos;
+            if (!!rid) {
+              row = data.factMap['T!T'].rows;
+              column = data.reportExtendedMetadata.detailColumnInfo;
+              Object.keys(column).forEach(function(key, index) {
+                if (column[key].label === x) {xPos = index;}
+                if (column[key].label === y) {yPos = index;}
+              });
+            } else {
+              row = data.records.map(function(val, i) {
+                return val.
+              });
+              console.log(row)
+            }
             switch(graphType) {
               case 'multi-bar-chart' :
                 scope.graph[graphData] = charts.multiBarChart(id, row, xPos, yPos);
@@ -62,6 +70,12 @@ app.directive('slides', function($compile, $http, charts) {
       };
       scope.xFunction = function() {
         return function(d) {return d.key || d.x || d[0];};
+      };
+      scope.xAxisTickFormatFunction = function(){
+	       return function(d){ return d3.time.format('%X')(new Date(d));};
+      };
+      scope.yAxisTickFormatFunction = function(){
+	       return function(d){ return d3.time.format('%X')(new Date(d));};
       };
     }
   };

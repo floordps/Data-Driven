@@ -35,11 +35,12 @@ $(function() {
             $('#createGraph').one('click', function() {
               str = '&nbsp;<!-- .element: class="graph center-block" '
                 + 'nvd3-' + graph.graphType + '="nvd3" '
-                + 'reportId="' + graph.reportId + '" '
+                + 'reportId="' + (graph.reportId || '') + '" '
+                + 'sobId="' + (graph.sobId || '') + '" '
                 + 'xValue="' + graph.xValue +'" '
                 + 'yValue="' + graph.yValue +'" '
                 + 'graphType="' + graph.graphType +'" '
-                + 'data="graph[\''+ graph.reportId + graph.graphType + graph.xValue + graph.yValue +'\']"';
+                + 'data="graph[\''+ (graph.reportId || graph.sobID || '') + graph.graphType + graph.xValue + graph.yValue +'\']"';
               if (graph.graphType === 'pie-chart' || graph.graphType === 'scatter-chart'
                   || graph.graphType === 'sparkline-chart' || graph.graphType === 'line-with-focus-chart') {
                 str += ' x="xFunction()" ' + 'y="yFunction()"';

@@ -138,8 +138,10 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
   $scope.showGraphType = function(e) {
     if (e == 'rID') {
       $scope.reportDetails = false;
+      $scope.reportTabSelected = false;
     } else {
       $scope.reportDetails = true;
+      $scope.reportTabSelected = true;
     }
   };
 
@@ -179,6 +181,7 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
     $scope.graphError = true;
     $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username, slidename: $scope.slideshow.slideName }).success(function(data) {
       if(data) {
+        $scope.labels = [];
         data.cols.forEach(function(data) {
         $scope.labels.push(data.label);
         $scope.showDetails = false;
@@ -193,6 +196,24 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
       $scope.graphError = false;
     });
   };
+
+  $scope.checkSob = function () {
+    $scope.load = true;
+    $scope.graphError = true;
+    $http.post('/sob/' + $scope.graph.sobId + '/desc').success(function(data) {
+      if(data) {
+        $scope.showDetails = false;
+      } else {
+        $scope.showDetails = true;
+        $scope.graphError = false;
+      }
+      $scope.load = false;
+    }).error(function(data) {
+      $scope.load = false;
+      $scope.graphError = false;
+    });
+  };
+
 
   $scope.$watch('graph', function() {
     $('#graphModal').data('graph', $scope.graph);

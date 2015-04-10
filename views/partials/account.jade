@@ -72,6 +72,10 @@ menu
         .form-group
           input.form-control(type='text', ng-model='graph.reportId', placeholder='Enter Report ID.', pattern='.{8,18}', required)
           button.btn.btn-primary(type='button', ng-disabled='!checkReportForm.$valid', ng-click='checkReport()' ladda='load', data-style='slide-left') Check Report
+      form.form-inline(name='checkSobForm', novalidate, ng-hide='!reportDetails')
+        .form-group
+          input.form-control(type='text', ng-model='graph.sobId', placeholder='Enter SObject Name.', required)
+          button.btn.btn-primary(type='button', ng-disabled='!checkSobForm.$valid', ng-click='checkSob()' ladda='load', data-style='slide-left') Check SObject
       .graphOption(ng-hide='showDetails')
         form
           .form-group
@@ -80,20 +84,20 @@ menu
               option(ng-repeat='type in gTypes', value='{{type.name}}') {{type.type}}
         form.form-inline(name='graphForm', novalidate)
           .form-group
-            select.form-control(ng-model='graph.xValue', required)
+            select.form-control(ng-model='graph.xValue', required, ng-hide='reportTabSelected')
               option(value='', disabled selected) Select X Column
               option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
-            select.form-control(ng-model='graph.yValue', required)
+            select.form-control(ng-model='graph.yValue', required, ng-hide='reportTabSelected')
               option(value='', disabled selected) Select Y Column
               option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
+            input.form-control(type='text', placeholder='Enter X Column', ng-model='graph.xValue', required, ng-hide='!reportTabSelected')
+            input.form-control(type='text', placeholder='Enter Y Column', ng-model='graph.yValue', required, ng-hide='!reportTabSelected')
             h3 Select Group Options:
             ul#groupOp
               li(ng-repeat='option in options track by $index')
                 label
                   input(type='checkbox', ng-model='graph.options[option.name]')
                   | &nbsp{{option.option}}
-
-
     .modal-footer
       button#createGraph.btn.btn-primary(type='button', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
 #tableModal.modal.fade(role='dialog')

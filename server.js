@@ -73,6 +73,34 @@ app.post('/report/:id', function(req, res, next) {
   });
 });
 
+app.post('/sob/:id', function(req, res, next) {
+  User.findOne({
+    username: req.body.username
+  }, function(err, user) {
+    var conn = new jsforce.Connection();
+    conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
+      conn.query('SELECT ' + req.body.xColumn + ', ' + req.body.yColumn + ' FROM ' + req.params.id, function(err, data) {
+        if(err) {console.log(err); return res.status(501).send(err);}
+        res.json(data);
+      });
+    });
+  });
+});
+
+app.post('/sob/:name/desc', function(req, res, next) {
+  User.findOne({
+    username: req.session.user.username
+  }, function(err, user) {
+    var conn = new jsforce.Connection();
+    conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
+      conn.sobject(req.params.name).describe(function(err, data) {
+        if(err) return res.status(501).send(err);
+        res.json(data.fields.map(function(val) { return val.label; }));
+        });
+      });
+    });
+  });
+
 //TODO: add sobject request similar to /reportId
 app.post('/report/:id/desc', function(req, res, next) {
   //TODO: desc on new slideshow (check reportId)
