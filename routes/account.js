@@ -1,4 +1,9 @@
 var express = require('express');
+var crypto = require('crypto');
+var hash = function(secret) {
+	var sha1 = crypto.createHash('sha1');
+	return sha1.update(secret.toString()).digest('hex');
+};
 
 module.exports.Router = function(SlideShow) {
   return express.Router()
@@ -21,23 +26,30 @@ module.exports.Router = function(SlideShow) {
         slideName: req.params.slidename
       }, function(err, slideshows) {
         if(err) return res.json({success: false});
-        var slide = null;
+        var slide = null,
+          secret = +new Date() + Math.floor(Math.random()*9999999);
         if(slideshows) {
           for(var prop in req.body) {
             if(prop in slideshows) {
               slideshows[prop] = req.body[prop];
             }
           }
-          //slideshows.slides = req.body.slides;
+          slide = slideshows;
           slideshows.save();
         } else {
+              console.log('==hash');
+              console.log(hash(secret));
           slide = new SlideShow({
             author: req.session.user.display_name,
             username: req.session.user.username,
             date: new Date(),
             slideName: req.params.slidename,
             slides: req.body.slides,
-            token: req.body.token
+            token: req.body.token,
+            multiplex: {
+              secret: secret,
+              id: hash(secret)
+            }
           });
           slide.save();
         }

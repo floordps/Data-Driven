@@ -1,4 +1,4 @@
-app.controller('clientCtrl', function($scope, $http, $routeParams) {
+app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, SocketIO) {
   var uname = $routeParams.username,
     sname = $routeParams.slidename;
   $scope.slideShows = [];
@@ -19,16 +19,24 @@ app.controller('clientCtrl', function($scope, $http, $routeParams) {
         transitionSpeed: 'slow',
         multiplex: {
           secret: null,
-          id: data.username + data.slideName,
+          id: data.multiplex.id,
           url: ''
         },
         dependencies: [
-          { src: '/socket.io/socket.io.js', async: true },
-          { src: '/app/plugin/multiplex/client.js', async: true },
+          { src: '/app/plugin/multiplex/client.js' },
           { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
           { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
           { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
         ]
+      });
+      Reveal.addEventListener('ready', function(event) {
+        if($rootScope.room) SocketIO.emit('leave', $rootScope.room);
+        $rootScope.room = data.multiplex.id;
+        SocketIO.emit('join', $rootScope.room);
+      });
+      $scope.$on('$destroy', function(e) {
+        Reveal.removeEventListeners();
+        SocketIO.destroy();
       });
     });
   } else {
@@ -42,7 +50,7 @@ app.controller('clientCtrl', function($scope, $http, $routeParams) {
 
 });
 
-app.controller('masterCtrl', function($scope, $http, $location, $routeParams) {
+app.controller('masterCtrl', function($scope, $http, $location, $routeParams, $rootScope, SocketIO) {
   var sname = $routeParams.slidename;
   $http.get('/api/account/' + sname).success(function(data) {
     if(!data) {
@@ -59,22 +67,30 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams) {
       transition: 'zoom',
       transitionSpeed: 'slow',
       multiplex: {
-        secret: 'secret123',
-        id: data.username + data.slideName,
+        secret: data.multiplex.secret,
+        id: data.multiplex.id,
         url: ''
       },
       dependencies: [
-        { src: '/socket.io/socket.io.js' },
         { src: '/app/plugin/multiplex/master.js' },
         { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
         { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
         { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
       ]
     });
+    Reveal.addEventListener('ready', function(event) {
+      if($rootScope.room) SocketIO.emit('leave', $rootScope.room);
+      $rootScope.room = data.multiplex.id;
+      SocketIO.emit('join', $rootScope.room);
+    });
+    $scope.$on('$destroy', function(e) {
+      Reveal.removeEventListeners();
+      SocketIO.destroy();
+    });
   });
 });
 
-app.controller('userCtrl', function($scope, $http, userProfile) {
+app.controller('userCtrl', function($scope, $http, userProfile, SocketIO) {
   $scope.slideshow = null;
   $scope.showDetails = true;
   $scope.reportDetails = true;
@@ -126,8 +142,9 @@ app.controller('userCtrl', function($scope, $http, userProfile) {
     $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md }).success(function(data) {
       $scope.loading = false;
       if(data && data.success) {
-        if(data.slideshow) $scope.slideShows.push(data.slideshow);
+        if(data.slideshow && $scope.checkSlideShowName(data.slideshow.slideName)) $scope.slideShows.push(data.slideshow);
         $scope.saveEditorSuccess = false;
+        SocketIO.emit('slideupdated', { id: data.slideshow.multiplex.id, slides: data.slideshow.slides });
       } else $scope.saveEditorError = false;
 
     }).error(function(data) {

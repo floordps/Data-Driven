@@ -88,3 +88,27 @@ app.factory('charts', function() {
     }
   };
 });
+app.factory('SocketIO', function($rootScope) {
+  var socket = io.connect('');
+  return {
+    on: function(event, cb) {
+      socket.emit(event, function() {
+        $rootScope.$apply(function() {
+          var args = arguments;
+          cb.apply(socket, args);
+        });
+      });
+    },
+    emit: function(event, data, cb) {
+      socket.emit(event, data, function() {
+        $rootScope.$apply(function() {
+          var args = arguments;
+          cb.apply(socket, args);
+        });
+      });
+    },
+    destroy: function() {
+      socket.removeAllListeners();
+    }
+  };
+});
