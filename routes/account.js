@@ -37,8 +37,6 @@ module.exports.Router = function(SlideShow) {
           slide = slideshows;
           slideshows.save();
         } else {
-              console.log('==hash');
-              console.log(hash(secret));
           slide = new SlideShow({
             author: req.session.user.display_name,
             username: req.session.user.username,
