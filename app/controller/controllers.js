@@ -9,26 +9,20 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
         return;
       }
       $scope.slideshow = data;
+      var revealOptions = data.reveal;
+      revealOptions.multiplex = {
+        secret: null,
+        id: data.multiplex.id,
+        url: ''
+      };
+      revealOptions.dependencies = [
+        { src: '/app/plugin/multiplex/client.js' },
+        { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
+      ];
       $('#slideMd').html(data.slides);
-      Reveal.initialize({
-        controls: true,
-        keyboard: true,
-        margin: 0.1,
-        progress: true,
-        transition: 'zoom',
-        transitionSpeed: 'slow',
-        multiplex: {
-          secret: null,
-          id: data.multiplex.id,
-          url: ''
-        },
-        dependencies: [
-          { src: '/app/plugin/multiplex/client.js' },
-          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
-        ]
-      });
+      Reveal.initialize(revealOptions);
       Reveal.addEventListener('ready', function(event) {
         if($rootScope.room) SocketIO.emit('leave', $rootScope.room);
         $rootScope.room = data.multiplex.id;
@@ -58,26 +52,20 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams, $r
       return;
     }
     $scope.slideshow = data;
+    var revealOptions = data.reveal;
+    revealOptions.multiplex = {
+      secret: data.multiplex.secret,
+      id: data.multiplex.id,
+      url: ''
+    };
+    revealOptions.dependencies = [
+      { src: '/app/plugin/multiplex/master.js' },
+      { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
+    ];
     $('#slideMd').html(data.slides);
-    Reveal.initialize({
-      controls: true,
-      keyboard: true,
-      margin: 0.1,
-      progress: true,
-      transition: 'zoom',
-      transitionSpeed: 'slow',
-      multiplex: {
-        secret: data.multiplex.secret,
-        id: data.multiplex.id,
-        url: ''
-      },
-      dependencies: [
-        { src: '/app/plugin/multiplex/master.js' },
-        { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-        { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-        { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
-      ]
-    });
+    Reveal.initialize(revealOptions);
     Reveal.addEventListener('ready', function(event) {
       if($rootScope.room) SocketIO.emit('leave', $rootScope.room);
       $rootScope.room = data.multiplex.id;
@@ -120,6 +108,11 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO) {
       return obj.slideName === a;
     }).length === 0;
   };
+
+  $scope.editReveal = function(name, reveal) {
+    $scope.revealOptions = reveal;
+  };
+
   $scope.editSlide = function(name) {
     $('#text-editor').val(null);
     $http.get('/api/account/' + name).success(function(data) {

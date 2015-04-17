@@ -16,7 +16,7 @@ menu
             th Author
             th Action
         tbody
-          tr(ng-repeat='slide in slideShows | filter:search')
+          tr(ng-repeat='slide in slideShows')
             td {{slide.slideName}}
             td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
             td
@@ -28,6 +28,9 @@ menu
                 i.fa.fa-pencil-square-o
               a.btn.btn-danger.btn-sm(ng-click='deleteSlide(slide.slideName)') Delete&nbsp
                 i.fa.fa-trash-o
+              a.btn.btn-default.btn-sm(ng-click='editReveal(slide.slideName, slide.reveal)') RevealJS&nbsp
+                i.fa.fa-cogs
+
 #newSlideshowModal.modal(role='dialog')
   .modal-dialog
     .modal-content
@@ -55,7 +58,6 @@ menu
           button.btn.btn-success(ng-click='updateMarkdown()' ladda='loading' data-style='slide-right') Save
           button.btn.btn-default(data-dismiss='modal') Close
 
-//- md editor button modals
 #graphModal.modal.fade(role='dialog')
   .modal-content
     .modal-header
@@ -118,3 +120,10 @@ menu
     .modal-footer
       button#createTable.btn.btn-primary(type='button', ng-disabled='!tableForm.$valid') Create Table
       button.btn.btn-default(type='button', data-dismiss='modal') Close
+#revealModal.modal.fade(role='dialog')
+  .modal-content
+    .modal-header
+      h3 RevealJS Options
+    .modal-body
+      .form-horizontal
+        .form-group

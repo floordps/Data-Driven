@@ -22,8 +22,13 @@ menu .dropdown .dropdown-menu {
   padding: 2px !important;
 }
 /* Account */
+
 #account-wrap table tbody tr td a:nth-child(2) {
   margin-right: 10px;
+  margin-left: 10px;
+}
+
+#account-wrap table tbody tr td a:last-child {
   margin-left: 10px;
 }
 
