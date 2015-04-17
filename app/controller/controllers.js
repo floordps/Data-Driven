@@ -78,7 +78,7 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams, $r
   });
 });
 
-app.controller('userCtrl', function($scope, $http, userProfile, SocketIO) {
+app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeout) {
   $scope.slideshow = null;
   $scope.showDetails = true;
   $scope.reportDetails = true;
@@ -116,6 +116,8 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO) {
 
   $scope.editSlide = function(name) {
     $('#text-editor').val(null);
+    $scope.saveEditorError = true;
+    $scope.saveEditorSuccess = true;
     $http.get('/api/account/' + name).success(function(data) {
       if(data) {
         $scope.slideshow = data;
@@ -128,6 +130,12 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO) {
       }
     });
   };
+  $('#graphModal').on('hidden.bs.modal', function() {
+    $scope.graph = {};
+    $scope.showDetails = true;
+    $scope.reportDetails = false;
+    $scope.$apply();
+  });
   $scope.updateMarkdown = function() {
     $scope.loading = true;
     $scope.saveEditorError = true;
