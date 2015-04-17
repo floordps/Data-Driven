@@ -86,6 +86,7 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO) {
   $scope.saveEditorError = true;
   $scope.saveEditorSuccess = true;
   $scope.graph = {};
+  $scope.revealTransition = ['none', 'default', 'zoom', 'fade'];
   $scope.username = userProfile.display_name;
   $scope.slideShows = [];
   $scope.tokens = userProfile.tokens;
@@ -223,8 +224,15 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO) {
       $scope.graphError = false;
     });
   };
-
-
+  $scope.isNumber = function(val) {
+    return (typeof val === 'number');
+  };
+  $scope.isBoolean = function(val) {
+    return (typeof val === 'boolean');
+  };
+  $scope.isString = function(val) {
+    return (typeof val === 'string');
+  };
   $scope.$watch('graph', function() {
     $('#graphModal').data('graph', $scope.graph);
   }, true);

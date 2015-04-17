@@ -16,7 +16,7 @@ var slideShowSchema = new mongoose.Schema({
     autoSlideStoppable: { type: Boolean, default: true },
     mousewheel: { type: Boolean, default: false },
     transition: { type: String, default: 'default' },
-    backgroundTransition: { type: String, default: false },
+    backgroundTransition: { type: String, default: 'default' },
     viewDistance: { type: Number, default: 3 }
   },
   multiplex: {

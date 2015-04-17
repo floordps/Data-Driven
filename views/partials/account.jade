@@ -28,7 +28,7 @@ menu
                 i.fa.fa-pencil-square-o
               a.btn.btn-danger.btn-sm(ng-click='deleteSlide(slide.slideName)') Delete&nbsp
                 i.fa.fa-trash-o
-              a.btn.btn-default.btn-sm(ng-click='editReveal(slide.slideName, slide.reveal)') RevealJS&nbsp
+              a.btn.btn-default.btn-sm(ng-click='editReveal(slide.slideName, slide.reveal)', data-toggle='modal', data-target='#revealModal') RevealJS&nbsp
                 i.fa.fa-cogs
 
 #newSlideshowModal.modal(role='dialog')
@@ -123,7 +123,22 @@ menu
 #revealModal.modal.fade(role='dialog')
   .modal-content
     .modal-header
-      h3 RevealJS Options
+      h3 RevealJS Configuration
     .modal-body
-      .form-horizontal
+      form.form
         .form-group
+          ul#groupOp
+            li(ng-repeat = '(key, val) in revealOptions')
+              label(ng-if='isNumber(val)')
+                | &nbsp {{key}}
+                input(type='text') 
+              label(ng-if='isBoolean(val)')
+                input(type='checkbox', ng-checked='val') 
+                | &nbsp {{key}}
+              label(ng-if='isString(val)')
+                | {{key}}
+                select
+                  option(ng-repeat='transition in revealTransition', ng-selected='transition === val') {{transition}}
+    .modal-footer
+      button.btn.btn-success(type='button') Save
+      button.btn.btn-default(type='button', data-dismiss='modal') Close
