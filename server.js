@@ -33,12 +33,16 @@ app.use(session({
  */
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/data-driven');
 
-
-
 function isAuth(req, res, next) {
   if(!req.session.accessToken || !req.session.instanceUrl) return res.redirect('/');
   next();
 }
+var js = require('./jsConnect.json');
+var oauth2 = new jsforce.OAuth2({
+    clientId: js.clientId,
+    clientSecret: js.clientSecret,
+    redirectUri: js.redirectUri
+});
 
 /**
  * Routes
@@ -60,8 +64,16 @@ app.post('/report/:id', function(req, res, next) {
   User.findOne({
     username: req.body.username
   }, function(err, user) {
-    var conn = new jsforce.Connection();
-    conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
+    var conn = new jsforce.Connection({
+      oauth2: oauth2,
+      instanceUrl: user.token.instanceUrl,
+      accessToken: user.token.accessToken,
+      refreshToken: user.token.refreshToken
+    });
+    conn.on('refresh', function(accessToken, res) {
+      user.token.accessToken = accessToken;
+    });
+    //conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
       conn.analytics.reports(function(err, reports) {
         if(err) return res.status(501).send(err);
         var id = req.params.id;
@@ -69,7 +81,7 @@ app.post('/report/:id', function(req, res, next) {
           res.json(result);
         });
       });
-    });
+    //});
   });
 });
 
@@ -77,13 +89,23 @@ app.post('/sob/:id', function(req, res, next) {
   User.findOne({
     username: req.body.username
   }, function(err, user) {
-    var conn = new jsforce.Connection();
-    conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
+    var conn = new jsforce.Connection({
+      oauth2: oauth2,
+      instanceUrl: user.token.instanceUrl,
+      accessToken: user.token.accessToken,
+      refreshToken: user.token.refreshToken
+    });
+    conn.on('refresh', function(accessToken, res) {
+      user.token.accessToken = accessToken;
+      user.save();
+    });
+    //var conn = new jsforce.Connection();
+    //conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
       conn.query('SELECT ' + req.body.xColumn + ', ' + req.body.yColumn + ' FROM ' + req.params.id, function(err, data) {
         if(err) {console.log(err); return res.status(501).send(err);}
         res.json(data);
       });
-    });
+    //});
   });
 });
 
@@ -91,14 +113,24 @@ app.post('/sob/:name/desc', function(req, res, next) {
   User.findOne({
     username: req.session.user.username
   }, function(err, user) {
-    var conn = new jsforce.Connection();
-    conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
+    var conn = new jsforce.Connection({
+      oauth2: oauth2,
+      instanceUrl: user.token.instanceUrl,
+      accessToken: user.token.accessToken,
+      refreshToken: user.token.refreshToken
+    });
+    conn.on('refresh', function(accessToken, res) {
+      user.token.accessToken = accessToken;
+      user.save();
+    });
+    //var conn = new jsforce.Connection();
+    //conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
       conn.sobject(req.params.name).describe(function(err, data) {
         if(err) return res.status(501).send(err);
         res.json(data.fields.map(function(val) { return val.label; }));
         });
       });
-    });
+    //});
   });
 
 //TODO: add sobject request similar to /reportId
@@ -107,8 +139,18 @@ app.post('/report/:id/desc', function(req, res, next) {
   User.findOne({
     username: req.body.username
   }, function(err, user) {
-    var conn = new jsforce.Connection({instanceUrl: 'https://na1.salesforce.com'});
-    conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
+    var conn = new jsforce.Connection({
+      oauth2: oauth2,
+      instanceUrl: user.token.instanceUrl,
+      accessToken: user.token.accessToken,
+      refreshToken: user.token.refreshToken
+    });
+    conn.on('refresh', function(accessToken, res) {
+      user.token.accessToken = accessToken;
+      user.save();
+    });
+    //var conn = new jsforce.Connection({instanceUrl: 'https://na1.salesforce.com'});
+    //conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
       conn.analytics.reports(function(err, reports) {
         var id = req.params.id;
         conn.analytics.report(id).describe(function(err, result) {
@@ -124,6 +166,37 @@ app.post('/report/:id/desc', function(req, res, next) {
           res.json(ret);
         });
       });
+    //});
+  });
+});
+
+/**
+ * Retrieve Token
+ */
+app.get('/oauth2/auth', function(req, res) {
+  res.redirect(oauth2.getAuthorizationUrl({ scope : 'api id refresh_token' }));
+});
+app.get('/oauth2/callback', function(req, res) {
+  var conn = new jsforce.Connection({ oauth2 : oauth2 });
+  var code = req.query.code;
+  conn.authorize(code, function(err, userInfo) {
+    if (err) return res.redirect(401, '/');
+    req.session.accessToken = conn.accessToken;
+    req.session.instanceUrl = conn.instanceUrl;
+    conn.identity(function(err, ret) {
+      User.findOne({ 'email': ret.email }, function(err, user) {
+        if(err) { return; }
+        var u = user || new User(ret);
+        u.token = {
+          accessToken: conn.accessToken,
+          refreshToken: conn.refreshToken,
+          instanceUrl: conn.instanceUrl
+        };
+        u.username = u.username.toLowerCase().replace(/@.*$/, '');
+        req.session.user = u;
+        u.save();
+        res.redirect('/account');
+      });
     });
   });
 });
@@ -131,7 +204,7 @@ app.post('/report/:id/desc', function(req, res, next) {
 /**
  * Login
  */
-app.post('/login', function(req, res, next) {
+/*app.post('/login', function(req, res, next) {
   var conn = new jsforce.Connection();
   if(!req.body.email || !req.body.password) return res.json({ success: false });
   User.findOne({ 'login.email': req.body.email }, function(err, user) {
@@ -153,7 +226,7 @@ app.post('/login', function(req, res, next) {
       });
     });
   });
-});
+});*/
 
 /**
  * Login Status
