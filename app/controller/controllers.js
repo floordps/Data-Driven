@@ -116,6 +116,8 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
 
   $scope.editSlide = function(name) {
     $('#text-editor').val(null);
+    $scope.reportType = 'rID';
+    $scope.showGraphType($scope.reportType);
     $scope.saveEditorError = true;
     $scope.saveEditorSuccess = true;
     $http.get('/api/account/' + name).success(function(data) {
