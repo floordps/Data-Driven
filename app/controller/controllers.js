@@ -132,8 +132,9 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
       }
     });
   };
-  $('#graphModal').on('hidden.bs.modal', function() {
+  $('#graphModal').off().on('hidden.bs.modal', function() {
     $scope.graph = {};
+    $scope.reportType = 'rID';
     $scope.showDetails = true;
     $scope.reportDetails = false;
     $scope.$apply();

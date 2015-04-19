@@ -32,7 +32,7 @@ $(function() {
             var str = '',
               graph = $('#graphModal').data('graph'),
               end = e.getContent().length;
-            $('#createGraph').one('click', function() {
+            $('#createGraph').off().one('click', function() {
               str = '&nbsp;<!-- .element: class="graph center-block" '
                 + 'nvd3-' + graph.graphType + '="nvd3" '
                 + 'reportId="' + (graph.reportId || '') + '" '
