@@ -6,19 +6,6 @@ $(function() {
     width: '100%',
     additionalButtons: [
       [{
-        name: 'slideButton',
-        data: [{
-          name: 'addSlide',
-          toggle: false,
-          title: 'Add Slide',
-          icon: 'fa fa-plus',
-          callback: function(e) {
-            var end = e.getContent().length;
-            e.setSelection(end, end);
-            e.replaceSelection('\n---\n');
-          }
-        }]
-      }, {
         name: 'graphButton',
         data: [{
           name: 'insertGraph',
