@@ -248,3 +248,7 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
     $('#graphModal').data('graph', $scope.graph);
   }, true);
 });
+
+app.controller('editorCtrl', function() {
+  
+});

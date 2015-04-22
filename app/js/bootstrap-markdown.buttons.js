@@ -1,9 +1,9 @@
 $(function() {
-  $('#text-editor').markdown({
+  $('.text-editor').markdown({
     iconlibrary: 'fa',
     hiddenButtons: 'cmdPreview',
     disabledButtons: 'cmdPreview',
-    width: '600',
+    width: '100%',
     additionalButtons: [
       [{
         name: 'slideButton',

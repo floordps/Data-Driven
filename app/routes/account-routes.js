@@ -8,10 +8,10 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl : 'partials/slide.jade',
       controller : 'masterCtrl'
     })
-    /*.when('/:slidename/editor', {
-      templateUrl : 'partials/editor.jade',
-      controller : 'editorCtrl'
-    })*/
+    // .when('/:slidename/editor', {
+    //   templateUrl : 'partials/editor.jade',
+    //   controller : 'editorCtrl'
+    // })
     .otherwise({
       redirectTo: '/'
     });
