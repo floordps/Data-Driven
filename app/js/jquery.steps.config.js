@@ -3,7 +3,7 @@ $(function(){
 
   form.steps({
     headerTag: 'h3',
-    bodyTag: 'section',
+    bodyTag: 'div',
     transitionEffect: 'slideLeft',
     stepsOrientation: 'vertical',
     enableAllSteps: true,

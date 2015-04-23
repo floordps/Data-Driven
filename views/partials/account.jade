@@ -53,7 +53,7 @@ menu
       .alert.alert-danger(role='alert', ng-hide='saveEditorError') Oops.. Something went wrong. Try Again!
       .alert.alert-success(role='alert', ng-hide='saveEditorSuccess') SlideShow Saved!!
       form
-        textarea#text-editor(name='content', rows='20', data-provide='markdown')
+        textarea.text-editor(name='content', rows='20', data-provide='markdown')
         #footer-editor
           button.btn.btn-success(ng-click='updateMarkdown()' ladda='loading' data-style='slide-right') Save
           button.btn.btn-default(data-dismiss='modal') Close

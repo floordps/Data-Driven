@@ -1,28 +1,74 @@
-script(src='/app/js/bootstrap-markdown.buttons.js')
 link(rel='stylesheet', href='https://cdn.rawgit.com/floordps/jquery-steps/master/demo/css/jquery.steps.css')
 script(src='/app/js/jquery.steps.config.js')
 
-.container
+menu
+.container#editor(ng-hide='false')
   h1.text-center Editor
   div#wizard
-    h3
-    section
-      textarea.text-editor(name='content', rows='20')
-    h3
-    section
-      textarea.text-editor(name='content', rows='20')
-    h3
-    section
-      textarea.text-editor(name='content', rows='20')
-    h3
-    section
-      textarea.text-editor(name='content', rows='20')
-    h3
-    section
-      textarea.text-editor(name='content', rows='20')
-    h3
-    section
-      textarea.text-editor(name='content', rows='20')
-    h3
-    section
-      textarea.text-editor(name='content', rows='20')
+  
+.container#config(ng-hide='true')
+  h1.text-center SlideShow Configuration
+  button.btn.btn-default.pull-left(type='button', ng-click='goBack()') Back
+  button.btn.btn-success.pull-right(type='button') Submit
+#graphModal.modal.fade(role='dialog')
+  .modal-content
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-label='close')
+      h3 Creating Graph
+    .modal-body
+      .alert.alert-danger(role='alert', ng-hide='graphError') Oops.. Something went wrong. Try Again!
+      form.form-inline(name='reportTypeForm', novalidate)
+        input(type='radio', ng-model='reportType', value='rID', id='rID', ng-change='showGraphType(reportType)', ng-init='reportType="rID"; showGraphType(reportType)')
+        label.btn.btn-primary(for='rID') Report ID
+        input(type='radio', ng-model='reportType', value='sob', id='sob', ng-change='showGraphType(reportType)')
+        label.btn.btn-primary(for='sob') SObject
+      form.form-inline(name='checkReportForm', novalidate, ng-hide='reportDetails')
+        .form-group
+          input.form-control(type='text', ng-model='graph.reportId', placeholder='Enter Report ID.', pattern='.{8,18}', required)
+          button.btn.btn-primary(type='button', ng-disabled='!checkReportForm.$valid', ng-click='checkReport()' ladda='load', data-style='slide-left') Check Report
+      form.form-inline(name='checkSobForm', novalidate, ng-hide='!reportDetails')
+        .form-group
+          input.form-control(type='text', ng-model='graph.sobId', placeholder='Enter SObject Name.', required)
+          button.btn.btn-primary(type='button', ng-disabled='!checkSobForm.$valid', ng-click='checkSob()' ladda='load', data-style='slide-left') Check SObject
+      .graphOption(ng-hide='showDetails')
+        form
+          .form-group
+            select.form-control(ng-model='graph.graphType', required)
+              option(value='' disabled selected) Select a Graph
+              option(ng-repeat='type in gTypes', value='{{type.name}}') {{type.type}}
+        form.form-inline(name='graphForm', novalidate)
+          .form-group
+            select.form-control(ng-model='graph.xValue', required, ng-hide='reportTabSelected')
+              option(value='', disabled selected) Select X Column
+              option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
+            select.form-control(ng-model='graph.yValue', required, ng-hide='reportTabSelected')
+              option(value='', disabled selected) Select Y Column
+              option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
+            input.form-control(type='text', placeholder='Enter X Column', ng-model='graph.xValue', required, ng-hide='!reportTabSelected')
+            input.form-control(type='text', placeholder='Enter Y Column', ng-model='graph.yValue', required, ng-hide='!reportTabSelected')
+            h3 Select Group Options:
+            ul#groupOp
+              li(ng-repeat='option in options track by $index')
+                label
+                  input(type='checkbox', ng-model='graph.options[option.name]')
+                  | &nbsp{{option.option}}
+    .modal-footer
+      button#createGraph.btn.btn-primary(type='button', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
+#tableModal.modal.fade(role='dialog')
+  .modal-content
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-label='close')
+      h4 Table
+    .modal-body
+      form(name='tableForm', novalidate)
+        .form-group
+          input.form-control(type='number', name='rows', placeholder='# of rows', min=1, ng-model='rows', required)
+        .form-group
+          input.form-control(type='number', name='columns', placeholder='# of columns', min=1, max=10, ng-model='columns', required)
+        .checkbox
+          label
+            input(type='checkbox')
+            | Headers
+    .modal-footer
+      button#createTable.btn.btn-primary(type='button', ng-disabled='!tableForm.$valid') Create Table
+      button.btn.btn-default(type='button', data-dismiss='modal') Close

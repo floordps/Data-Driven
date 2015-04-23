@@ -123,7 +123,8 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
     $http.get('/api/account/' + name).success(function(data) {
       if(data) {
         $scope.slideshow = data;
-        $('#text-editor').val(data.slides);
+        console.log(data.slides.split('---'))
+        $('.text-editor').val(data.slides);
         $('#editorModal').modal('show');
       } else {
         $scope.slideshow = { slideName: name };
@@ -249,6 +250,19 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
   }, true);
 });
 
-app.controller('editorCtrl', function() {
-  
+app.controller('editorCtrl', function($scope, $http) {
+  $scope.goBack = function() {
+    $('#editor').removeClass('ng-hide');
+    $('#config').addClass('ng-hide');
+  };
+  $scope.slides = [];
+  $scope.slides.forEach(function(data, index) {
+    console.log(index);
+    $('#wizard').steps('add', {
+      title: '',
+      content: ''
+    });
+    $('#wizard .content #wizard-p-' + index).html('<textarea class=".text-editor" name="content" data-provide="markdown" rows="20">' + data + '</textarea>');
+    markdownEditor();
+  });
 });
