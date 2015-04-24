@@ -250,28 +250,20 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
   }, true);
 });
 
-app.controller('editorCtrl', function($scope, $http, $routeParams, $q, $rootScope, $timeout) {
+app.controller('editorCtrl', function($scope, $http, $routeParams, $rootScope, $timeout, $location, SocketIO) {
   $scope.transitions = ['Default', 'Slide', 'Convex', 'Concave', 'Zoom'];
   $scope.themes = ['Simple', 'Black', 'White', 'League', 'Sky', 'Beige', 'Serif', 'Night', 'Moon', 'Solarized', 'Blood'];
   $scope.revealOptions = {autoSlide: 0, transition: 'Default', theme: 'Simple'};
   $scope.currentTransition = 'Default';
   $scope.currentTheme = 'Simple';
   $scope.autoSlide = 0;
-  //var deferred = $q.defer();
   $scope.goBack = function() {
     $('#editor').removeClass('ng-hide');
     $('#config').addClass('ng-hide');
   };
   $http.get('/api/account/' + $routeParams.slidename).success(function(data) {
     var slides = '';
-    if (!data) {
-      $http.post('/api/account/' + $routeParams.slidename).success(function(data) {
-        if (data && data.success) {
-          $scope.slideshow = data.slideshow;
-        }
-      });
-    }
-  //  deferred.promise.then(function() {
+    $scope.slideshow = data || { slideName: $routeParams.slidename };
     if (data) {
       $scope.currentTransition = data.reveal.transition;
       $scope.currentTheme = data.theme;
@@ -286,19 +278,16 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $q, $rootScop
       $('#wizard .content #wizard-p-' + index).html('<textarea class=".text-editor" name="content" data-provide="markdown" rows="20">' + data + '</textarea>');
       markdownEditor();
     });
-  //  });
   });
   $scope.updateMarkdown = function() {
     $scope.loading = true;
     var md = $.map($('#wizard .content textarea'), function(obj) { return $(obj).val(); }).join("\n---\n");
     $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md }).success(function(data) {
       $scope.loading = false;
-      /*if(data && data.success) {
-        if(data.slideshow && $scope.checkSlideShowName(data.slideshow.slideName)) $scope.slideShows.push(data.slideshow);
-        $scope.saveEditorSuccess = false;
+      if(data && data.success) {
         SocketIO.emit('slideupdated', { id: data.slideshow.multiplex.id, slides: data.slideshow.slides });
-      } else $scope.saveEditorError = false;*/
-
+      }
+      $location.path('/account');
     }).error(function(data) {
       $scope.loading=false;
     });

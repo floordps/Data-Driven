@@ -41,7 +41,7 @@ menu
         form.form-inline.form-group(novalidate, name='newSlideForm')
           input.form-control(type='text', placeholder='SlideShow Name', ng-model='newSlideName', ng-change='!checkSlideShowName(newSlideName)', required)
       .modal-footer
-        a.btn.btn-primary(ng-disabled='newSlideForm.$invalid || !checkSlideShowName(newSlideName)', ng-click='editSlide(newSlideName)') Create
+        a.btn.btn-primary(ng-disabled='newSlideForm.$invalid || !checkSlideShowName(newSlideName)', href='/account#/{{newSlideName}}/editor') Create
         button.btn.btn-default(data-dismiss='modal') Close
 /*
 #editorModal.modal.fade(data-keyboard='false', data-backdrop='static', role='dialog')
