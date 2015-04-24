@@ -86,7 +86,6 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
   $scope.saveEditorError = true;
   $scope.saveEditorSuccess = true;
   $scope.graph = {};
-  $scope.revealTransition = ['none', 'default', 'zoom', 'fade'];
   $scope.username = userProfile.display_name;
   $scope.slideShows = [];
   $scope.tokens = userProfile.tokens;
@@ -250,7 +249,9 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
   }, true);
 });
 
-app.controller('editorCtrl', function($scope, $http, $routeParams, $rootScope, $timeout, $location, SocketIO) {
+app.controller('editorCtrl', function($scope, $http, $routeParams, $location, SocketIO) {
+  $scope.reportDetails = true;
+  $scope.graph = {};
   $scope.transitions = ['Default', 'Slide', 'Convex', 'Concave', 'Zoom'];
   $scope.themes = ['Simple', 'Black', 'White', 'League', 'Sky', 'Beige', 'Serif', 'Night', 'Moon', 'Solarized', 'Blood'];
   $scope.revealOptions = {autoSlide: 0, transition: 'Default', theme: 'Simple'};
@@ -267,9 +268,9 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $rootScope, $
     if (data) {
       $scope.currentTransition = data.reveal.transition;
       $scope.currentTheme = data.theme;
-      $scope.autoSlide = data.reveal.autoSlide;
+      $scope.autoSlide = data.reveal.autoSlide / 1000;
       slides = data.slides || '';
-    }
+      }
     slides.split('\n---\n').forEach(function(data, index) {
       $('#wizard').steps('add', {
         title: '',
@@ -281,8 +282,13 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $rootScope, $
   });
   $scope.updateMarkdown = function() {
     $scope.loading = true;
+    var reveal = {
+      transition: $($('.slideConfig input[type="radio"]:checked')[0]).val(),
+      autoSlide: parseInt($('.input-group #autoslide').val()) * 1000
+    };
+    var theme = $($('.slideConfig input[type="radio"]:checked')[1]).val();
     var md = $.map($('#wizard .content textarea'), function(obj) { return $(obj).val(); }).join("\n---\n");
-    $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md }).success(function(data) {
+    $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md, reveal: reveal, theme: theme }).success(function(data) {
       $scope.loading = false;
       if(data && data.success) {
         SocketIO.emit('slideupdated', { id: data.slideshow.multiplex.id, slides: data.slideshow.slides });
@@ -292,4 +298,73 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $rootScope, $
       $scope.loading=false;
     });
   };
+  $('#graphModal').off().on('hidden.bs.modal', function() {
+    $scope.graph = {};
+    $scope.reportType = 'rID';
+    $scope.showDetails = true;
+    $scope.reportDetails = false;
+    $scope.$apply();
+  });
+  $scope.$watch('graph', function() {
+    $('#graphModal').data('graph', $scope.graph);
+  }, true);
+  $scope.checkReport = function () {
+    $scope.load = true;
+    $scope.graphError = true;
+    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username, slidename: $scope.slideshow.slideName }).success(function(data) {
+      if(data) {
+        $scope.labels = [];
+        data.cols.forEach(function(data) {
+        $scope.labels.push(data.label);
+        $scope.showDetails = false;
+        });
+      } else {
+        $scope.showDetails = true;
+        $scope.graphError = false;
+      }
+      $scope.load = false;
+    }).error(function(data) {
+      $scope.load = false;
+      $scope.graphError = false;
+    });
+  };
+
+  $scope.checkSob = function () {
+    $scope.load = true;
+    $scope.graphError = true;
+    $http.post('/sob/' + $scope.graph.sobId + '/desc').success(function(data) {
+      if(data) {
+        $scope.showDetails = false;
+      } else {
+        $scope.showDetails = true;
+        $scope.graphError = false;
+      }
+      $scope.load = false;
+    }).error(function(data) {
+      $scope.load = false;
+      $scope.graphError = false;
+    });
+  };
+  $scope.showGraphType = function(e) {
+    if (e == 'rID') {
+      $scope.reportDetails = false;
+      $scope.reportTabSelected = false;
+    } else {
+      $scope.reportDetails = true;
+      $scope.reportTabSelected = true;
+    }
+  };
+  $scope.gTypes = [
+    {name: 'line-chart', type: 'Line Charts'},
+    {name: 'stacked-area-chart', type: 'Stacked Area Charts'},
+    {name: 'multi-bar-chart', type: 'Multi Bar Charts'},
+    {name: 'multi-bar-horizontal-chart', type: 'Multi Bar Horizontal Charts'},
+    {name: 'discrete-bar-chart', type: 'Discrete Bar Charts'},
+    {name: 'pie-chart', type: 'Pie Charts'},
+    {name: 'scatter-chart', type: 'Scatter Charts'},
+    {name: 'sparkline-chart', type: 'Sparkline  Charts'},
+    {name: 'cumulative-line-chart', type: 'Cumulative Line Charts'},
+    {name: 'line-with-focus-chart', type: 'Line with Focus Charts'}
+  ];
+
 });

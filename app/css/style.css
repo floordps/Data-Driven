@@ -76,9 +76,9 @@ input[type='radio'] + label {
 }
 
 input[type='radio']:checked + label {
-  background-color: #9BC8E2;
+  background-color: #2184BE;
   color: #FFF;
-  border-color: #9BC8E2;
+  border-color: #2184BE;
 }
 
 ul.slideConfig {
