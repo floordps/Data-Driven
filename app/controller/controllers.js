@@ -250,33 +250,43 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
   }, true);
 });
 
-app.controller('editorCtrl', function($scope, $http, $routeParams) {
+app.controller('editorCtrl', function($scope, $http, $routeParams, $q, $rootScope, $timeout) {
   $scope.transitions = ['Default', 'Slide', 'Convex', 'Concave', 'Zoom'];
   $scope.themes = ['Simple', 'Black', 'White', 'League', 'Sky', 'Beige', 'Serif', 'Night', 'Moon', 'Solarized', 'Blood'];
-  $scope.transition = 'Convex';
+  $scope.revealOptions = {autoSlide: 0, transition: 'Default', theme: 'Simple'};
+  $scope.currentTransition = 'Default';
   $scope.currentTheme = 'Simple';
+  $scope.autoSlide = 0;
+  //var deferred = $q.defer();
   $scope.goBack = function() {
     $('#editor').removeClass('ng-hide');
     $('#config').addClass('ng-hide');
   };
-  $scope.slides = [];
   $http.get('/api/account/' + $routeParams.slidename).success(function(data) {
-    if(data) {
-      $scope.slideshow = data;
-      $scope.currentTransition = data.reveal.transition;
-      $scope.currentThem = data.theme;
-      $scope.autoSlide = data.reveal.autoSlide;
-      var slides = data.slides.split('\n---\n') || [''];
-      slides.forEach(function(data, index) {
-        console.log(index);
-        $('#wizard').steps('add', {
-          title: '',
-          content: ''
-        });
-        $('#wizard .content #wizard-p-' + index).html('<textarea class=".text-editor" name="content" data-provide="markdown" rows="20">' + data + '</textarea>');
-        markdownEditor();
+    var slides = '';
+    if (!data) {
+      $http.post('/api/account/' + $routeParams.slidename).success(function(data) {
+        if (data && data.success) {
+          $scope.slideshow = data.slideshow;
+        }
       });
     }
+  //  deferred.promise.then(function() {
+    if (data) {
+      $scope.currentTransition = data.reveal.transition;
+      $scope.currentTheme = data.theme;
+      $scope.autoSlide = data.reveal.autoSlide;
+      slides = data.slides || '';
+    }
+    slides.split('\n---\n').forEach(function(data, index) {
+      $('#wizard').steps('add', {
+        title: '',
+        content: ''
+      });
+      $('#wizard .content #wizard-p-' + index).html('<textarea class=".text-editor" name="content" data-provide="markdown" rows="20">' + data + '</textarea>');
+      markdownEditor();
+    });
+  //  });
   });
   $scope.updateMarkdown = function() {
     $scope.loading = true;
