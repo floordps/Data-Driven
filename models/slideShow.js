@@ -11,7 +11,7 @@ var slideShowSchema = new mongoose.Schema({
     center: { type: Boolean, default: true },
     touch: { type: Boolean, default: true },
     loop: { type: Boolean, default: true },
-    rtl: { type: Boolean, default: true },
+    rtl: { type: Boolean, default: false },
     help: { type: Boolean, default: true },
     autoSlide: { type: Number, default: 0 },
     autoSlideStoppable: { type: Boolean, default: true },

@@ -299,7 +299,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       if(data && data.success) {
         SocketIO.emit('slideupdated', { id: data.slideshow.multiplex.id, slides: data.slideshow.slides });
       }
-      $location.path('/account');
+      $location.path('/');
     }).error(function(data) {
       $scope.loading=false;
     });
