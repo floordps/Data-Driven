@@ -10,7 +10,7 @@ var slideShowSchema = new mongoose.Schema({
     overview: { type: Boolean, default: true },
     center: { type: Boolean, default: true },
     touch: { type: Boolean, default: true },
-    loop: { type: Boolean, default: false },
+    loop: { type: Boolean, default: true },
     rtl: { type: Boolean, default: true },
     help: { type: Boolean, default: true },
     autoSlide: { type: Number, default: 0 },

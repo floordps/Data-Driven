@@ -26,6 +26,7 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
       Reveal.addEventListener('ready', function(event) {
         if($rootScope.room) SocketIO.emit('leave', $rootScope.room);
         $rootScope.room = data.multiplex.id;
+        $('#theme').attr('href', '/app/css/' + data.theme.toLowerCase() + '.css');
         SocketIO.emit('join', $rootScope.room);
       });
       $scope.$on('$destroy', function(e) {
@@ -70,6 +71,7 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams, $r
       if($rootScope.room) SocketIO.emit('leave', $rootScope.room);
       $rootScope.room = data.multiplex.id;
       SocketIO.emit('join', $rootScope.room);
+      $('#theme').attr('href', '/app/css/' + data.theme.toLowerCase() + '.css');
     });
     $scope.$on('$destroy', function(e) {
       Reveal.removeEventListeners();
