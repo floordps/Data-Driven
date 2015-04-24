@@ -252,7 +252,9 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
 });
 
 app.controller('editorCtrl', function($scope, $http, $routeParams, $location, SocketIO) {
+  $scope.showDetails = true;
   $scope.reportDetails = true;
+  $scope.graphError = true;
   $scope.graph = {};
   $scope.transitions = ['Default', 'Slide', 'Convex', 'Concave', 'Zoom'];
   $scope.themes = ['Simple', 'Black', 'White', 'League', 'Sky', 'Beige', 'Serif', 'Night', 'Moon', 'Solarized', 'Blood'];
@@ -274,11 +276,13 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       slides = data.slides || '';
       }
     slides.split('\n---\n').forEach(function(data, index) {
+      var $textarea = $('<textarea class=".text-editor" name="content" data-provide="markdown" rows="20"></textarea>');
+      $textarea.text(data);
       $('#wizard').steps('add', {
         title: '',
         content: ''
       });
-      $('#wizard .content #wizard-p-' + index).html('<textarea class=".text-editor" name="content" data-provide="markdown" rows="20">' + data + '</textarea>');
+      $('#wizard .content #wizard-p-' + index).html($textarea);
       markdownEditor();
     });
   });
