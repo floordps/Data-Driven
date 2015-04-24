@@ -250,19 +250,47 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
   }, true);
 });
 
-app.controller('editorCtrl', function($scope, $http) {
+app.controller('editorCtrl', function($scope, $http, $routeParams) {
+  $scope.transitions = ['Default', 'Slide', 'Convex', 'Concave', 'Zoom'];
+  $scope.themes = ['Simple', 'Black', 'White', 'League', 'Sky', 'Beige', 'Serif', 'Night', 'Moon', 'Solarized', 'Blood'];
+  $scope.transition = 'Convex';
+  $scope.currentTheme = 'Simple';
   $scope.goBack = function() {
     $('#editor').removeClass('ng-hide');
     $('#config').addClass('ng-hide');
   };
   $scope.slides = [];
-  $scope.slides.forEach(function(data, index) {
-    console.log(index);
-    $('#wizard').steps('add', {
-      title: '',
-      content: ''
-    });
-    $('#wizard .content #wizard-p-' + index).html('<textarea class=".text-editor" name="content" data-provide="markdown" rows="20">' + data + '</textarea>');
-    markdownEditor();
+  $http.get('/api/account/' + $routeParams.slidename).success(function(data) {
+    if(data) {
+      $scope.slideshow = data;
+      $scope.currentTransition = data.reveal.transition;
+      $scope.currentThem = data.theme;
+      $scope.autoSlide = data.reveal.autoSlide;
+      var slides = data.slides.split('\n---\n') || [''];
+      slides.forEach(function(data, index) {
+        console.log(index);
+        $('#wizard').steps('add', {
+          title: '',
+          content: ''
+        });
+        $('#wizard .content #wizard-p-' + index).html('<textarea class=".text-editor" name="content" data-provide="markdown" rows="20">' + data + '</textarea>');
+        markdownEditor();
+      });
+    }
   });
+  $scope.updateMarkdown = function() {
+    $scope.loading = true;
+    var md = $.map($('#wizard .content textarea'), function(obj) { return $(obj).val(); }).join("\n---\n");
+    $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md }).success(function(data) {
+      $scope.loading = false;
+      /*if(data && data.success) {
+        if(data.slideshow && $scope.checkSlideShowName(data.slideshow.slideName)) $scope.slideShows.push(data.slideshow);
+        $scope.saveEditorSuccess = false;
+        SocketIO.emit('slideupdated', { id: data.slideshow.multiplex.id, slides: data.slideshow.slides });
+      } else $scope.saveEditorError = false;*/
+
+    }).error(function(data) {
+      $scope.loading=false;
+    });
+  };
 });

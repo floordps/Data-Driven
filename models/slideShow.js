@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var slideShowSchema = new mongoose.Schema({
+  theme: {type: String, default: 'Simple'},
   reveal: {
     controls: { type: Boolean, default: true },
     progress: { type: Boolean, default: true },
@@ -10,13 +11,14 @@ var slideShowSchema = new mongoose.Schema({
     center: { type: Boolean, default: true },
     touch: { type: Boolean, default: true },
     loop: { type: Boolean, default: false },
-    rtl: { type: Boolean, default: false },
+    rtl: { type: Boolean, default: true },
     help: { type: Boolean, default: true },
     autoSlide: { type: Number, default: 0 },
     autoSlideStoppable: { type: Boolean, default: true },
-    mousewheel: { type: Boolean, default: false },
-    transition: { type: String, default: 'default' },
-    backgroundTransition: { type: String, default: 'default' },
+    mousewheel: { type: Boolean, default: true },
+    transition: { type: String, default: 'Default' },
+    transitionSpeed: {type: String, default: 'Default'},
+    backgroundTransition: { type: String, default: 'Default' },
     viewDistance: { type: Number, default: 3 }
   },
   multiplex: {

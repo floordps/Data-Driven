@@ -5,11 +5,33 @@ menu
 .container#editor(ng-hide='false')
   h1.text-center Editor
   div#wizard
-  
+
 .container#config(ng-hide='true')
   h1.text-center SlideShow Configuration
-  button.btn.btn-default.pull-left(type='button', ng-click='goBack()') Back
-  button.btn.btn-success.pull-right(type='button') Submit
+  form.form-inline.text-center
+    div.form-group
+      label.sr-only(for='autoslide') Auto Slide (in seconds)
+      div.input-group
+        div.input-group-addon Auto Slide
+        input.form-control#autoslide(type='text', ng-model='autoSlide')
+        div.input-group-addon SEC
+    .row
+      h3 Transistion:
+      ul.slideConfig
+        li(ng-repeat='tran in transitions')
+          input(type='radio', ng-checked='{{tran==currentTransition}}', ng-model='slideOption', name='transitionOption', value="{{tran}}", id='{{tran}}')
+          label.btn.btn-default(for='{{tran}}')
+            | {{tran}}
+    .row
+      h3 Themes:
+      ul.slideConfig
+        li(ng-repeat='theme in themes')
+          input(type='radio', ng-checked='{{theme==currentTheme}}', ng-model='slideOption', name='themeOption', value="{{theme}}", id='{{theme}}')
+          label.btn.btn-default(for='{{theme}}')
+            | {{theme}}
+    .row
+      button.btn.btn-default(type='button', ng-click='goBack()') Back
+      button.btn.btn-success(ng-click='updateMarkdown()', type='button') Submit
 #graphModal.modal.fade(role='dialog')
   .modal-content
     .modal-header
