@@ -1,5 +1,4 @@
-link(rel='stylesheet', href='https://cdn.rawgit.com/floordps/jquery-steps/master/demo/css/jquery.steps.css')
-script(src='/app/js/jquery.steps.config.js')
+link(rel='stylesheet', href='https://rawgit.com/floordps/jquery-steps/master/demo/css/jquery.steps.css')
 
 menu
 .container#editor(ng-hide='false')
@@ -31,8 +30,8 @@ menu
           label.btn.btn-default(for='{{theme}}')
             | {{theme}}
     .row
-      button.btn.btn-default(type='button', ng-click='goBack()') Back
-      button.btn.btn-success(ng-click='updateMarkdown()', type='button', ladda='loading', data-style='slide-left') Submit
+      button.btn.btn-default.btn-md(type='button', ng-click='goBack()') Go Back
+      //button.btn.btn-success(ng-click='updateMarkdown()', type='button', ladda='loading', data-style='slide-left') Submit
 #graphModal.modal.fade(role='dialog')
   .modal-content
     .modal-header

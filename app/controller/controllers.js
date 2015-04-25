@@ -262,6 +262,24 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
   $scope.currentTransition = 'Default';
   $scope.currentTheme = 'Simple';
   $scope.autoSlide = 0;
+  var form = $('#wizard');
+
+  form.steps({
+    headerTag: 'h3',
+    bodyTag: 'div',
+    transitionEffect: 'slideLeft',
+    stepsOrientation: 'vertical',
+    enableAllSteps: true,
+    enableKeyNavigation: true,
+    enablePagination: true,
+    startIndex: 0,
+    showFinishButtonAlways: true,
+    autoFocus: true,
+    onFinished: function(event, currentIndex) {
+      $scope.updateMarkdown();
+    }
+  });
+
   $scope.goBack = function() {
     $('#editor').removeClass('ng-hide');
     $('#config').addClass('ng-hide');
