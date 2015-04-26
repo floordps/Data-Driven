@@ -26,7 +26,11 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
       Reveal.addEventListener('ready', function(event) {
         if($rootScope.room) SocketIO.emit('leave', $rootScope.room);
         $rootScope.room = data.multiplex.id;
-        $('#theme').attr('href', '/app/css/' + data.theme.toLowerCase() + '.css');
+        var ref = '/app/css/' + data.theme.toLowerCase() + '.css';
+        if(ref !== $('#theme').attr('href')) {
+          $('#theme').attr('href', ref);
+        }
+        $('#theme').prop('disabled', false);
         SocketIO.emit('join', $rootScope.room);
       });
       $scope.$on('$destroy', function(e) {
@@ -35,6 +39,7 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
       });
     });
   } else {
+    $('#theme').prop('disabled', true);
     $http.get('/api/view/all').success(function(data) {
       $scope.slideShows = data;
     });
@@ -71,7 +76,11 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams, $r
       if($rootScope.room) SocketIO.emit('leave', $rootScope.room);
       $rootScope.room = data.multiplex.id;
       SocketIO.emit('join', $rootScope.room);
-      $('#theme').attr('href', '/app/css/' + data.theme.toLowerCase() + '.css');
+      var ref = '/app/css/' + data.theme.toLowerCase() + '.css';
+      if(ref !== $('#theme').attr('href')) {
+        $('#theme').attr('href', ref);
+      }
+      $('#theme').prop('disabled', false);
     });
     $scope.$on('$destroy', function(e) {
       Reveal.removeEventListeners();
@@ -90,7 +99,7 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
   $scope.graph = {};
   $scope.username = userProfile.display_name;
   $scope.slideShows = [];
-  $scope.tokens = userProfile.tokens;
+  $('#theme').prop('disabled', true);
   $scope.deleteSlide = function(sname) {
     $http.delete('/api/account/' + sname).success(function(data) {
       if(data && data.success) {
