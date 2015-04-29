@@ -1,5 +1,4 @@
 link(rel='stylesheet', href='https://rawgit.com/floordps/jquery-steps/master/demo/css/jquery.steps.css')
-
 menu
 .container#editor(ng-hide='false')
   h1.text-center Editor
@@ -32,7 +31,7 @@ menu
     .row
       button.btn.btn-default.btn-md(type='button', ng-click='goBack()') Go Back
       //button.btn.btn-success(ng-click='updateMarkdown()', type='button', ladda='loading', data-style='slide-left') Submit
-#graphModal.modal.fade(role='dialog')
+#graphModal.modal.fade.medium(role='dialog')
   .modal-content
     .modal-header
       button.close(type='button', data-dismiss='modal', aria-label='close')
@@ -41,9 +40,9 @@ menu
       .alert.alert-danger(role='alert', ng-hide='graphError') Oops.. Something went wrong. Try Again!
       form.form-inline(name='reportTypeForm', novalidate)
         input(type='radio', ng-model='reportType', value='rID', id='rID', ng-change='showGraphType(reportType)', ng-init='reportType="rID"; showGraphType(reportType)')
-        label.btn.btn-primary(for='rID') Report ID
+        label.btn(for='rID') Report ID
         input(type='radio', ng-model='reportType', value='sob', id='sob', ng-change='showGraphType(reportType)')
-        label.btn.btn-primary(for='sob') SObject
+        label.btn(for='sob') SObject
       form.form-inline(name='checkReportForm', novalidate, ng-hide='reportDetails')
         .form-group
           input.form-control(type='text', ng-model='graph.reportId', placeholder='Enter Report ID.', pattern='.{8,18}', required)
@@ -68,15 +67,12 @@ menu
               option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
             input.form-control(type='text', placeholder='Enter X Column', ng-model='graph.xValue', required, ng-hide='!reportTabSelected')
             input.form-control(type='text', placeholder='Enter Y Column', ng-model='graph.yValue', required, ng-hide='!reportTabSelected')
-            h3 Select Group Options:
-            ul#groupOp
-              li(ng-repeat='option in options track by $index')
-                label
-                  input(type='checkbox', ng-model='graph.options[option.name]')
-                  | &nbsp{{option.option}}
+          label
+            |Date Format:
+            toggle-switch.switch-primary(model='graph.option.date')
     .modal-footer
       button#createGraph.btn.btn-primary(type='button', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
-#tableModal.modal.fade(role='dialog')
+#tableModal.modal.fade.medium(role='dialog')
   .modal-content
     .modal-header
       button.close(type='button', data-dismiss='modal', aria-label='close')

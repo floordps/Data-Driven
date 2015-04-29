@@ -18,6 +18,8 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
       revealOptions.dependencies = [
         { src: '/app/plugin/multiplex/client.js' },
         { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: '/app/plugin/zoom-js/zoom.js', async: true },
+        { src: '/app/plugin/math/math.js', async: true },
         { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
         { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
       ];
@@ -67,6 +69,8 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams, $r
     revealOptions.dependencies = [
       { src: '/app/plugin/multiplex/master.js' },
       { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: '/app/plugin/zoom-js/zoom.js', async: true },
+      { src: '/app/plugin/math/math.js', async: true },
       { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
     ];
@@ -120,29 +124,6 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
     }).length === 0;
   };
 
-  $scope.editReveal = function(name, reveal) {
-    $scope.revealOptions = reveal;
-  };
-
-  $scope.editSlide = function(name) {
-    $('#text-editor').val(null);
-    $scope.reportType = 'rID';
-    $scope.showGraphType($scope.reportType);
-    $scope.saveEditorError = true;
-    $scope.saveEditorSuccess = true;
-    $http.get('/api/account/' + name).success(function(data) {
-      if(data) {
-        $scope.slideshow = data;
-        console.log(data.slides.split('---'))
-        $('.text-editor').val(data.slides);
-        $('#editorModal').modal('show');
-      } else {
-        $scope.slideshow = { slideName: name };
-        $('#newSlideshowModal').modal('hide');
-        $('#editorModal').modal('show');
-      }
-    });
-  };
   $('#graphModal').off().on('hidden.bs.modal', function() {
     $scope.graph = {};
     $scope.reportType = 'rID';
@@ -150,111 +131,6 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
     $scope.reportDetails = false;
     $scope.$apply();
   });
-  $scope.updateMarkdown = function() {
-    $scope.loading = true;
-    $scope.saveEditorError = true;
-    $scope.saveEditorSuccess = true;
-    var md = $('#text-editor').val();
-    $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md }).success(function(data) {
-      $scope.loading = false;
-      if(data && data.success) {
-        if(data.slideshow && $scope.checkSlideShowName(data.slideshow.slideName)) $scope.slideShows.push(data.slideshow);
-        $scope.saveEditorSuccess = false;
-        SocketIO.emit('slideupdated', { id: data.slideshow.multiplex.id, slides: data.slideshow.slides });
-      } else $scope.saveEditorError = false;
-
-    }).error(function(data) {
-      $scope.loading=false;
-      $scope.saveEditorError = false;
-    });
-  };
-  $scope.showGraphType = function(e) {
-    if (e == 'rID') {
-      $scope.reportDetails = false;
-      $scope.reportTabSelected = false;
-    } else {
-      $scope.reportDetails = true;
-      $scope.reportTabSelected = true;
-    }
-  };
-
-  $scope.options = [
-    {name: 'xAxisFmt', option: 'X Axis Data Format'},
-    {name: 'yAxisFmt', option: 'Y Axis Date Format'},
-    {name: 'showYAxis', option: 'Show X Axis'},
-    {name: 'showXAxis', option: 'Show Y Axis'},
-    {name: 'isArea', option: 'Is Area'},
-    {name: 'interactive', option: 'Interactive'},
-    {name: 'guideLine', option: 'Interactive Guide Line'},
-    {name: 'tooltips', option: 'Tooltips'},
-    {name: 'clipEdge', option: 'Clip Edge'},
-    {name: 'clipVoronoi', option: 'Clip Voronoi'},
-    {name: 'showLegend', option: 'Show Legend'},
-    {name: 'staggerLabels', option: 'Stagger Labels'},
-    {name: 'rotateLabels', option: 'Rotate Labels'}
-  ];
-
-  $scope.gTypes = [
-    {name: 'line-chart', type: 'Line Charts'},
-    {name: 'stacked-area-chart', type: 'Stacked Area Charts'},
-    {name: 'multi-bar-chart', type: 'Multi Bar Charts'},
-    {name: 'multi-bar-horizontal-chart', type: 'Multi Bar Horizontal Charts'},
-    {name: 'discrete-bar-chart', type: 'Discrete Bar Charts'},
-    {name: 'pie-chart', type: 'Pie Charts'},
-    {name: 'scatter-chart', type: 'Scatter Charts'},
-    {name: 'sparkline-chart', type: 'Sparkline  Charts'},
-    {name: 'cumulative-line-chart', type: 'Cumulative Line Charts'},
-    {name: 'line-with-focus-chart', type: 'Line with Focus Charts'}
-  ];
-
-  $scope.labels = [];
-
-  $scope.checkReport = function () {
-    $scope.load = true;
-    $scope.graphError = true;
-    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username, slidename: $scope.slideshow.slideName }).success(function(data) {
-      if(data) {
-        $scope.labels = [];
-        data.cols.forEach(function(data) {
-        $scope.labels.push(data.label);
-        $scope.showDetails = false;
-        });
-      } else {
-        $scope.showDetails = true;
-        $scope.graphError = false;
-      }
-      $scope.load = false;
-    }).error(function(data) {
-      $scope.load = false;
-      $scope.graphError = false;
-    });
-  };
-
-  $scope.checkSob = function () {
-    $scope.load = true;
-    $scope.graphError = true;
-    $http.post('/sob/' + $scope.graph.sobId + '/desc').success(function(data) {
-      if(data) {
-        $scope.showDetails = false;
-      } else {
-        $scope.showDetails = true;
-        $scope.graphError = false;
-      }
-      $scope.load = false;
-    }).error(function(data) {
-      $scope.load = false;
-      $scope.graphError = false;
-    });
-  };
-  $scope.isNumber = function(val) {
-    return (typeof val === 'number');
-  };
-  $scope.isBoolean = function(val) {
-    return (typeof val === 'boolean');
-  };
-  $scope.isString = function(val) {
-    return (typeof val === 'string');
-  };
   $scope.$watch('graph', function() {
     $('#graphModal').data('graph', $scope.graph);
   }, true);
@@ -266,7 +142,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
   $scope.graphError = true;
   $scope.graph = {};
   $scope.transitions = ['Default', 'Slide', 'Convex', 'Concave', 'Zoom'];
-  $scope.themes = ['Simple', 'Black', 'White', 'League', 'Sky', 'Beige', 'Serif', 'Night', 'Moon', 'Solarized', 'Blood'];
+  $scope.themes = ['Simple', 'White', 'League', 'Sky', 'Beige', 'Blood'];
   $scope.revealOptions = {autoSlide: 0, transition: 'Default', theme: 'Simple'};
   $scope.currentTransition = 'Default';
   $scope.currentTheme = 'Simple';
@@ -399,5 +275,4 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
     {name: 'cumulative-line-chart', type: 'Cumulative Line Charts'},
     {name: 'line-with-focus-chart', type: 'Line with Focus Charts'}
   ];
-
 });
