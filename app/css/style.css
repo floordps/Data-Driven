@@ -33,18 +33,17 @@ menu .dropdown .dropdown-menu {
 }
 
 /* Editor */
+.medium .modal-content {
+  width: 500px;
+  margin: auto;
+}
+
 #footer-editor {
   margin-top: 5px;
 }
 
 #footer-editor a {
   margin-left: 10px;
-}
-
-.modal-content {
-  width: 700px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 #editorModal textarea {
@@ -69,6 +68,8 @@ input[type='radio'] {
 }
 
 input[type='radio'] + label {
+  background-color: #FFF;
+  border-color: #CCC;
   width: 150px;
   display: inline-block;
   text-align: center;

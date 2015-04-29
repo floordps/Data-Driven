@@ -263,3 +263,7 @@ body {
  *********************************************/
 .reveal .slide-number {
   color: #268bd2; }
+
+.graph {
+  fill: #fff;
+}

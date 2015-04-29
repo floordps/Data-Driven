@@ -289,3 +289,7 @@ body {
 
 .reveal small code {
   vertical-align: baseline; }
+
+.graph {
+  fill: #fff;
+}
