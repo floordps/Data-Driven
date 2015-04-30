@@ -1,21 +1,90 @@
 /* Home */
+body{
+	font-family: 'Droid Sans', sans-serif !important;
+	color:#373737 !important;
+	height:100% !important;
+	background-color:white !important;
+}
+
 a {
   cursor: pointer;
 }
 
 #listSlides {
-  height: 80vh;
   overflow-y: auto;
+  margin:auto;
+  width:600px;
+  max-height: 70vh;
+}
+
+/* Header */
+.headerdiv{
+	background-color:#373737;
+	margin-top:0;
+	height:auto;
+}
+.logo{
+	width:300px;
+	height:80px;
+	background-image: url("img/Data-driven_logo_web.png");
+	margin:auto;
+}
+.h1, h1{
+  font-size:24px !important;
+  font-weight:bold !important;
+}
+.accountinfo{
+  width:580px !important;
+  padding:15px;
+}
+
+/* New Slideshow Button */
+#newSlideshow{
+  width:auto !important;
+  height:auto !important;
+  padding:2px 5px!important;
 }
 
 /* Menu */
 menu {
   margin-right: 20px;
+  float:right;
+  position:relative;
+  right:0px;
+	z-index:20 !important;
 }
 
 menu .dropdown .dropdown-menu {
   width: 200px;
   padding: 5px !important;
+	z-index:20 !important;
+}
+
+/* Search Form */
+.form-group{
+	font-weight:normal !important;
+}
+.form-group label{
+	font-weight:normal !important;
+	color:inherit !important;
+}
+.formcontainer {
+	margin:auto;
+	width:100% !important;
+	padding:5px;
+	background-color:#cccccc;
+	position:relative;
+	z-index:10;
+}
+.form-control{
+	border-radius:0 !important;
+	width:200px !important;
+	height:25px !important;
+}
+#filterForm{
+	width:600px;
+	margin:auto;
+	padding-left:10px;
 }
 
 .alert {
@@ -115,3 +184,78 @@ ul.slideConfig {
 .controls {
   left: 10px !important;
 }
+
+/* Table */
+.table {
+	background-color:red;
+	width:600px;
+	border:none !important;
+	font-size:16px;
+}
+.thead {
+	background-color:white;
+	font-size:20px !important;
+}
+.table-striped {
+	background-color:orange;
+}
+
+.table-hover{
+	background-color:white;
+}
+
+.slidecontainer{
+	width:600px;
+	background-color:white;
+	margin:auto;
+  max-height: 95vh;
+	-webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+	z-index:5;
+}
+.container1{
+	height:100% !important;
+	position:relative !important;
+}
+
+/* Footer */
+.footercontainer{
+	width:100%;
+  max-height: 10vh;
+	background-color:#373737;
+	color:white;
+	text-align:center;
+	padding:5px;
+	position:fixed;
+	bottom:0;
+}
+
+/* New Slide Window */
+.slideWindow{
+  width: 400px !important;
+  height:225px;
+  text-align:center !important;
+  border-radius:0 !important;
+  position:absolute;
+	top:50%;
+	left:50%;
+  margin:150px 0 0 -200px;
+}
+.modal-footer{
+  width:175px !important;
+  margin:auto !important;
+}
+
+/* Guess Work */
+#config{
+  background-color:blue;
+}
+
+
+
+
+
+
+
+

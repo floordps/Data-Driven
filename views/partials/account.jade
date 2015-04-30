@@ -1,10 +1,14 @@
-menu
-#account-wrap.container
-  .row
-    span.h1 {{username}}
-    .pull-right
-      button#newSlideshow.btn.btn-primary(data-toggle='modal', data-target='#newSlideshowModal') New Slideshow
-  .row
+.headerdiv
+  menu
+  .logo
+.container.formcontainer
+  #account-wrap.container.accountinfo
+    .row
+      span.h1 {{username}}
+      .pull-right
+        button#newSlideshow.btn.btn-primary(data-toggle='modal', data-target='#newSlideshowModal') New Slideshow
+.container1
+  .slidecontainer
     #listSlides
       table.table.table-striped.table-hover(data-toggle='table')
         thead
@@ -26,15 +30,17 @@ menu
                 i.fa.fa-pencil-square-o
               a.btn.btn-danger.btn-sm(ng-click='deleteSlide(slide.slideName)') Delete&nbsp
                 i.fa.fa-trash-o
-#newSlideshowModal.modal.medium(role='dialog')
+#newSlideshowModal.modal(role='dialog')
   .modal-dialog
-    .modal-content
+    .modal-content.slideWindow
       .modal-header
         button.close(data-dismiss='modal')
-        h3 New SlideShow
+        h3 New Slideshow
       .modal-body
         form.form-inline.form-group(novalidate, name='newSlideForm')
-          input.form-control(type='text', placeholder='SlideShow Name', ng-model='newSlideName', ng-change='!checkSlideShowName(newSlideName)', required)
+          input.form-control(type='text', placeholder='Slideshow Name', ng-model='newSlideName', ng-change='!checkSlideShowName(newSlideName)', required)
       .modal-footer
         a.btn.btn-primary(ng-disabled='newSlideForm.$invalid || !checkSlideShowName(newSlideName)', href='/account#/{{newSlideName}}/editor') Create
         button.btn.btn-default(data-dismiss='modal') Close
+br
+.footercontainer Developed by Gerardo Santiago, Yanrong Huang, Jacob Salinas, and Zach Woodward, 2015

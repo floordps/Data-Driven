@@ -1,25 +1,29 @@
-menu
-h1.text-center Data - Driven
-.container
+.headerdiv
+  menu
+  .logo
+.container.formcontainer
   form#filterForm.form-inline
     .form-group
       label(for='searchFilter') Filter By
-      input.form-control#searchFilter(type='text' style='width: 200px;' ng-model='search')
-.container
-  #listSlides
-    table.table.table-striped.table-hover(data-toggle='table')
-      thead
-        tr
-          th SlideShow
-          th Created Date
-          th Author
-          th Action
-      tbody
-        tr(ng-repeat='slide in slideShows | filter:search')
-          td {{slide.slideName}}
-          td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
-          td
-            a(ng-click='setSearch(slide.author)') {{slide.author | uppercase}}
-          td
-            a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
-              i.fa.fa-play
+      input.form-control#searchFilter(type='text' ng-model='search')
+.container1
+  .slidecontainer
+    #listSlides
+      table.table.table-striped.table-hover(data-toggle='table')
+        thead.thead
+          tr
+            th SlideShow
+            th Created Date
+            th Author
+            th Action
+        tbody
+          tr(ng-repeat='slide in slideShows | filter:search')
+            td {{slide.slideName}}
+            td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
+            td
+              a(ng-click='setSearch(slide.author)') {{slide.author | uppercase}}
+            td
+              a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
+                i.fa.fa-play
+br
+.footercontainer Developed by Gerardo Santiago, Yanrong Huang, Jacob Salinas, and Zach Woodward, 2015
