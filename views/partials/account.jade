@@ -2,7 +2,7 @@
   menu
   .logo
 .container.formcontainer
-  #account-wrap.container.accountinfo
+  .container.accountinfo
     .row
       span.h1 {{username}}
       .pull-right
@@ -26,7 +26,7 @@
             td
               a.btn.btn-info.btn-sm(href='/account#/{{slide.slideName}}') PLAY&nbsp
                 i.fa.fa-play
-              a.btn.btn-warning.btn-sm(href='/account#/{{slide.slideName}}/editor') Edit&nbsp
+              a.btn.btn-warning.btn-sm.buttonSpacer(href='/account#/{{slide.slideName}}/editor') Edit&nbsp
                 i.fa.fa-pencil-square-o
               a.btn.btn-danger.btn-sm(ng-click='deleteSlide(slide.slideName)') Delete&nbsp
                 i.fa.fa-trash-o

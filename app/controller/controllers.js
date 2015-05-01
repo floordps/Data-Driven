@@ -142,7 +142,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
   $scope.graphError = true;
   $scope.graph = {};
   $scope.transitions = ['Default', 'Slide', 'Convex', 'Concave', 'Zoom'];
-  $scope.themes = ['Simple', 'White', 'League', 'Sky', 'Beige', 'Blood'];
+  $scope.themes = ['Simple', 'White', 'League', 'Sky', 'Beige', 'Blood', 'Black', 'Moon', 'Night', 'Serif', 'Solarized'];
   $scope.revealOptions = {autoSlide: 0, transition: 'Default', theme: 'Simple'};
   $scope.currentTransition = 'Default';
   $scope.currentTheme = 'Simple';
@@ -179,7 +179,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       slides = data.slides || '';
       }
     slides.split('\n---\n').forEach(function(data, index) {
-      var $textarea = $('<textarea class=".text-editor" name="content" data-provide="markdown" rows="20"></textarea>');
+      var $textarea = $('<textarea class=".text-editor" name="content" data-provide="markdown" rows="33"></textarea>');
       $textarea.text(data);
       $('#wizard').steps('add', {
         title: '',

@@ -4,9 +4,6 @@ html(ng-app='data-driven')
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes')
     title Data-Driven
-    link(rel='stylesheet', href='/app/css/reveal.css')
-    link(rel='stylesheet', href='/app/css/simple.css', id='theme')
-    link(rel='stylesheet', href='/app/css/style.css')
     script.
       window.userProfile = !{JSON.stringify(user)};
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
@@ -37,6 +34,7 @@ html(ng-app='data-driven')
     script(src='/bower/angular-ladda/dist/angular-ladda.min.js')
     link(href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css')
     link(rel='icon' type='image/png' sizes='16x16' href='favicon/favicon-16x16.png')
-
-
+    link(rel='stylesheet', href='/app/css/reveal.css')
+    link(rel='stylesheet', href='/app/css/simple.css', id='theme')
+    link(rel='stylesheet', href='/app/css/style.css')
   body(ng-view)

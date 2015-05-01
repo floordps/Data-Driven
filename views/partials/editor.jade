@@ -1,10 +1,11 @@
 link(rel='stylesheet', href='https://rawgit.com/floordps/jquery-steps/master/demo/css/jquery.steps.css')
-menu
+.headerdiv
+  menu
+  .logo
 .container#editor(ng-hide='false')
   div#wizard
 
 .container#config(ng-hide='true')
-  h1.text-center SlideShow Configuration
   form.form-inline.text-center(novalidate)
     div.form-group
       label.sr-only(for='autoslide') Auto Slide (in seconds)
@@ -42,11 +43,11 @@ menu
         label.btn(for='rID') Report ID
         input(type='radio', ng-model='reportType', value='sob', id='sob', ng-change='showGraphType(reportType)')
         label.btn(for='sob') SObject
-      form.form-inline(name='checkReportForm', novalidate, ng-hide='reportDetails')
+      form.form-inline.checkReportId(name='checkReportForm', novalidate, ng-hide='reportDetails')
         .form-group
           input.form-control(type='text', ng-model='graph.reportId', placeholder='Enter Report ID.', pattern='.{8,18}', required)
           button.btn.btn-primary(type='button', ng-disabled='!checkReportForm.$valid', ng-click='checkReport()' ladda='load', data-style='slide-left') Check Report
-      form.form-inline(name='checkSobForm', novalidate, ng-hide='!reportDetails')
+      form.form-inline.checkSObject(name='checkSobForm', novalidate, ng-hide='!reportDetails')
         .form-group
           input.form-control(type='text', ng-model='graph.sobId', placeholder='Enter SObject Name.', required)
           button.btn.btn-primary(type='button', ng-disabled='!checkSobForm.$valid', ng-click='checkSob()' ladda='load', data-style='slide-left') Check SObject
@@ -66,11 +67,12 @@ menu
               option(ng-repeat='label in labels track by $index', value='{{label}}') {{label}}
             input.form-control(type='text', placeholder='Enter X Column', ng-model='graph.xValue', required, ng-hide='!reportTabSelected')
             input.form-control(type='text', placeholder='Enter Y Column', ng-model='graph.yValue', required, ng-hide='!reportTabSelected')
-          label
+          label.dateFormat
             |Date Format:
             toggle-switch.switch-primary(model='graph.option.date')
     .modal-footer
       button#createGraph.btn.btn-primary(type='button', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
+      button.btn.btn-default(type='button', data-dismiss='modal') Close
 #tableModal.modal.fade.medium(role='dialog')
   .modal-content
     .modal-header

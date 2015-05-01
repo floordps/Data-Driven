@@ -1,9 +1,5 @@
-/* Home */
-body{
-	font-family: 'Droid Sans', sans-serif !important;
-	color:#373737 !important;
-	height:100% !important;
-	background-color:white !important;
+#editor, #config {
+  margin-top: 20px;
 }
 
 a {
@@ -13,7 +9,7 @@ a {
 #listSlides {
   overflow-y: auto;
   margin:auto;
-  width:600px;
+  width:700px;
   max-height: 70vh;
 }
 
@@ -30,19 +26,19 @@ a {
 	margin:auto;
 }
 .h1, h1{
-  font-size:24px !important;
-  font-weight:bold !important;
+  font-size:24px;
+  font-weight:bold;
 }
 .accountinfo{
-  width:580px !important;
+  width:580px;
   padding:15px;
 }
 
 /* New Slideshow Button */
 #newSlideshow{
-  width:auto !important;
-  height:auto !important;
-  padding:2px 5px!important;
+  width:auto;
+  height:auto;
+  padding:2px 5px;
 }
 
 /* Menu */
@@ -51,35 +47,35 @@ menu {
   float:right;
   position:relative;
   right:0px;
-	z-index:20 !important;
+	z-index:20;
 }
 
 menu .dropdown .dropdown-menu {
   width: 200px;
-  padding: 5px !important;
-	z-index:20 !important;
+  padding: 5px;
+	z-index:20;
 }
 
 /* Search Form */
 .form-group{
-	font-weight:normal !important;
+	font-weight:normal ;
 }
 .form-group label{
-	font-weight:normal !important;
-	color:inherit !important;
+	font-weight:normal ;
+	color:inherit ;
 }
 .formcontainer {
 	margin:auto;
-	width:100% !important;
+	width:100% ;
 	padding:5px;
 	background-color:#cccccc;
 	position:relative;
 	z-index:10;
 }
-.form-control{
-	border-radius:0 !important;
-	width:200px !important;
-	height:25px !important;
+ol{
+	border-radius:0 ;
+	width:200px ;
+	height:25px ;
 }
 #filterForm{
 	width:600px;
@@ -88,23 +84,26 @@ menu .dropdown .dropdown-menu {
 }
 
 .alert {
-  padding: 2px !important;
+  padding: 2px ;
 }
 /* Account */
 
-#account-wrap table tbody tr td a:nth-child(2) {
+.buttonSpacer {
   margin-right: 10px;
-  margin-left: 10px;
-}
-
-#account-wrap table tbody tr td a:last-child {
   margin-left: 10px;
 }
 
 /* Editor */
 .medium .modal-content {
-  width: 500px;
+  width: 450px;
   margin: auto;
+}
+.medium .modal-footer {
+  text-align: center;
+}
+
+.checkSObject, .graphOption, .dateFormat, .checkReportId {
+  margin-top: 10px;
 }
 
 #footer-editor {
@@ -177,24 +176,24 @@ ul.slideConfig {
 
 /* Reveal */
 .slides {
-  width: 100% !important;
-  height: 100% !important;
+  width: 100% ;
+  height: 100% ;
 }
 
 .controls {
-  left: 10px !important;
+  left: 10px ;
 }
 
 /* Table */
 .table {
 	background-color:red;
-	width:600px;
-	border:none !important;
+	width:700px;
+	border:none ;
 	font-size:16px;
 }
 .thead {
 	background-color:white;
-	font-size:20px !important;
+	font-size:20px ;
 }
 .table-striped {
 	background-color:orange;
@@ -205,7 +204,7 @@ ul.slideConfig {
 }
 
 .slidecontainer{
-	width:600px;
+	width:700px;
 	background-color:white;
 	margin:auto;
   max-height: 95vh;
@@ -215,8 +214,8 @@ ul.slideConfig {
 	z-index:5;
 }
 .container1{
-	height:100% !important;
-	position:relative !important;
+	height:100% ;
+	position:relative ;
 }
 
 /* Footer */
@@ -233,29 +232,16 @@ ul.slideConfig {
 
 /* New Slide Window */
 .slideWindow{
-  width: 400px !important;
+  width: 400px ;
   height:225px;
-  text-align:center !important;
-  border-radius:0 !important;
+  text-align:center ;
+  border-radius:0 ;
   position:absolute;
 	top:50%;
 	left:50%;
   margin:150px 0 0 -200px;
 }
-.modal-footer{
-  width:175px !important;
-  margin:auto !important;
+
+.slideWindow .modal-footer {
+  text-align: center;
 }
-
-/* Guess Work */
-#config{
-  background-color:blue;
-}
-
-
-
-
-
-
-
-
