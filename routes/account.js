@@ -43,7 +43,8 @@ module.exports.Router = function(SlideShow) {
             date: new Date(),
             slideName: req.params.slidename,
             slides: req.body.slides,
-            token: req.body.token,
+						reveal: req.body.reveal,
+						theme: req.body.theme,
             multiplex: {
               secret: secret,
               id: hash(secret)
