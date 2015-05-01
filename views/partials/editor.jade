@@ -16,7 +16,7 @@ link(rel='stylesheet', href='https://rawgit.com/floordps/jquery-steps/master/dem
     .row
       h3 Transistion:
       ul.slideConfig
-        li(ng-repeat='tran in transitions')
+        li.slideConfigOpts(ng-repeat='tran in transitions', ng-class='{"clear-left": ($index % 3 === 0)}')
           input(type='radio', ng-model='currentTransition' name='transitionOption', value="{{tran}}", id='{{tran}}')
           label.btn.btn-default(for='{{tran}}')
             | {{tran}}
@@ -24,11 +24,11 @@ link(rel='stylesheet', href='https://rawgit.com/floordps/jquery-steps/master/dem
     .row
       h3 Theme:
       ul.slideConfig
-        li(ng-repeat='theme in themes')
+        li.slideConfigOpts(ng-repeat='theme in themes', ng-class='{"clear-left": ($index % 3 === 0)}')
           input(type='radio', ng-model='currentTheme' name='themeOption', value="{{theme}}", id='{{theme}}')
           label.btn.btn-default(for='{{theme}}')
             | {{theme}}
-    .row
+    .row.go-back
       button.btn.btn-default.btn-md(type='button', ng-click='goBack()') Go Back
       //button.btn.btn-success(ng-click='updateMarkdown()', type='button', ladda='loading', data-style='slide-left') Submit
 #graphModal.modal.fade.medium(role='dialog')

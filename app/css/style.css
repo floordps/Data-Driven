@@ -152,11 +152,21 @@ input[type='radio']:checked + label {
 
 ul.slideConfig {
   list-style: none;
-  -webkit-column-count: 3;
-  -moz-column-count: 3;
-  -o-column-count: 3;
-  column-count: 3;
-  }
+  margin: auto;
+  width: 550px;
+}
+.slideConfigOpts {
+  float: left;
+  margin-right: 15px;
+  margin-top: 10px;
+}
+.slideConfigOpts.clear-left {
+  clear: left;
+}
+
+#config .go-back.row {
+  margin-top: 10px;
+}
 
 /* NVD3 Graph */
 .reveal p {
