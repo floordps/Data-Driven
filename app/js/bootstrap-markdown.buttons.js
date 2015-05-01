@@ -38,7 +38,7 @@ function markdownEditor() {
                 //   if (o === 'rotateLabels') str += ' ' + o + '="60"';
                 //   else str += ' ' + o + '="'+ graph.options[o] +'"';
                 // }
-                if (graph.option.date) str += ' xAxisTickFormat="xAxisTickFormatFunction()"';
+                if (graph.option && graph.option.date) str += ' xAxisTickFormat="xAxisTickFormatFunction()"';
                 str += ' width="600" height="350" -->';
                 e.setSelection(end, end);
                 e.replaceSelection(str);

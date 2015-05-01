@@ -13,7 +13,7 @@ app.directive('slides', function($compile, $http, charts) {
             graphType = $(this).attr('graphType'),
             graphData = id + graphType + x + y,
             rid = $(this).attr('reportId');
-          $http.post((!!$(this).attr('reportId') ? '/report/' : '/sob/')+ id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName, xColumn: x, yColumn: y }).success(function(data) {
+          $http.post('/force' + (!!$(this).attr('reportId') ? '/report/' : '/sob/')+ id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName, xColumn: x, yColumn: y }).success(function(data) {
             var row = [], column = [], xPos, yPos;
             if (!!rid) {
               row = data.factMap['T!T'].rows;
@@ -115,23 +115,8 @@ app.directive('menu', function($http, $window, $compile, $timeout) {
                     '</div>');
           });
          } else {
-          //  menuOption = '<h3>Login</h3><form name="loginForm" ng-submit="login(email, password, token)"novalidate>' +
-          //                 '<div class="form-group"><input type="email" placeholder="Salesforce Email" ng-model="email" class="form-control" required></div>' +
-          //                 '<div class="form-group"><input type="password" placeholder="Salesforce Password" ng-model="password" class="form-control" required></div>' +
-          //                 '<div ng-hide="incorrectLogin" class="alert alert-danger alert-dismissable" role="alert"><button type="button" class="close" data-dismiss="alert"></button>Invalid Email / Password / Token</div>' +
-          //                 '<div ng-hide="noConnection" class="alert alert-danger alert-dismissable" role="alert"><button type="button" class="close" data-dismiss="alert"></button>Oops! Something went wrong. Please try again later.</div>' +
-          //                 '<div class="form-group"><a ng-click="showTokenField()">Token (Optional)</label></a>' +
-          //                 '<div class="form-group"><input type="text" placeholder="Security Token" ng-model="token" class="form-control" ng-hide="hideToken"></div>' +
-          //                 '<div class="form-group"><button type="submit" ladda="load" data-style="slide-left" class="btn btn-primary form-control ladda-button" ng-disabled="loginForm.$invalid">Login</button></div>' +
-          //               '</form>';
           elem.html('<a class="pull-right btn btn-primary" href="/oauth2/auth"><span class="fa-stack"><i class="fa fa-cloud fa-stack-2x"></i><i class="fa fa-stack-1x" style="color:#1E90FF;font-style:italic;font-weight:bold;">sf</i></span></a>');
         }
-        // elem.html('<div class="dropdown pull-right">'+
-        //           '<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="fa-stack"><i class="fa fa-cloud fa-stack-2x"></i><i class="fa fa-stack-1x" style="color:#1E90FF;font-style:italic;font-weight:bold;">sf</i></span>&nbsp<i class="caret" style="margin-left: 5px;"></i></a>'+
-        //           '<ul class="dropdown-menu dropdown-menu-right" role="menu">'+
-        //             menuOption +
-        //           '</ul>'+
-        //         '</div>');
         $compile($('.dropdown-menu'))(scope);
         scope.hideToken = true;
         scope.noConnection = true;
