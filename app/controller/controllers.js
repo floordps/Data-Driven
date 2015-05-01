@@ -220,7 +220,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
   $scope.checkReport = function () {
     $scope.load = true;
     $scope.graphError = true;
-    $http.post('/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username, slidename: $scope.slideshow.slideName }).success(function(data) {
+    $http.post('/force/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username, slidename: $scope.slideshow.slideName }).success(function(data) {
       if(data) {
         $scope.labels = [];
         data.cols.forEach(function(data) {
@@ -241,7 +241,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
   $scope.checkSob = function () {
     $scope.load = true;
     $scope.graphError = true;
-    $http.post('/sob/' + $scope.graph.sobId + '/desc').success(function(data) {
+    $http.post('/force/sob/' + $scope.graph.sobId + '/desc').success(function(data) {
       if(data) {
         $scope.showDetails = false;
       } else {

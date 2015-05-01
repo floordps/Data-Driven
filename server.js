@@ -5,8 +5,6 @@ var io = require('socket.io')(server);
 var socket = require('./routes/socket.js');
 var bodyParser = require('body-parser');
 var jsforce = require('jsforce');
-//var passport = require('passport');
-//var GoogleStrategy = require('passport-google').Strategy;
 var mongoose = require('mongoose');
 var User = require('./models/user');
 var SlideShow = require('./models/slideShow');
@@ -14,6 +12,13 @@ var viewRouter = require('./routes/view').Router(SlideShow);
 var accountRouter = require('./routes/account').Router(SlideShow);
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
+var js = require('./jsConnect.json');
+var oauth2 = new jsforce.OAuth2({
+    clientId: js.clientId,
+    clientSecret: js.clientSecret,
+    redirectUri: js.redirectUri
+});
+var forceRouter = require('./routes/force').Router(oauth2, User);
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -37,12 +42,6 @@ function isAuth(req, res, next) {
   if(!req.session.accessToken || !req.session.instanceUrl) return res.redirect('/');
   next();
 }
-var js = require('./jsConnect.json');
-var oauth2 = new jsforce.OAuth2({
-    clientId: js.clientId,
-    clientSecret: js.clientSecret,
-    redirectUri: js.redirectUri
-});
 
 /**
  * Routes
@@ -57,118 +56,6 @@ app.get('/partials/:id', function(req, res, next) {
   res.render('partials/' + req.params.id);
 });
 
-/**
- * Retrieve graph data
- */
-app.post('/report/:id', function(req, res, next) {
-  User.findOne({
-    username: req.body.username
-  }, function(err, user) {
-    var conn = new jsforce.Connection({
-      oauth2: oauth2,
-      instanceUrl: user.token.instanceUrl,
-      accessToken: user.token.accessToken,
-      refreshToken: user.token.refreshToken
-    });
-    conn.on('refresh', function(accessToken, res) {
-      user.token.accessToken = accessToken;
-    });
-    //conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
-      conn.analytics.reports(function(err, reports) {
-        if(err) return res.status(501).send(err);
-        var id = req.params.id;
-        conn.analytics.report(id).execute({ details: true }, function(err, result) {
-          res.json(result);
-        });
-      });
-    //});
-  });
-});
-
-app.post('/sob/:id', function(req, res, next) {
-  User.findOne({
-    username: req.body.username
-  }, function(err, user) {
-    var conn = new jsforce.Connection({
-      oauth2: oauth2,
-      instanceUrl: user.token.instanceUrl,
-      accessToken: user.token.accessToken,
-      refreshToken: user.token.refreshToken
-    });
-    conn.on('refresh', function(accessToken, res) {
-      user.token.accessToken = accessToken;
-      user.save();
-    });
-    //var conn = new jsforce.Connection();
-    //conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
-      conn.query('SELECT ' + req.body.xColumn + ', ' + req.body.yColumn + ' FROM ' + req.params.id, function(err, data) {
-        if(err) {console.log(err); return res.status(501).send(err);}
-        res.json(data);
-      });
-    //});
-  });
-});
-
-app.post('/sob/:name/desc', function(req, res, next) {
-  User.findOne({
-    username: req.session.user.username
-  }, function(err, user) {
-    var conn = new jsforce.Connection({
-      oauth2: oauth2,
-      instanceUrl: user.token.instanceUrl,
-      accessToken: user.token.accessToken,
-      refreshToken: user.token.refreshToken
-    });
-    conn.on('refresh', function(accessToken, res) {
-      user.token.accessToken = accessToken;
-      user.save();
-    });
-    //var conn = new jsforce.Connection();
-    //conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
-      conn.sobject(req.params.name).describe(function(err, data) {
-        if(err) return res.status(501).send(err);
-        res.json(data.fields.map(function(val) { return val.label; }));
-        });
-      });
-    //});
-  });
-
-//TODO: add sobject request similar to /reportId
-app.post('/report/:id/desc', function(req, res, next) {
-  //TODO: desc on new slideshow (check reportId)
-  User.findOne({
-    username: req.body.username
-  }, function(err, user) {
-    var conn = new jsforce.Connection({
-      oauth2: oauth2,
-      instanceUrl: user.token.instanceUrl,
-      accessToken: user.token.accessToken,
-      refreshToken: user.token.refreshToken
-    });
-    conn.on('refresh', function(accessToken, res) {
-      user.token.accessToken = accessToken;
-      user.save();
-    });
-    //var conn = new jsforce.Connection({instanceUrl: 'https://na1.salesforce.com'});
-    //conn.login(user.login.email, user.login.password + (user && user.login.securityToken || ''), function(err, userInfo) {
-      conn.analytics.reports(function(err, reports) {
-        var id = req.params.id;
-        conn.analytics.report(id).describe(function(err, result) {
-          if(err) return res.status(501).send(err);
-          var details = result.reportExtendedMetadata.detailColumnInfo;
-          var ret = {
-            cols: [],
-            name: result.reportMetadata.name
-          };
-          for(var o in details) {
-            ret.cols.push(details[o]);
-          }
-          res.json(ret);
-        });
-      });
-    //});
-  });
-});
 
 /**
  * Retrieve Token
@@ -202,33 +89,6 @@ app.get('/oauth2/callback', function(req, res) {
 });
 
 /**
- * Login
- */
-/*app.post('/login', function(req, res, next) {
-  var conn = new jsforce.Connection();
-  if(!req.body.email || !req.body.password) return res.json({ success: false });
-  User.findOne({ 'login.email': req.body.email }, function(err, user) {
-    conn.login(req.body.email, req.body.password + (req.body.token || (user && user.login.securityToken)  || ''), function(err, userInfo) {
-      if(err) return res.json({success: false });
-      //TODO: invalid_grant require token (error message)
-      // { [invalid_grant: authentication failure] name: 'invalid_grant' }
-      req.session.accessToken = conn.accessToken;
-      req.session.instanceUrl = conn.instanceUrl;
-      conn.identity(function(err, ret) {
-        var u = user || new User(ret);
-        u.login.email = req.body.email;
-        u.login.password = req.body.password;
-        if(!!req.body.token) u.login.securityToken = req.body.token;
-        u.username = u.username.toLowerCase().replace(/@.*$/, '');
-        u.save();
-        req.session.user = u;
-        res.json({ success: true });
-      });
-    });
-  });
-});*/
-
-/**
  * Login Status
  */
 app.get('/loggedIn', function(req, res, next) {
@@ -253,3 +113,8 @@ app.use('/api/account', function(req, res, next) {
   res.sendStatus(401);
 }, accountRouter);
 io.sockets.on('connection', socket);
+
+/**
+ * Retrieve graph data
+ */
+app.use('/force', forceRouter);
