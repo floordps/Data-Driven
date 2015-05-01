@@ -1,3 +1,6 @@
+#editor {
+  height: 85%;
+}
 #editor, #config {
   margin-top: 20px;
 }
@@ -254,4 +257,10 @@ ul.slideConfig {
 
 .slideWindow .modal-footer {
   text-align: center;
+}
+#wizard > .steps,
+#wizard > .content,
+.wizard > .content {
+  min-height: 30em;
+  height: 30em;
 }

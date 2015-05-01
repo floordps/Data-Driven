@@ -179,7 +179,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       slides = data.slides || '';
       }
     slides.split('\n---\n').forEach(function(data, index) {
-      var $textarea = $('<textarea class=".text-editor" name="content" data-provide="markdown" rows="33"></textarea>');
+      var $textarea = $('<textarea class=".text-editor" name="content" data-provide="markdown" rows="28"></textarea>');
       $textarea.text(data);
       $('#wizard').steps('add', {
         title: '',
