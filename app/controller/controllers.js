@@ -37,7 +37,18 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
       });
     });
     SocketIO.on('slideupdated', function(data) {
+      var pos = {
+        indexh: Reveal.getIndices().h,
+        indexv: Reveal.getIndices().v,
+        indexf: Reveal.getIndices().f,
+        origin: event.origin
+      };
       console.log('updating slideshow...');
+      $('.slides section').remove();
+      $('.slides').prepend($('<section data-markdown="" data-separator="---$"><script id="slideMd"></script></section>'));
+      $('#slideMd').html(data.slides);
+      RevealMarkdown.initialize();
+      Reveal.slide(pos.indexh, pos.indexv, pos.indexf, 'remote');
       Reveal.configure(data.reveal);
         var ref = '/app/css/' + data.theme.toLowerCase() + '.css';
         if(ref !== $('#theme').attr('href')) {
