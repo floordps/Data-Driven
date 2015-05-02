@@ -35,10 +35,19 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
         $('#theme').prop('disabled', false);
         SocketIO.emit('join', $rootScope.room);
       });
-      $scope.$on('$destroy', function(e) {
-        Reveal.removeEventListeners();
-        SocketIO.destroy();
-      });
+    });
+    SocketIO.on('slideupdated', function(data) {
+      console.log('updating slideshow...');
+      Reveal.configure(data.reveal);
+        var ref = '/app/css/' + data.theme.toLowerCase() + '.css';
+        if(ref !== $('#theme').attr('href')) {
+          $('#theme').attr('href', ref);
+        }
+        $('#theme').prop('disabled', false);
+    });
+    $scope.$on('$destroy', function(e) {
+      Reveal.removeEventListeners();
+      SocketIO.destroy();
     });
   } else {
     $('#theme').prop('disabled', true);
@@ -200,7 +209,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
     $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md, reveal: reveal, theme: theme }).success(function(data) {
       $scope.loading = false;
       if(data && data.success) {
-        SocketIO.emit('slideupdated', { id: data.slideshow.multiplex.id, slides: data.slideshow.slides });
+        SocketIO.emit('slidesaved', data.slideshow);
       }
       $location.path('/');
     }).error(function(data) {

@@ -92,10 +92,9 @@ app.factory('SocketIO', function($rootScope) {
   var socket = io.connect('');
   return {
     on: function(event, cb) {
-      socket.emit(event, function() {
+      socket.on(event, function(data) {
         $rootScope.$apply(function() {
-          var args = arguments;
-          cb.apply(socket, args);
+          cb.apply(socket, [data]);
         });
       });
     },

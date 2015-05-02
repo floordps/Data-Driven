@@ -17,7 +17,11 @@ module.exports = function (socket) {
       socket.broadcast.to(data.socketId).emit(data.socketId, data);
     }
   });
-  socket.on('slideupdated', function(data) {
-    socket.broadcast.to(data.id).emit(data.id, { slides: data.slides });
+  socket.on('slidesaved', function(data) {
+    if(!data.multiplex.secret || !data.multiplex.id) return;
+    if(hash(data.multiplex.secret) === data.multiplex.id) {
+			data.multiplex.secret = null;
+	    socket.broadcast.to(data.multiplex.id).emit('slideupdated', data);
+		}
   });
 };
