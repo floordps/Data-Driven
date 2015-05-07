@@ -1,4 +1,4 @@
-app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, SocketIO) {
+app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, SocketIO, $compile) {
   var uname = $routeParams.username,
     sname = $routeParams.slidename;
   $scope.slideShows = [];
@@ -50,6 +50,7 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
       RevealMarkdown.initialize();
       Reveal.slide(pos.indexh, pos.indexv, pos.indexf, 'remote');
       Reveal.configure(data.reveal);
+      $compile('.graph')($scope);
         var ref = '/app/css/' + data.theme.toLowerCase() + '.css';
         if(ref !== $('#theme').attr('href')) {
           $('#theme').attr('href', ref);
