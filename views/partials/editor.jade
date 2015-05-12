@@ -1,7 +1,14 @@
+script(src='/app/plugin/ckeditor/ckeditor.js')
+script(src='/app/plugin/ckeditor/adapters/jquery.js')
 link(rel='stylesheet', href='https://rawgit.com/floordps/jquery-steps/master/demo/css/jquery.steps.css')
 .headerdiv
   menu
   .logo
+
+textarea()
+script.
+  $('textarea').ckeditor();
+
 .container#editor(ng-hide='false')
   div#wizard
 
