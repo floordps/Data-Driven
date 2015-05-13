@@ -72,7 +72,7 @@ link(rel='stylesheet', href='https://rawgit.com/floordps/jquery-steps/master/dem
             |Date Format:
             toggle-switch.switch-primary(model='graph.option.date')
     .modal-footer
-      button#createGraph.btn.btn-primary(type='button', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
+      button#createGraph.btn.btn-primary(type='button', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)', ng-click='createGraph()') Create Graph
       button.btn.btn-default(type='button', data-dismiss='modal') Close
 #tableModal.modal.fade.medium(role='dialog')
   .modal-content

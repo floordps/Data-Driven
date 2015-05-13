@@ -9,9 +9,12 @@ CKEDITOR.editorConfig = function( config ) {
   config.height = '20em';
   config.toolbar = 'Full';
   config.enterMode = CKEDITOR.ENTER_BR;
+
+  config.extraPlugins = 'graph';
+
   config.toolbar_Full =
   [
-  	{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+  	{ name: 'clipboard', items : [ 'Source','Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
   	{ name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt' ] },
   	'/',
   	{ name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
@@ -20,6 +23,6 @@ CKEDITOR.editorConfig = function( config ) {
   	{ name: 'links', items : [ 'Link','Unlink','Anchor' ] },
   	{ name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
   	{ name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
-  	{ name: 'colors', items : [ 'TextColor'] }
+  	{ name: 'colors', items : [ 'TextColor', 'graph'] }
   ];
 };

@@ -101,7 +101,7 @@ app.directive('menu', function($http, $window, $compile, $timeout) {
         var menuOption = '';
         if (data === 'true') {
           var menuOptions = [{name: 'Home', link: '/'},
-                             {name: 'My Account', link: '/account'},
+                             {name: 'My Account', link: '/account#/'},
                              {name: 'Logout', link: '/logout'}];
                                        menuOptions.forEach(function(menu) {
             menuOption = menuOption + '<li role="presentation">'+
@@ -118,30 +118,40 @@ app.directive('menu', function($http, $window, $compile, $timeout) {
           elem.html('<a class="pull-right btn btn-primary" href="/oauth2/auth"><span class="fa-stack"><i class="fa fa-cloud fa-stack-2x"></i><i class="fa fa-stack-1x" style="color:#1E90FF;font-style:italic;font-weight:bold;">sf</i></span></a>');
         }
         $compile($('.dropdown-menu'))(scope);
-        scope.hideToken = true;
-        scope.noConnection = true;
-        scope.incorrectLogin = true;
-        scope.showTokenField = function() {
-          scope.hideToken = !scope.hideToken;
-        };
-        scope.login = function(email, password, token) {
-          scope.load = true;
-          $http.post('/login', {email: email, password: password, token: token}).success(function(data) {
-            if (data.success) {        scope.incorrectLogin = true;
-              scope.incorrectLogin = true;
-              scope.noConnection = true;
-              $window.location.href = '/account';
-            } else {
-              scope.incorrectLogin = false;
-            }
-            scope.load = false;
-          }).error(function(data) {
-            scope.incorrectLogin = true;
-            scope.noConnection = false;
-            scope.load = false;
-          });
-        };
+        // scope.hideToken = true;
+        // scope.noConnection = true;
+        // scope.incorrectLogin = true;
+        // scope.showTokenField = function() {
+        //   scope.hideToken = !scope.hideToken;
+        // };
+        // scope.login = function(email, password, token) {
+        //   scope.load = true;
+        //   $http.post('/login', {email: email, password: password, token: token}).success(function(data) {
+        //     if (data.success) {        scope.incorrectLogin = true;
+        //       scope.incorrectLogin = true;
+        //       scope.noConnection = true;
+        //       $window.location.href = '/account';
+        //     } else {
+        //       scope.incorrectLogin = false;
+        //     }
+        //     scope.load = false;
+        //   }).error(function(data) {
+        //     scope.incorrectLogin = true;
+        //     scope.noConnection = false;
+        //     scope.load = false;
+        //   });
+        // };
       });
+    }
+  };
+});
+
+app.directive('graph', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'partials/graph.jade',
+    link: function(scope, elem, attr) {
+
     }
   };
 });

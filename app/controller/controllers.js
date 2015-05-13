@@ -145,18 +145,6 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
     }).length === 0;
   };
 
-  $('#graphModal').off().on('hidden.bs.modal', function() {
-    $scope.graph = {};
-    $scope.reportType = 'rID';
-    $scope.showDetails = true;
-    $scope.reportDetails = false;
-    $scope.$apply();
-  });
-  $scope.$watch('graph', function() {
-    $('#graphModal').data('graph', $scope.graph);
-  }, true);
-});
-
 app.controller('editorCtrl', function($scope, $http, $routeParams, $location, SocketIO) {
   $scope.showDetails = true;
   $scope.reportDetails = true;
@@ -185,7 +173,9 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       $scope.updateMarkdown();
     }
   });
-
+  $scope.createGraph = function() {
+    // TODO
+  };
   $scope.goBack = function() {
     $('#editor').removeClass('ng-hide');
     $('#config').addClass('ng-hide');
