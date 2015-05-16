@@ -151,6 +151,8 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
     $scope.showDetails = true;
     $scope.reportDetails = false;
     $scope.$apply();
+    $scope.reportDetails = false;
+    $scope.$apply();
   });
   $scope.$watch('graph', function() {
     $('#graphModal').data('graph', $scope.graph);
@@ -180,38 +182,74 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       Reveal.down();
     }
     $scope.deleteSlide = function() {
-      if($('.slides > section').length == 1) {
+      if (Reveal.getTotalSlides() == 1) {
         alert("Delete slideshow from account page");
         return 0;
       }
-      if($('.slides > .present').index() != 0 || $('.slides > .present').hasClass('stack')) {
-        if($('.slides > .present').hasClass('stack')) {
-          var tmp = $('.slides > .stack.present');
-          Reveal.right();
-          tmp.remove();
-          Reveal.right();
-          Reveal.left();
-          // if($('.slides > .stack.present > section').length == 1) {
-          //   $('.slides > .stack.present').remove();
-          //   Reveal.right();
-          //   Reveal.left();
-          // } else {
-          //   // $('.slides > .stack.present > .present').remove();
-          //   // Reveal.down();
-          //   // Reveal.up();
-          //   Reveal.getCurrentSlide().remove();
-          // }
-        } else {
-          Reveal.getCurrentSlide().remove();
+      if ($('.slides > .present').hasClass('stack')) {
+        var stackPresentSlide = $('.slides > .stack.present > .present');
+        if (stackPresentSlide.prev().index() >= 0) {
+          stackPresentSlide.remove();
+          Reveal.up();
+        } else if (stackPresentSlide.next().length) {
+          Reveal.down();
+          stackPresentSlide.remove();
+          Reveal.up();
+          Reveal.down();
+          Reveal.up();
+        } else if (!(stackPresentSlide.next().length && stackPresentSlide.prev().length)) {
+          $('.slides > .present').remove();
           Reveal.left();
         }
-      } else {
-        Reveal.right();
-        Reveal.getPreviousSlide().remove();
-        Reveal.left();
-        Reveal.right();
-        Reveal.left();
+      } else if ($('.slides > .present')) {
+        if ($('.slides > .present').prev().length) {
+          $('.slides > .present').remove();
+          Reveal.left()
+        } else {
+          Reveal.right();
+          $('.slides > .present').prev().remove();
+          Reveal.left();
+        }
       }
+      // var stack = $('.slides > .stack.present > .present');
+      // if (stack.index() == 0) {
+      //   stack.remove();
+      // }
+      // console.log($('.slides > .stack.present > .present').index());
+
+
+      // if($('.slides > section').length == 1) {
+      //   alert("Delete slideshow from account page");
+      //   return 0;
+      // }
+      // if($('.slides > .present').index() != 0 || $('.slides > .present').hasClass('stack')) {
+      //   if($('.slides > .present').hasClass('stack')) {
+      //     var tmp = $('.slides > .stack.present');
+      //     Reveal.right();
+      //     tmp.remove();
+      //     Reveal.right();
+      //     Reveal.left();
+      //     // if($('.slides > .stack.present > section').length == 1) {
+      //     //   $('.slides > .stack.present').remove();
+      //     //   Reveal.right();
+      //     //   Reveal.left();
+      //     // } else {
+      //     //   // $('.slides > .stack.present > .present').remove();
+      //     //   // Reveal.down();
+      //     //   // Reveal.up();
+      //     //   Reveal.getCurrentSlide().remove();
+      //     // }
+      //   } else {
+      //     Reveal.getCurrentSlide().remove();
+      //     Reveal.left();
+      //   }
+      // } else {
+      //   Reveal.right();
+      //   Reveal.getPreviousSlide().remove();
+      //   Reveal.left();
+      //   Reveal.right();
+      //   Reveal.left();
+      // }
 
       //
       // if($('.slides > .present').hasClass('stack') && !!Reveal.getPreviousSlide() && ($('.slides > section').length == 1)) {
