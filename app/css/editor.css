@@ -1,0 +1,51 @@
+#cke_editor1 {
+  margin: 0 auto;
+}
+
+.slides {
+  height: 600px !important; // RevealJS inline height has more priority
+}
+
+.reveal > .slides > .inlineEditor,
+.reveal > .slides > .stack > .inlineEditor {
+  height: 600px;
+  border: 1px solid black;
+}
+
+svg {
+  height: auto;
+}
+
+.addRight {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+}
+
+.addBottom {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+}
+
+.slideControl {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  height: 100%;
+}
+.slideControlTop {
+  position:absolute;
+  top: 10%;
+}
+.slideControlMid {
+  position: absolute;
+  top: 45%;
+}
+.slideControlMid .btn {
+  display: block;
+  margin: 5px 0;
+}
+.slideControl .btn .fa {
+  margin-right: 5px;
+}

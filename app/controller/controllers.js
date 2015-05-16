@@ -158,142 +158,205 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
 });
 
 app.controller('editorCtrl', function($scope, $http, $routeParams, $location, SocketIO) {
-  $scope.showDetails = true;
-  $scope.reportDetails = true;
-  $scope.graphError = true;
-  $scope.graph = {};
-  $scope.transitions = ['Default', 'Slide', 'Convex', 'Concave', 'Zoom'];
-  $scope.themes = ['Simple', 'White', 'League', 'Sky', 'Beige', 'Blood', 'Black', 'Moon', 'Night', 'Serif', 'Solarized'];
-  $scope.revealOptions = {autoSlide: 0, transition: 'Default', theme: 'Simple'};
-  $scope.currentTransition = 'Default';
-  $scope.currentTheme = 'Simple';
-  $scope.autoSlide = 0;
-  var form = $('#wizard');
+  Reveal.initialize({
+    center: false,
+    history: false
+  });
+  Reveal.addEventListener('ready', function() {
+    $scope.addRightSlide = function() {
+      var newSlide = $('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
+      newSlide.insertAfter('.slides > .present');
+      CKEDITOR.inline($(newSlide).get(0));
+      Reveal.right();
+    }
+    $scope.addDownSlide = function() {
+      var section = $('.slides > .present');
+      if (!section.hasClass('stack')) {
+        $('.slides > .present').replaceWith('<section class="stack present">' + section.prop('outerHTML') + '</section>');
+      }
+      var newSlide = $('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
+      newSlide.insertAfter('.slides > .present > .present');
+      CKEDITOR.inline($(newSlide).get(0));
+      Reveal.down();
+    }
+    $scope.deleteSlide = function() {
+      if($('.slides > section').length == 1) {
+        alert("Delete slideshow from account page");
+        return 0;
+      }
+      if($('.slides > .present').index() != 0 || $('.slides > .present').hasClass('stack')) {
+        if($('.slides > .present').hasClass('stack')) {
+          var tmp = $('.slides > .stack.present');
+          Reveal.right();
+          tmp.remove();
+          Reveal.right();
+          Reveal.left();
+          // if($('.slides > .stack.present > section').length == 1) {
+          //   $('.slides > .stack.present').remove();
+          //   Reveal.right();
+          //   Reveal.left();
+          // } else {
+          //   // $('.slides > .stack.present > .present').remove();
+          //   // Reveal.down();
+          //   // Reveal.up();
+          //   Reveal.getCurrentSlide().remove();
+          // }
+        } else {
+          Reveal.getCurrentSlide().remove();
+          Reveal.left();
+        }
+      } else {
+        Reveal.right();
+        Reveal.getPreviousSlide().remove();
+        Reveal.left();
+        Reveal.right();
+        Reveal.left();
+      }
 
-  form.steps({
-    headerTag: 'h3',
-    bodyTag: 'div',
-    transitionEffect: 'slideLeft',
-    stepsOrientation: 'vertical',
-    enableAllSteps: true,
-    enableKeyNavigation: true,
-    enablePagination: true,
-    startIndex: 0,
-    showFinishButtonAlways: true,
-    autoFocus: true,
-    onFinished: function(event, currentIndex) {
-      $scope.updateMarkdown();
+      //
+      // if($('.slides > .present').hasClass('stack') && !!Reveal.getPreviousSlide() && ($('.slides > section').length == 1)) {
+      //   console.log("HERE")
+      //   alert("Delete slideshow from account page");
+      //   return 0;
+      // }
     }
   });
-
-  $scope.goBack = function() {
-    $('#editor').removeClass('ng-hide');
-    $('#config').addClass('ng-hide');
-  };
-  $http.get('/api/account/' + $routeParams.slidename).success(function(data) {
-    var slides = '';
-    $scope.slideshow = data || { slideName: $routeParams.slidename };
-    if (data) {
-      $scope.currentTransition = data.reveal.transition;
-      $scope.currentTheme = data.theme;
-      $scope.autoSlide = data.reveal.autoSlide / 1000;
-      slides = data.slides || '';
-      }
-    slides.split('\n---\n').forEach(function(data, index) {
-      var $textarea = $('<textarea class=".text-editor" name="content" data-provide="markdown" rows="28"></textarea>');
-      $textarea.text(data);
-      $('#wizard').steps('add', {
-        title: '',
-        content: ''
-      });
-      $('#wizard .content #wizard-p-' + index).html($textarea);
-      markdownEditor();
-    });
-  });
-  $scope.updateMarkdown = function() {
-    $scope.loading = true;
-    var reveal = {
-      transition: $($('.slideConfig input[type="radio"]:checked')[0]).val(),
-      autoSlide: parseInt($('.input-group #autoslide').val()) * 1000
-    };
-    var theme = $($('.slideConfig input[type="radio"]:checked')[1]).val();
-    var md = $.map($('#wizard .content textarea'), function(obj) { return $(obj).val(); }).join("\n---\n");
-    $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md, reveal: reveal, theme: theme }).success(function(data) {
-      $scope.loading = false;
-      if(data && data.success) {
-        SocketIO.emit('slidesaved', data.slideshow);
-      }
-      $location.path('/');
-    }).error(function(data) {
-      $scope.loading=false;
-    });
-  };
-  $('#graphModal').off().on('hidden.bs.modal', function() {
-    $scope.graph = {};
-    $scope.reportType = 'rID';
-    $scope.showDetails = true;
-    $scope.reportDetails = false;
-    $scope.$apply();
-  });
-  $scope.$watch('graph', function() {
-    $('#graphModal').data('graph', $scope.graph);
-  }, true);
-  $scope.checkReport = function () {
-    $scope.load = true;
-    $scope.graphError = true;
-    $http.post('/force/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username, slidename: $scope.slideshow.slideName }).success(function(data) {
-      if(data) {
-        $scope.labels = [];
-        data.cols.forEach(function(data) {
-        $scope.labels.push(data.label);
-        $scope.showDetails = false;
-        });
-      } else {
-        $scope.showDetails = true;
-        $scope.graphError = false;
-      }
-      $scope.load = false;
-    }).error(function(data) {
-      $scope.load = false;
-      $scope.graphError = false;
-    });
-  };
-
-  $scope.checkSob = function () {
-    $scope.load = true;
-    $scope.graphError = true;
-    $http.post('/force/sob/' + $scope.graph.sobId + '/desc').success(function(data) {
-      if(data) {
-        $scope.showDetails = false;
-      } else {
-        $scope.showDetails = true;
-        $scope.graphError = false;
-      }
-      $scope.load = false;
-    }).error(function(data) {
-      $scope.load = false;
-      $scope.graphError = false;
-    });
-  };
-  $scope.showGraphType = function(e) {
-    if (e == 'rID') {
-      $scope.reportDetails = false;
-      $scope.reportTabSelected = false;
-    } else {
-      $scope.reportDetails = true;
-      $scope.reportTabSelected = true;
-    }
-  };
-  $scope.gTypes = [
-    {name: 'line-chart', type: 'Line Charts'},
-    {name: 'stacked-area-chart', type: 'Stacked Area Charts'},
-    {name: 'multi-bar-chart', type: 'Multi Bar Charts'},
-    {name: 'multi-bar-horizontal-chart', type: 'Multi Bar Horizontal Charts'},
-    {name: 'discrete-bar-chart', type: 'Discrete Bar Charts'},
-    {name: 'pie-chart', type: 'Pie Charts'},
-    {name: 'scatter-chart', type: 'Scatter Charts'},
-    {name: 'sparkline-chart', type: 'Sparkline  Charts'},
-    {name: 'cumulative-line-chart', type: 'Cumulative Line Charts'},
-    {name: 'line-with-focus-chart', type: 'Line with Focus Charts'}
-  ];
+  // $scope.showDetails = true;
+  // $scope.reportDetails = true;
+  // $scope.graphError = true;
+  // $scope.graph = {};
+  // $scope.transitions = ['Default', 'Slide', 'Convex', 'Concave', 'Zoom'];
+  // $scope.themes = ['Simple', 'White', 'League', 'Sky', 'Beige', 'Blood', 'Black', 'Moon', 'Night', 'Serif', 'Solarized'];
+  // $scope.revealOptions = {autoSlide: 0, transition: 'Default', theme: 'Simple'};
+  // $scope.currentTransition = 'Default';
+  // $scope.currentTheme = 'Simple';
+  // $scope.autoSlide = 0;
+  // var form = $('#wizard');
+  //
+  // form.steps({
+  //   headerTag: 'h3',
+  //   bodyTag: 'div',
+  //   transitionEffect: 'slideLeft',
+  //   stepsOrientation: 'vertical',
+  //   enableAllSteps: true,
+  //   enableKeyNavigation: true,
+  //   enablePagination: true,
+  //   startIndex: 0,
+  //   showFinishButtonAlways: true,
+  //   autoFocus: true,
+  //   onFinished: function(event, currentIndex) {
+  //     $scope.updateMarkdown();
+  //   }
+  // });
+  //
+  // $scope.goBack = function() {
+  //   $('#editor').removeClass('ng-hide');
+  //   $('#config').addClass('ng-hide');
+  // };
+  // $http.get('/api/account/' + $routeParams.slidename).success(function(data) {
+  //   var slides = '';
+  //   $scope.slideshow = data || { slideName: $routeParams.slidename };
+  //   if (data) {
+  //     $scope.currentTransition = data.reveal.transition;
+  //     $scope.currentTheme = data.theme;
+  //     $scope.autoSlide = data.reveal.autoSlide / 1000;
+  //     slides = data.slides || '';
+  //     }
+  //   slides.split('\n---\n').forEach(function(data, index) {
+  //     var $textarea = $('<textarea class=".text-editor" name="content" data-provide="markdown" rows="28"></textarea>');
+  //     $textarea.text(data);
+  //     $('#wizard').steps('add', {
+  //       title: '',
+  //       content: ''
+  //     });
+  //     $('#wizard .content #wizard-p-' + index).html($textarea);
+  //     markdownEditor();
+  //   });
+  // });
+  // $scope.updateMarkdown = function() {
+  //   $scope.loading = true;
+  //   var reveal = {
+  //     transition: $($('.slideConfig input[type="radio"]:checked')[0]).val(),
+  //     autoSlide: parseInt($('.input-group #autoslide').val()) * 1000
+  //   };
+  //   var theme = $($('.slideConfig input[type="radio"]:checked')[1]).val();
+  //   var md = $.map($('#wizard .content textarea'), function(obj) { return $(obj).val(); }).join("\n---\n");
+  //   $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md, reveal: reveal, theme: theme }).success(function(data) {
+  //     $scope.loading = false;
+  //     if(data && data.success) {
+  //       SocketIO.emit('slidesaved', data.slideshow);
+  //     }
+  //     $location.path('/');
+  //   }).error(function(data) {
+  //     $scope.loading=false;
+  //   });
+  // };
+  // $('#graphModal').off().on('hidden.bs.modal', function() {
+  //   $scope.graph = {};
+  //   $scope.reportType = 'rID';
+  //   $scope.showDetails = true;
+  //   $scope.reportDetails = false;
+  //   $scope.$apply();
+  // });
+  // $scope.$watch('graph', function() {
+  //   $('#graphModal').data('graph', $scope.graph);
+  // }, true);
+  // $scope.checkReport = function () {
+  //   $scope.load = true;
+  //   $scope.graphError = true;
+  //   $http.post('/force/report/' + $scope.graph.reportId + '/desc', { username: userProfile.username, slidename: $scope.slideshow.slideName }).success(function(data) {
+  //     if(data) {
+  //       $scope.labels = [];
+  //       data.cols.forEach(function(data) {
+  //       $scope.labels.push(data.label);
+  //       $scope.showDetails = false;
+  //       });
+  //     } else {
+  //       $scope.showDetails = true;
+  //       $scope.graphError = false;
+  //     }
+  //     $scope.load = false;
+  //   }).error(function(data) {
+  //     $scope.load = false;
+  //     $scope.graphError = false;
+  //   });
+  // };
+  //
+  // $scope.checkSob = function () {
+  //   $scope.load = true;
+  //   $scope.graphError = true;
+  //   $http.post('/force/sob/' + $scope.graph.sobId + '/desc').success(function(data) {
+  //     if(data) {
+  //       $scope.showDetails = false;
+  //     } else {
+  //       $scope.showDetails = true;
+  //       $scope.graphError = false;
+  //     }
+  //     $scope.load = false;
+  //   }).error(function(data) {
+  //     $scope.load = false;
+  //     $scope.graphError = false;
+  //   });
+  // };
+  // $scope.showGraphType = function(e) {
+  //   if (e == 'rID') {
+  //     $scope.reportDetails = false;
+  //     $scope.reportTabSelected = false;
+  //   } else {
+  //     $scope.reportDetails = true;
+  //     $scope.reportTabSelected = true;
+  //   }
+  // };
+  // $scope.gTypes = [
+  //   {name: 'line-chart', type: 'Line Charts'},
+  //   {name: 'stacked-area-chart', type: 'Stacked Area Charts'},
+  //   {name: 'multi-bar-chart', type: 'Multi Bar Charts'},
+  //   {name: 'multi-bar-horizontal-chart', type: 'Multi Bar Horizontal Charts'},
+  //   {name: 'discrete-bar-chart', type: 'Discrete Bar Charts'},
+  //   {name: 'pie-chart', type: 'Pie Charts'},
+  //   {name: 'scatter-chart', type: 'Scatter Charts'},
+  //   {name: 'sparkline-chart', type: 'Sparkline  Charts'},
+  //   {name: 'cumulative-line-chart', type: 'Cumulative Line Charts'},
+  //   {name: 'line-with-focus-chart', type: 'Line with Focus Charts'}
+  // ];
 });
