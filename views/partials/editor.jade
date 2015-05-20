@@ -1,22 +1,7 @@
 .reveal
   .slides
-    //- section.inlineEditor(contenteditable='true')
-      svg(width='400', height='110')
-        rect(width='300', height='100', style='fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)')
-          |   Sorry, your browser does not support inline SVG.
-          p
-    //- section.stack.future
-    //-   | 0
-    //-   section
-    //-     | 0.0
-    //-   section.future
-    //-     | 0.1
-    //- section.inlineEditor(contenteditable='true')
-    //-   | 1
-    //- section
-    //-   | 2
     section.inlineEditor(contenteditable='true')
-      | New Slide
+      p New Slide
 .slideControl
   .slideControlTop
     .btn.btn-danger(ng-click='deleteSlide()')
@@ -115,7 +100,7 @@ link(href='/app/css/editor.css', rel='stylesheet')
             |Date Format:
             toggle-switch.switch-primary(model='graph.option.date')
     .modal-footer
-      button#createGraph.btn.btn-primary(type='button', ng-disabled='(!checkReportForm.$valid && !graphForm.$valid)') Create Graph
+      button#createGraph.btn.btn-primary(type='button', ng-disabled='((!checkReportForm.$valid || !checkSobForm.$valid) && !graphForm.$valid)') Create Graph
       button.btn.btn-default(type='button', data-dismiss='modal') Close
 //- #tableModal.modal.fade.medium(role='dialog')
 //-   .modal-content

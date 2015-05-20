@@ -160,9 +160,21 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
 });
 
 app.controller('editorCtrl', function($scope, $http, $routeParams, $location, SocketIO) {
+  $scope.showDetails = true;
+  $scope.reportDetails = true;
+  $scope.graphError = true;
+  $scope.graph = {};
+  $scope.transitions = ['Default', 'Slide', 'Convex', 'Concave', 'Zoom'];
+  $scope.themes = ['Simple', 'White', 'League', 'Sky', 'Beige', 'Blood', 'Black', 'Moon', 'Night', 'Serif', 'Solarized'];
+  $scope.revealOptions = {autoSlide: 0, transition: 'Default', theme: 'Simple'};
+  $scope.currentTransition = 'Default';
+  $scope.currentTheme = 'Simple';
+  $scope.autoSlide = 0;
   Reveal.initialize({
     center: false,
-    history: false
+    history: false,
+    transition: 'convex',
+    transitionSpeed: 'slow'
   });
   Reveal.addEventListener('ready', function() {
     $scope.addRightSlide = function() {
@@ -174,7 +186,8 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
     $scope.addDownSlide = function() {
       var section = $('.slides > .present');
       if (!section.hasClass('stack')) {
-        $('.slides > .present').replaceWith('<section class="stack present">' + section.prop('outerHTML') + '</section>');
+        //$('.slides > .present').replaceWith('<section class="stack present">' + section.prop('outerHTML') + '</section>');
+        $('.slides > .present').wrap('<section class="stack present"></section');
       }
       var newSlide = $('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
       newSlide.insertAfter('.slides > .present > .present');
