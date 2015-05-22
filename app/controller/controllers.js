@@ -186,8 +186,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
     $scope.addDownSlide = function() {
       var section = $('.slides > .present');
       if (!section.hasClass('stack')) {
-        //$('.slides > .present').replaceWith('<section class="stack present">' + section.prop('outerHTML') + '</section>');
-        $('.slides > .present').wrap('<section class="stack present"></section');
+        $('.slides > .present').wrap('<section class="stack present"></section>')
       }
       var newSlide = $('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
       newSlide.insertAfter('.slides > .present > .present');
@@ -199,77 +198,26 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
         alert("Delete slideshow from account page");
         return 0;
       }
-      if ($('.slides > .present').hasClass('stack')) {
-        var stackPresentSlide = $('.slides > .stack.present > .present');
-        if (stackPresentSlide.prev().index() >= 0) {
-          stackPresentSlide.remove();
-          Reveal.up();
-        } else if (stackPresentSlide.next().length) {
-          Reveal.down();
-          stackPresentSlide.remove();
-          Reveal.up();
-          Reveal.down();
-          Reveal.up();
-        } else if (!(stackPresentSlide.next().length && stackPresentSlide.prev().length)) {
-          $('.slides > .present').remove();
-          Reveal.left();
-        }
-      } else if ($('.slides > .present')) {
-        if ($('.slides > .present').prev().length) {
-          $('.slides > .present').remove();
-          Reveal.left()
-        } else {
+      if (Reveal.getIndices().h == 0 && Reveal.getIndices().v == 0) {
+        if($('.slides > .present').next().length) {
           Reveal.right();
           $('.slides > .present').prev().remove();
           Reveal.left();
+          Reveal.down();
+          Reveal.up();
+        } else {
+          $scope.addRightSlide();
+          $('.slides > .present').prev().remove();
+          Reveal.left();
+          $('.slides > section').addClass('present');
         }
+      } else if ($('.slides > .present > .present').index() == 0 || ($('.slides > .present') && Reveal.getIndices().v == 0)) {
+        $('.slides > .present').remove();
+        Reveal.left();
+      } else {
+        $('.slides > .present > .present').remove();
+        Reveal.up();
       }
-      // var stack = $('.slides > .stack.present > .present');
-      // if (stack.index() == 0) {
-      //   stack.remove();
-      // }
-      // console.log($('.slides > .stack.present > .present').index());
-
-
-      // if($('.slides > section').length == 1) {
-      //   alert("Delete slideshow from account page");
-      //   return 0;
-      // }
-      // if($('.slides > .present').index() != 0 || $('.slides > .present').hasClass('stack')) {
-      //   if($('.slides > .present').hasClass('stack')) {
-      //     var tmp = $('.slides > .stack.present');
-      //     Reveal.right();
-      //     tmp.remove();
-      //     Reveal.right();
-      //     Reveal.left();
-      //     // if($('.slides > .stack.present > section').length == 1) {
-      //     //   $('.slides > .stack.present').remove();
-      //     //   Reveal.right();
-      //     //   Reveal.left();
-      //     // } else {
-      //     //   // $('.slides > .stack.present > .present').remove();
-      //     //   // Reveal.down();
-      //     //   // Reveal.up();
-      //     //   Reveal.getCurrentSlide().remove();
-      //     // }
-      //   } else {
-      //     Reveal.getCurrentSlide().remove();
-      //     Reveal.left();
-      //   }
-      // } else {
-      //   Reveal.right();
-      //   Reveal.getPreviousSlide().remove();
-      //   Reveal.left();
-      //   Reveal.right();
-      //   Reveal.left();
-      // }
-
-      //
-      // if($('.slides > .present').hasClass('stack') && !!Reveal.getPreviousSlide() && ($('.slides > section').length == 1)) {
-      //   console.log("HERE")
-      //   alert("Delete slideshow from account page");
-      //   return 0;
-      // }
     }
   });
   // $scope.showDetails = true;
