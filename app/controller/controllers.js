@@ -1,4 +1,12 @@
-app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, SocketIO, $compile) {
+var slideshowSplit = function(slideshows, size) {
+  var newSlideshows = [];
+  for (var i = 0; i < slideshows.length; i += size) {
+    newSlideshows.push(slideshows.slice(i, i+size));
+  }
+  return newSlideshows;
+};
+
+app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, SocketIO, $compile, $filter) {
   var uname = $routeParams.username,
     sname = $routeParams.slidename;
   $scope.slideShows = [];
@@ -64,8 +72,13 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
   } else {
     $('#theme').prop('disabled', true);
     $http.get('/api/view/all').success(function(data) {
+      // $scope.slideShows = slideshowSplit(data, 2);
       $scope.slideShows = data;
+      $scope.slideGroups = slideshowSplit($scope.slideShows, 3);
     });
+  }
+  $scope.searchChange = function() {
+    $scope.slideGroups = slideshowSplit($filter('filter')($scope.slideShows, $scope.search), 3);
   }
   $scope.setSearch = function(e) {
     $scope.search = e;
@@ -131,11 +144,13 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
         $scope.slideShows = $.grep($scope.slideShows, function(obj, i) {
           return obj.slideName === sname;
         }, true);
+        $scope.slideGroups = slideshowSplit($scope.slideShows, 3);
       }
     });
   };
   $http.get('/api/account').success(function(data) {
     $scope.slideShows = data;
+    $scope.slideGroups = slideshowSplit($scope.slideShows, 3);
   });
 
   $scope.checkSlideShowName = function(a) {
@@ -220,6 +235,32 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       }
     }
   });
+  $scope.openConfig = function() {
+    $('#configModal').modal('show');
+  }
+  $scope.closeConfig = function() {
+    $('#configModal').modal('hide');
+  }
+  $scope.updateMarkdown = function() {
+    $scope.loading = true;
+    var reveal = {
+      transition: $($('.slideConfig input[type="radio"]:checked')[0]).val(),
+      autoSlide: parseInt($('.input-group #autoslide').val()) * 1000
+    };
+    var theme = $($('.slideConfig input[type="radio"]:checked')[1]).val();
+    // TODO: Save to server
+    // var md = $.map($('#wizard .content textarea'), function(obj) { return $(obj).val(); }).join("\n---\n");
+    // $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md, reveal: reveal, theme: theme }).success(function(data) {
+    //   $scope.loading = false;
+    //   if(data && data.success) {
+    //     SocketIO.emit('slidesaved', data.slideshow);
+    //   }
+    //   $location.path('/');
+    // }).error(function(data) {
+    //   $scope.loading=false;
+    // });
+    $location.path('/');
+  };
   // $scope.showDetails = true;
   // $scope.reportDetails = true;
   // $scope.graphError = true;

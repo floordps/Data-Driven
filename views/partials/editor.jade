@@ -1,31 +1,30 @@
+script(src='/app/plugin/ckeditor/ckeditor.js')
+script(src='/app/plugin/ckeditor/adapters/jquery.js')
+.headerdiv
+  menu
+  .logo
+.slideControlTop
+  .btn.btn-danger(ng-click='deleteSlide()')
+    span.fa.fa-trash-o
+    | Delete
 .reveal
   .slides
     section.inlineEditor(contenteditable='true')
       p New Slide
-.slideControl
-  .slideControlTop
-    .btn.btn-danger(ng-click='deleteSlide()')
-      span.fa.fa-trash-o
-      | Delete
-  .slideControlMid
-    .btn.btn-primary(ng-click='') 
-      span.fa.fa-cog
-      | Settings
-    .btn.btn-success(ng-click='updateMarkdown()')
-      span.fa.fa-check
-      | Finish
+.slideControlBottom
+  .btn.btn-primary(ng-click='openConfig()') 
+    span.fa.fa-cog
+    | Settings
+  .btn.btn-success(ng-click='updateMarkdown()')
+    span.fa.fa-check
+    | Finish
 .addRight(ng-click='addRightSlide()')
   .fa.fa-plus-circle.fa-3x
 .addBottom(ng-click='addDownSlide()')
   .fa.fa-plus-circle.fa-3x
-//- script .
-//-   console.log("HELLO");
-//-   CKEDITOR.disableAutoInline = true;
-//-   CKEDITOR.inline(document.getElementsByClassName('editor'));
 script(src='/app/js/head.min.js')
 script(src='/app/js/reveal.js')
-script(src='/app/plugin/ckeditor/ckeditor.js')
-script(src='/app/plugin/ckeditor/adapters/jquery.js')
+link(rel='stylesheet', href='/app/css/simple.css', id='theme')
 link(href='/app/css/editor.css', rel='stylesheet')
 //- link(rel='stylesheet', href='https://rawgit.com/floordps/jquery-steps/master/demo/css/jquery.steps.css')
 //- .headerdiv
@@ -34,6 +33,33 @@ link(href='/app/css/editor.css', rel='stylesheet')
 //- .container#editor(ng-hide='false')
 //-   div#wizard
 //- 
+#configModal.modal.fade.config
+  .modal-content
+    .modal-body
+      form.form-inline.text-center(novalidate)
+        div.form-group
+          label.sr-only(for='autoslide') Auto Slide (in seconds)
+          div.input-group
+            div.input-group-addon Auto Slide
+            input.form-control#autoslide(type='number', ng-model='autoSlide', min="0")
+            div.input-group-addon SEC
+        .row
+          h3 Transistion:
+          ul.slideConfig
+            li.slideConfigOpts(ng-repeat='tran in transitions', ng-class='{"clear-left": ($index % 3 === 0)}')
+              input(type='radio', ng-model='currentTransition' name='transitionOption', value="{{tran}}", id='{{tran}}')
+              label.btn.btn-default(for='{{tran}}')
+                | {{tran}}
+        strong {{transOption}}
+        .row
+          h3 Theme:
+          ul.slideConfig
+            li.slideConfigOpts(ng-repeat='theme in themes', ng-class='{"clear-left": ($index % 3 === 0)}')
+              input(type='radio', ng-model='currentTheme' name='themeOption', value="{{theme}}", id='{{theme}}')
+              label.btn.btn-default(for='{{theme}}')
+                | {{theme}}
+    .modal-footer
+      button.btn.btn-default.btn-md(type='button', ng-click='closeConfig()') Go Back
 //- .container#config(ng-hide='true')
 //-   form.form-inline.text-center(novalidate)
 //-     div.form-group

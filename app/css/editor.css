@@ -1,9 +1,14 @@
+.config .modal-content {
+  width: 600px;
+  margin: auto;
+}
+
 #cke_editor1 {
   margin: 0 auto;
 }
 
-.slides {
-  height: 600px !important; // RevealJS inline height has more priority
+.reveal > .slides {
+  /*height: 600px !important; /* RevealJS inline height has more priority */
 }
 
 .reveal > .slides > .inlineEditor,
@@ -20,32 +25,51 @@ svg {
   position: absolute;
   top: 50%;
   right: 10px;
+  z-index: 30;
 }
 
 .addBottom {
   position: absolute;
   bottom: 10px;
   left: 50%;
+  z-index: 30;
 }
 
-.slideControl {
+.slideControlTop {
+  position: absolute;
+  top: 90px;
+  left: 10px;
+  z-index: 30;
+}
+.slideControlBottom {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 30;
+}
+.slideControlTop .btn .fa,
+.slideControlBottom .btn .fa {
+  margin-right: 5px;
+}
+/*.slideControl {
   position: absolute;
   top: 0;
   left: 10px;
   height: 100%;
-}
-.slideControlTop {
+}*/
+/*.slideControlTop {
   position:absolute;
   top: 10%;
-}
-.slideControlMid {
+}*/
+/*.slideControlBottom {
   position: absolute;
-  top: 45%;
+  bottom: 10px;
+  display: inline;
 }
-.slideControlMid .btn {
-  display: block;
+.slideControlBottom .btn {
+  display: inline;
   margin: 5px 0;
 }
 .slideControl .btn .fa {
   margin-right: 5px;
-}
+}*/

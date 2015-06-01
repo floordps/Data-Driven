@@ -9,12 +9,12 @@ a {
   cursor: pointer;
 }
 
-#listSlides {
+/*#listSlides {
   overflow-y: auto;
   margin:auto;
   width:700px;
   max-height: 70vh;
-}
+}*/
 
 /* Header */
 .headerdiv{
@@ -39,8 +39,8 @@ a {
 
 /* New Slideshow Button */
 #newSlideshow{
-  width:auto;
-  height:auto;
+  /*width:auto;
+  height:auto;*/
   padding:2px 5px;
 }
 
@@ -63,10 +63,10 @@ menu .dropdown .dropdown-menu {
 .form-group{
 	font-weight:normal ;
 }
-.form-group label{
+/*.form-group label{
 	font-weight:normal ;
 	color:inherit ;
-}
+}*/
 .formcontainer {
 	margin:auto;
 	width:100% ;
@@ -80,20 +80,95 @@ ol{
 	width:200px ;
 	height:25px ;
 }
-#filterForm{
+
+.formcontainer > form {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.formcontainer > form > input.search {
+  width: 100%;
+  text-align: center;
+}
+
+/*#filterForm{
 	width:600px;
 	margin:auto;
 	padding-left:10px;
-}
+}*/
 
 .alert {
   padding: 2px ;
 }
+
+/* Landing Page */
+.container-fluid.slideshows {
+  overflow-y: auto;
+  max-height: 83vh;
+}
+
+.slideshowItem {
+  margin: 40px;
+  /*border: 1px solid black;*/
+  border-radius: 4px;
+  /*padding: 20px;*/
+  background-color: #f5f5f5;
+  -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+}
+.slideshowItemInfo, .slideshowItemControl {
+  padding: 10px 20px;
+}
+
+.slideshowItemInfo .col-xs-6:nth-child(odd) {
+  padding-right: 0;
+}
+.slideshowItemInfo .col-xs-6:nth-child(even) {
+  padding-left: 0;
+}
+
+.slideshowItemInfo h1 {
+  margin: 5px 0;
+}
+
+.slideshowItemInfo a {
+  font-style: italic;
+}
+
+.date {
+  text-align: right;
+}
+
+/*.slideshowItem .col-xs-6 > .date {
+  font-size: .85em;
+  font-weight: bold;
+  text-align: right;
+}*/
+
+.slideshowItemControl {
+  border-top: 1px solid #cccccc;
+  text-align: center;
+  background-color: white;
+}
+
 /* Account */
 
 .buttonSpacer {
   margin-right: 10px;
   margin-left: 10px;
+}
+
+.formcontainer .row .col-xs-6 h1 {
+  margin: 0;
+}
+
+.formcontainer .newSlideshow {
+  text-align: right;
+}
+
+.slideshowItemControl a:nth-child(even) {
+  margin: 0 5px;
 }
 
 /* Editor */
