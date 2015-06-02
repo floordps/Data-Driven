@@ -1,91 +1,47 @@
-script(src='/app/plugin/ckeditor/ckeditor.js')
-script(src='/app/plugin/ckeditor/adapters/jquery.js')
-.headerdiv
-  menu
-  .logo
-.slideControlTop
-  .btn.btn-danger(ng-click='deleteSlide()')
-    span.fa.fa-trash-o
-    | Delete
-.reveal
-  .slides
-    section.inlineEditor(contenteditable='true')
-      p New Slide
-.slideControlBottom
-  .btn.btn-primary(ng-click='openConfig()') 
-    span.fa.fa-cog
-    | Settings
-  .btn.btn-success(ng-click='updateMarkdown()')
-    span.fa.fa-check
-    | Finish
+menu
+slides#editor(ng-hide='false')
+.slideControl
+  .slideControlTop
+    .btn.btn-danger(ng-click='deleteSlide()')
+      span.fa.fa-trash-o
+      | Delete
+  .slideControlBottom
+    .btn.btn-primary(ng-click='showConfig()') 
+      span.fa.fa-cog
+      | Settings
+    .btn.btn-success(ng-click='updateMarkdown()')
+      span.fa.fa-check
+      | Finish
 .addRight(ng-click='addRightSlide()')
   .fa.fa-plus-circle.fa-3x
 .addBottom(ng-click='addDownSlide()')
   .fa.fa-plus-circle.fa-3x
-script(src='/app/js/head.min.js')
-script(src='/app/js/reveal.js')
-link(rel='stylesheet', href='/app/css/simple.css', id='theme')
-link(href='/app/css/editor.css', rel='stylesheet')
-//- link(rel='stylesheet', href='https://rawgit.com/floordps/jquery-steps/master/demo/css/jquery.steps.css')
-//- .headerdiv
-//-   menu
-//-   .logo
-//- .container#editor(ng-hide='false')
-//-   div#wizard
-//- 
-#configModal.modal.fade.config
-  .modal-content
-    .modal-body
-      form.form-inline.text-center(novalidate)
-        div.form-group
-          label.sr-only(for='autoslide') Auto Slide (in seconds)
-          div.input-group
-            div.input-group-addon Auto Slide
-            input.form-control#autoslide(type='number', ng-model='autoSlide', min="0")
-            div.input-group-addon SEC
-        .row
-          h3 Transistion:
-          ul.slideConfig
-            li.slideConfigOpts(ng-repeat='tran in transitions', ng-class='{"clear-left": ($index % 3 === 0)}')
-              input(type='radio', ng-model='currentTransition' name='transitionOption', value="{{tran}}", id='{{tran}}')
-              label.btn.btn-default(for='{{tran}}')
-                | {{tran}}
-        strong {{transOption}}
-        .row
-          h3 Theme:
-          ul.slideConfig
-            li.slideConfigOpts(ng-repeat='theme in themes', ng-class='{"clear-left": ($index % 3 === 0)}')
-              input(type='radio', ng-model='currentTheme' name='themeOption', value="{{theme}}", id='{{theme}}')
-              label.btn.btn-default(for='{{theme}}')
-                | {{theme}}
-    .modal-footer
-      button.btn.btn-default.btn-md(type='button', ng-click='closeConfig()') Go Back
-//- .container#config(ng-hide='true')
-//-   form.form-inline.text-center(novalidate)
-//-     div.form-group
-//-       label.sr-only(for='autoslide') Auto Slide (in seconds)
-//-       div.input-group
-//-         div.input-group-addon Auto Slide
-//-         input.form-control#autoslide(type='number', ng-model='autoSlide', min="0")
-//-         div.input-group-addon SEC
-//-     .row
-//-       h3 Transistion:
-//-       ul.slideConfig
-//-         li.slideConfigOpts(ng-repeat='tran in transitions', ng-class='{"clear-left": ($index % 3 === 0)}')
-//-           input(type='radio', ng-model='currentTransition' name='transitionOption', value="{{tran}}", id='{{tran}}')
-//-           label.btn.btn-default(for='{{tran}}')
-//-             | {{tran}}
-//-     strong {{transOption}}
-//-     .row
-//-       h3 Theme:
-//-       ul.slideConfig
-//-         li.slideConfigOpts(ng-repeat='theme in themes', ng-class='{"clear-left": ($index % 3 === 0)}')
-//-           input(type='radio', ng-model='currentTheme' name='themeOption', value="{{theme}}", id='{{theme}}')
-//-           label.btn.btn-default(for='{{theme}}')
-//-             | {{theme}}
-//-     .row.go-back
-//-       button.btn.btn-default.btn-md(type='button', ng-click='goBack()') Go Back
-//-       //button.btn.btn-success(ng-click='updateMarkdown()', type='button', ladda='loading', data-style='slide-left') Submit
+.container#config(ng-hide='true')
+  form.form-inline.text-center(novalidate)
+    div.form-group
+      label.sr-only(for='autoslide') Auto Slide (in seconds)
+      div.input-group
+        div.input-group-addon Auto Slide
+        input.form-control#autoslide(type='number', ng-model='autoSlide', min="0")
+        div.input-group-addon SEC
+    .row
+      h3 Transistion:
+      ul.slideConfig
+        li.slideConfigOpts(ng-repeat='tran in transitions', ng-class='{"clear-left": ($index % 3 === 0)}')
+          input(type='radio', ng-model='currentTransition' name='transitionOption', value="{{tran}}", id='{{tran}}')
+          label.btn.btn-default(for='{{tran}}')
+            | {{tran}}
+    strong {{transOption}}
+    .row
+      h3 Theme:
+      ul.slideConfig
+        li.slideConfigOpts(ng-repeat='theme in themes', ng-class='{"clear-left": ($index % 3 === 0)}')
+          input(type='radio', ng-model='currentTheme' name='themeOption', value="{{theme}}", id='{{theme}}')
+          label.btn.btn-default(for='{{theme}}')
+            | {{theme}}
+    .row.go-back
+      button.btn.btn-default.btn-md(type='button', ng-click='goBack()') 
+        span.fa.fa-arrow-left &nbsp;Go Back
 #graphModal.modal.fade.medium(role='dialog')
   .modal-content
     .modal-header
@@ -126,23 +82,10 @@ link(href='/app/css/editor.css', rel='stylesheet')
             |Date Format:
             toggle-switch.switch-primary(model='graph.option.date')
     .modal-footer
-      button#createGraph.btn.btn-primary(type='button', ng-disabled='((!checkReportForm.$valid || !checkSobForm.$valid) && !graphForm.$valid)') Create Graph
+      button#createGraph.btn.btn-primary(type='button', ng-disabled='((!checkReportForm.$valid || !checkSobForm.$valid) && !graphForm.$valid)', ng-click='createGraph()') Create Graph
       button.btn.btn-default(type='button', data-dismiss='modal') Close
-//- #tableModal.modal.fade.medium(role='dialog')
-//-   .modal-content
-//-     .modal-header
-//-       button.close(type='button', data-dismiss='modal', aria-label='close')
-//-       h4 Table
-//-     .modal-body
-//-       form(name='tableForm', novalidate)
-//-         .form-group
-//-           input.form-control(type='number', name='rows', placeholder='# of rows', min=1, ng-model='rows', required)
-//-         .form-group
-//-           input.form-control(type='number', name='columns', placeholder='# of columns', min=1, max=10, ng-model='columns', required)
-//-         .checkbox
-//-           label
-//-             input(type='checkbox')
-//-             | Headers
-//-     .modal-footer
-//-       button#createTable.btn.btn-primary(type='button', ng-disabled='!tableForm.$valid') Create Table
-//-       button.btn.btn-default(type='button', data-dismiss='modal') Close
+script(src='/app/js/head.min.js')
+script(src='/app/js/reveal.js')
+script(src='/app/plugin/ckeditor/ckeditor.js')
+script(src='/app/plugin/ckeditor/adapters/jquery.js')
+link(href='/app/css/editor.css', rel='stylesheet')

@@ -1,4 +1,4 @@
-app.directive('slides', function($compile, $http, charts) {
+app.directive('slides', function($compile, $http, charts, graphs) {
   return {
     restrict: 'E',
     templateUrl: 'partials/slideShow.jade',
@@ -12,69 +12,74 @@ app.directive('slides', function($compile, $http, charts) {
             y = $(this).attr('yValue'),
             graphType = $(this).attr('graphType'),
             graphData = id + graphType + x + y,
-            rid = $(this).attr('reportId');
-          $http.post('/force' + (!!$(this).attr('reportId') ? '/report/' : '/sob/')+ id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName, xColumn: x, yColumn: y }).success(function(data) {
-            var row = [], column = [], xPos, yPos;
-            if (!!rid) {
-              row = data.factMap['T!T'].rows;
-              column = data.reportExtendedMetadata.detailColumnInfo;
-              Object.keys(column).forEach(function(key, index) {
-                if (column[key].label === x) {xPos = index;}
-                if (column[key].label === y) {yPos = index;}
-              });
-            } else {
-              row = data.records.map(function(val) {
-                var k = Object.keys(val),
-                  arr = [];
-                xPos = 0;
-                yPos = 1;
-                k.shift();  // rem attr
-                k.forEach(function(v) {
-                  arr.push({
-                    label: val[v],
-                    value: val[v]
-                  });
-                });
-                return {
-                  dataCells: arr
-                };
-              });
-            }
-            switch(graphType) {
-              case 'multi-bar-chart' :
-                scope.graph[graphData] = charts.multiBarChart(id, row, xPos, yPos);
-                break;
-              case 'pie-chart' :
-                scope.graph[graphData] = charts.pieChart(id, row, xPos, yPos);
-                break;
-              case 'line-chart' :
-                scope.graph[graphData] = charts.lineChart(id, row, xPos, yPos);
-                break;
-              case 'scatter-chart' :
-                scope.graph[graphData] = charts.scatterChart(id, row, xPos, yPos);
-                break;
-              case 'discrete-bar-chart' :
-                scope.graph[graphData] = charts.discreteBarChart(id, row, xPos, yPos);
-                break;
-              case 'stacked-area-chart' :
-                scope.graph[graphData] = charts.stackedAreaChart(id, row, xPos, yPos);
-                break;
-              case 'multi-bar-horizontal-chart' :
-                scope.graph[graphData] = charts.multiBarHorizontalChart(id, row, xPos, yPos);
-                break;
-              case 'sparkline-chart' :
-                scope.graph[graphData] = charts.sparklineChart(id, row, xPos, yPos);
-                break;
-              case 'cumulative-line-chart' :
-                scope.graph[graphData] = charts.cumulativeLineChart(id, row, xPos, yPos);
-                break;
-              case 'line-with-focus-chart' :
-                scope.graph[graphData] = charts.lineWithFocusChart(id, row, xPos, yPos);
-                break;
-              default :
-                break;
-            }
-          });
+            rid = $(this).attr('reportId'),
+            qType = (!!$(this).attr('reportId') ? '/report/' : '/sob/');
+          graphs.makeGraph(id, x , y, rid, scope.slideshow.slideName, scope.slideshow.username, graphType, qType)
+            .then(function(data) {
+              scope.graph[graphData] = data;
+            });
+          // $http.post('/force' + (!!$(this).attr('reportId') ? '/report/' : '/sob/')+ id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName, xColumn: x, yColumn: y }).success(function(data) {
+          //   var row = [], column = [], xPos, yPos;
+          //   if (!!rid) {
+          //     row = data.factMap['T!T'].rows;
+          //     column = data.reportExtendedMetadata.detailColumnInfo;
+          //     Object.keys(column).forEach(function(key, index) {
+          //       if (column[key].label === x) {xPos = index;}
+          //       if (column[key].label === y) {yPos = index;}
+          //     });
+          //   } else {
+          //     row = data.records.map(function(val) {
+          //       var k = Object.keys(val),
+          //         arr = [];
+          //       xPos = 0;
+          //       yPos = 1;
+          //       k.shift();  // rem attr
+          //       k.forEach(function(v) {
+          //         arr.push({
+          //           label: val[v],
+          //           value: val[v]
+          //         });
+          //       });
+          //       return {
+          //         dataCells: arr
+          //       };
+          //     });
+          //   }
+          //   switch(graphType) {
+          //     case 'multi-bar-chart' :
+          //       scope.graph[graphData] = charts.multiBarChart(id, row, xPos, yPos);
+          //       break;
+          //     case 'pie-chart' :
+          //       scope.graph[graphData] = charts.pieChart(id, row, xPos, yPos);
+          //       break;
+          //     case 'line-chart' :
+          //       scope.graph[graphData] = charts.lineChart(id, row, xPos, yPos);
+          //       break;
+          //     case 'scatter-chart' :
+          //       scope.graph[graphData] = charts.scatterChart(id, row, xPos, yPos);
+          //       break;
+          //     case 'discrete-bar-chart' :
+          //       scope.graph[graphData] = charts.discreteBarChart(id, row, xPos, yPos);
+          //       break;
+          //     case 'stacked-area-chart' :
+          //       scope.graph[graphData] = charts.stackedAreaChart(id, row, xPos, yPos);
+          //       break;
+          //     case 'multi-bar-horizontal-chart' :
+          //       scope.graph[graphData] = charts.multiBarHorizontalChart(id, row, xPos, yPos);
+          //       break;
+          //     case 'sparkline-chart' :
+          //       scope.graph[graphData] = charts.sparklineChart(id, row, xPos, yPos);
+          //       break;
+          //     case 'cumulative-line-chart' :
+          //       scope.graph[graphData] = charts.cumulativeLineChart(id, row, xPos, yPos);
+          //       break;
+          //     case 'line-with-focus-chart' :
+          //       scope.graph[graphData] = charts.lineWithFocusChart(id, row, xPos, yPos);
+          //       break;
+          //     default :
+          //       break;
+          //   }
+          // });
         });
       });
       scope.yFunction = function() {

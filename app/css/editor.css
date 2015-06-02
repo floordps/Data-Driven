@@ -35,6 +35,15 @@ svg {
   z-index: 30;
 }
 
+.addRight:hover,
+.addBottom:hover {
+  cursor: pointer;
+  -ms-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg)
+  transform: rotate(45deg);
+}
+
 .slideControlTop {
   position: absolute;
   top: 90px;
@@ -51,7 +60,19 @@ svg {
 .slideControlBottom .btn .fa {
   margin-right: 5px;
 }
+
 /*.slideControl {
+.addRight:hover,
+.addBottom:hover {
+  cursor: pointer;
+  -ms-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg)
+  transform: rotate(45deg);
+}
+
+.slideControl {
+>>>>>>> Stashed changes
   position: absolute;
   top: 0;
   left: 10px;
@@ -72,4 +93,4 @@ svg {
 }
 .slideControl .btn .fa {
   margin-right: 5px;
-}*/
+}
