@@ -53,7 +53,6 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
       };
       console.log('updating slideshow...');
       $('.slides section').remove();
-      //$('.slides').prepend($('<section data-markdown="" data-separator="---$"><script id="slideMd"></script></section>'));
       $('.slides').html(data.slides);
       RevealMarkdown.initialize();
       Reveal.slide(pos.indexh, pos.indexv, pos.indexf, 'remote');
@@ -227,6 +226,13 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       $scope.currentTheme = data.theme;
       $scope.autoSlide = data.reveal.autoSlide / 1000;
       $('.slides').append(data.slides);
+      $('[contenteditable="true"]').each(function() {
+        var ck = CKEDITOR.inline(this);
+        ck.on('instanceReady', function(ev) {
+          var editor = ev.editor;
+          editor.setReadOnly(false);
+        });
+      });
     } else {
       $('.slides').append('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
       CKEDITOR.inline($('.slides section').get(0));
