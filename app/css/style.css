@@ -16,11 +16,20 @@ a {
   max-height: 70vh;
 }*/
 
+html, body {
+  height: 100%;
+  box-sizing: border-box;
+}
+
 /* Header */
-.headerdiv{
-	background-color:#373737;
-	margin-top:0;
-	height:auto;
+header {
+  background-color:#373737;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 30;
+  heigth: 300px;
 }
 .logo{
 	width:300px;
@@ -68,13 +77,11 @@ menu .dropdown .dropdown-menu {
 	color:inherit ;
 }*/
 .formcontainer {
-	margin:auto;
 	width:100% ;
 	padding:5px;
 	background-color:#cccccc;
-	position:relative;
-	z-index:10;
 }
+
 ol{
 	border-radius:0 ;
 	width:200px ;
@@ -102,23 +109,34 @@ ol{
 }
 
 /* Landing Page */
-.container-fluid.slideshows {
+.wrapper {
+  margin-top: 124px;
+  height: 87%;
   overflow-y: auto;
-  max-height: 83vh;
 }
 
-.slideshowItem {
-  margin: 40px;
-  /*border: 1px solid black;*/
-  border-radius: 4px;
-  /*padding: 20px;*/
-  background-color: #f5f5f5;
-  -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
-  box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+#items {
 }
-.slideshowItemInfo, .slideshowItemControl {
+#items:after {
+  content: '';
+  display:block;
+  clear: both;
+}
+
+.item {
+  width: 25%;
+  float: left;
+  background-color: #f5f5f5;
+  border: 2px solid #333;
+  border-color: hsla(0, 0%, 0%, 0.5);
+  border-radius: 5px;
+}
+
+.slideshowItemInfo {
   padding: 10px 20px;
+}
+.slideshowItemControl {
+  padding: 10px 0px;
 }
 
 .slideshowItemInfo .col-xs-6:nth-child(odd) {
@@ -140,16 +158,31 @@ ol{
   text-align: right;
 }
 
-/*.slideshowItem .col-xs-6 > .date {
-  font-size: .85em;
-  font-weight: bold;
-  text-align: right;
-}*/
-
 .slideshowItemControl {
   border-top: 1px solid #cccccc;
   text-align: center;
   background-color: white;
+}
+
+@media (max-width: 620px) {
+  .logo {
+    margin: 0;
+  }
+  .item {
+    width: 50%;
+  }
+}
+
+@media (min-width: 620px) and (max-width: 1200px) {
+  .item {
+    width: 33%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .item {
+    width: 25%;
+  }
 }
 
 /* Account */

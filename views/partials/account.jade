@@ -1,39 +1,16 @@
-.headerdiv
+header
   menu
   .logo
-.container.formcontainer
-  .row
-    .col-xs-6
-      h1 {{username}}
-    .col-xs-6.newSlideshow
-      button#newSlideshow.btn.btn-primary(data-toggle='modal', data-target='#newSlideshowModal') New Slideshow&nbsp
-        span.fa.fa-plus
-//- .container1
-//-   .slidecontainer
-//-     #listSlides
-//-       table.table.table-striped.table-hover(data-toggle='table')
-//-         thead
-//-           tr
-//-             th SlideShow
-//-             th Created Date
-//-             th Author
-//-             th Action
-//-         tbody
-//-           tr(ng-repeat='slide in slideShows')
-//-             td {{slide.slideName}}
-//-             td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
-//-             td
-//-               a(ng-click='setSearch(slide.author)') {{slide.author | uppercase}}
-//-             td
-//-               a.btn.btn-info.btn-sm(href='/account#/{{slide.slideName}}') PLAY&nbsp
-//-                 i.fa.fa-play
-//-               a.btn.btn-warning.btn-sm.buttonSpacer(href='/account#/{{slide.slideName}}/editor') Edit&nbsp
-//-                 i.fa.fa-pencil-square-o
-//-               a.btn.btn-danger.btn-sm(ng-click='deleteSlide(slide.slideName)') Delete&nbsp
-//-                 i.fa.fa-trash-o
-.row(ng-repeat='slideRow in slideGroups')
-  .col-md-4(ng-repeat='slide in slideRow')
-    .slideshowItem
+  .container.formcontainer
+    .row
+      .col-xs-6
+        h1 {{username}}
+      .col-xs-6.newSlideshow
+        button#newSlideshow.btn.btn-primary(data-toggle='modal', data-target='#newSlideshowModal') New Slideshow&nbsp
+          span.fa.fa-plus
+.wrapper
+  #items
+    .item(ng-repeat='slide in slideShows')
       .slideshowItemInfo
         h1 {{slide.slideName | uppercase}}
         .row
@@ -42,7 +19,7 @@
           .col-xs-6
             .date {{slide.date | date:'MMMM d, yyyy' : 'UTC'}}
       .slideshowItemControl
-        a.btn.btn-info.btn-sm(href='/account#/{{slide.slideName}}') PLAY&nbsp
+        a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
           i.fa.fa-play
         a.btn.btn-warning.btn-sm(href='/account#/{{slide.slideName}}/editor') Edit&nbsp
           i.fa.fa-pencil-square-o
@@ -60,5 +37,3 @@
       .modal-footer
         a.btn.btn-primary(ng-disabled='newSlideForm.$invalid || !checkSlideShowName(newSlideName)', href='/account#/{{newSlideName}}/editor') Create
         button.btn.btn-default(data-dismiss='modal') Close
-//- br
-//- .footercontainer Developed by Gerardo Santiago, Yanrong Huang, Jacob Salinas, and Zach Woodward, 2015

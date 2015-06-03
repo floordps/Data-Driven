@@ -1,12 +1,4 @@
-var slideshowSplit = function(slideshows, size) {
-  var newSlideshows = [];
-  for (var i = 0; i < slideshows.length; i += size) {
-    newSlideshows.push(slideshows.slice(i, i+size));
-  }
-  return newSlideshows;
-};
-
-app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, SocketIO, $compile, $filter) {
+app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, SocketIO, $compile, $filter, $timeout) {
   var uname = $routeParams.username,
     sname = $routeParams.slidename;
   $scope.slideShows = [];
@@ -71,18 +63,38 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
   } else {
     $('#theme').prop('disabled', true);
     $http.get('/api/view/all').success(function(data) {
-      // $scope.slideShows = slideshowSplit(data, 2);
       $scope.slideShows = data;
-      $scope.slideGroups = slideshowSplit($scope.slideShows, 3);
     });
+
+    $timeout(function() {
+      $(function() {
+        var $items = $('#items').masonry({
+          // disable initial layout
+          isInitLayout: false,
+          itemSelector: '.item',
+          columnWidth: '.item'
+        });
+        $items.masonry();
+      });
+    }, 500);
   }
   $scope.searchChange = function() {
-    $scope.slideGroups = slideshowSplit($filter('filter')($scope.slideShows, $scope.search), 3);
+    $('.item').removeAttr('style');
+    $timeout(function() {
+      $(function() {
+        var $items = $('#items').masonry({
+          // disable initial layout
+          isInitLayout: false,
+          itemSelector: '.item',
+          columnWidth: '.item'
+        });
+        $items.masonry();
+      });
+    }, 1000);
   };
   $scope.setSearch = function(e) {
     $scope.search = e;
   };
-
 });
 
 app.controller('masterCtrl', function($scope, $http, $location, $routeParams, $rootScope, SocketIO) {
@@ -143,14 +155,24 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
         $scope.slideShows = $.grep($scope.slideShows, function(obj, i) {
           return obj.slideName === sname;
         }, true);
-        $scope.slideGroups = slideshowSplit($scope.slideShows, 3);
       }
     });
   };
   $http.get('/api/account').success(function(data) {
     $scope.slideShows = data;
-    $scope.slideGroups = slideshowSplit($scope.slideShows, 3);
   });
+
+  $timeout(function() {
+    $(function() {
+      var $items = $('#items').masonry({
+        // disable initial layout
+        isInitLayout: false,
+        itemSelector: '.item',
+        columnWidth: '.item'
+      });
+      $items.masonry();
+    });
+  }, 500);
 
   $scope.checkSlideShowName = function(a) {
     if(!$scope.slideShows.length) return true;

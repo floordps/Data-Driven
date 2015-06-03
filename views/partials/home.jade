@@ -1,47 +1,19 @@
-.headerdiv
+header
   menu
   .logo
-.container.formcontainer
-  form.form-inline
-    input.form-control.search(type='text' ng-model='search' ng-change='searchChange()' placeholder='Search by Slideshow or Author')
-//- .container1
-//-   .slidecontainer
-    //- #listSlides
-    //-   table.table.table-striped.table-hover(data-toggle='table')
-    //-     thead.thead
-    //-       tr
-    //-         th SlideShow
-    //-         th Created Date
-    //-         th Author
-    //-         th Action
-    //-     tbody
-    //-       tr(ng-repeat='slide in slideShows | filter:search')
-    //-         td {{slide}}{{slide.slideName}}
-    //-         td {{slide.date | date:'d MMMM yyyy' : 'UTC'}}
-    //-         td
-    //-           a(ng-click='setSearch(slide.author)') {{slide.author | uppercase}}
-    //-         td
-    //-           a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
-    //-             i.fa.fa-play
-.container-fluid.slideshows
-  .row(ng-repeat='slideRow in slideGroups')
-    .col-sm-4(ng-repeat='slide in slideRow')
-      .slideshowItem
-        .slideshowItemInfo
-          h1 {{slide.slideName | uppercase}}
-          .row
-            .col-xs-6
-              a(ng-click='setSearch(slide.author)') {{slide.author}}
-            .col-xs-6
-              .date {{slide.date | date:'MMMM d, yyyy' : 'UTC'}}
-        //- .row
-        //-   .col-xs-6
-        //-     h1 {{slide.slideName | uppercase}}
-        //-     a(ng-click='setSearch(slide.author)') {{slide.author}}
-        //-   .col-xs-6
-        //-     h3.date {{slide.date | date:'MMMM d, yyyy' : 'UTC'}}
-        .slideshowItemControl
-          a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
-            i.fa.fa-play
-//- br
-//- .footercontainer Developed by Gerardo Santiago, Yanrong Huang, Jacob Salinas, and Zach Woodward, 2015
+  .container.formcontainer
+    form.form-inline
+      input.form-control.search(type='text' ng-model='search' ng-change='searchChange()' placeholder='Search by Slideshow or Author')
+.wrapper
+  #items
+    .item(ng-repeat='slide in slideShows | filter:search')
+      .slideshowItemInfo
+        h1 {{slide.slideName | uppercase}}
+        .row
+          .col-xs-6
+            a(ng-click='setSearch(slide.author)') {{slide.author}}
+          .col-xs-6
+            .date {{slide.date | date:'MMMM d, yyyy' : 'UTC'}}
+      .slideshowItemControl
+        a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
+          i.fa.fa-play
