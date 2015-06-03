@@ -68,28 +68,20 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
 
     $timeout(function() {
       $(function() {
-        var $items = $('#items').masonry({
+        $scope.items = $('#items').masonry({
           // disable initial layout
           isInitLayout: false,
           itemSelector: '.item',
           columnWidth: '.item'
         });
-        $items.masonry();
+        $scope.items.masonry();
       });
     }, 500);
   }
   $scope.searchChange = function() {
-    $('.item').removeAttr('style');
     $timeout(function() {
-      $(function() {
-        var $items = $('#items').masonry({
-          // disable initial layout
-          isInitLayout: false,
-          itemSelector: '.item',
-          columnWidth: '.item'
-        });
-        $items.masonry();
-      });
+        $scope.items.masonry('reloadItems');
+        $scope.items.masonry();
     }, 1000);
   };
   $scope.setSearch = function(e) {
@@ -156,6 +148,10 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
           return obj.slideName === sname;
         }, true);
       }
+    }).then(function() {
+      $timeout(function() {
+        $scope.items.masonry();
+      }, 500);
     });
   };
   $http.get('/api/account').success(function(data) {
@@ -164,13 +160,13 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
 
   $timeout(function() {
     $(function() {
-      var $items = $('#items').masonry({
+      $scope.items = $('#items').masonry({
         // disable initial layout
         isInitLayout: false,
         itemSelector: '.item',
         columnWidth: '.item'
       });
-      $items.masonry();
+      $scope.items.masonry();
     });
   }, 500);
 
