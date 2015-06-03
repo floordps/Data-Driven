@@ -72,7 +72,8 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
           // disable initial layout
           isInitLayout: false,
           itemSelector: '.item',
-          columnWidth: '.item'
+          columnWidth: '.item',
+          gutter: 10
         });
         $scope.items.masonry();
       });
@@ -164,7 +165,8 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
         // disable initial layout
         isInitLayout: false,
         itemSelector: '.item',
-        columnWidth: '.item'
+        columnWidth: '.item',
+        gutter: 10
       });
       $scope.items.masonry();
     });
