@@ -59,7 +59,6 @@ menu {
   float:right;
   position:relative;
   right:0px;
-	z-index:20;
 }
 
 menu .dropdown .dropdown-menu {

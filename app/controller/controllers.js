@@ -25,8 +25,10 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
         { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
         { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
       ];
-      $('.slides').html(data.slides);
-      deferred.resolve(data);
+      $timeout(function() {
+        $('.slides').html(data.slides);
+        deferred.resolve(data);
+      }, 500);
     });
     return deferred.promise;
   };
@@ -198,7 +200,7 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
   };
 });
 
-app.controller('editorCtrl', function($scope, $http, $routeParams, $location, SocketIO, userProfile, graphs, $compile, $q) {
+app.controller('editorCtrl', function($scope, $http, $routeParams, $location, SocketIO, userProfile, graphs, $compile, $q, $timeout) {
   $scope.showDetails = true;
   $scope.reportDetails = true;
   $scope.graphError = true;
@@ -223,7 +225,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       str += ' x="xFunction()" ' + 'y="yFunction()"';
     }
     if ($scope.graph.option && $scope.graph.option.date) str += ' xAxisTickFormat="xAxisTickFormatFunction()"';
-    str += ' noData="No Data Found!" height="300"></nvd3-' + $scope.graph.graphType + '><p>&nbsp</p>';
+    str += ' noData="No Data Found!" height="400"></nvd3-' + $scope.graph.graphType + '><p>&nbsp</p>';
     if ($('.slides .present').hasClass('stack')) {
         $('.slides .present > .present').append(str);
         $compile($('.slides .present > .present .graph'))($scope);
@@ -273,11 +275,14 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
             editor.setReadOnly(false);
           });
         });
+        deferred.resolve();
       } else {
-        $('.slides').append('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
-        CKEDITOR.inline($('.slides section').get(0));
+        $timeout(function() {
+          $('.slides').append('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
+          CKEDITOR.inline($('.slides section').get(0));
+          deferred.resolve();
+        }, 500);
       }
-      deferred.resolve();
     });
     return deferred.promise;
   };
