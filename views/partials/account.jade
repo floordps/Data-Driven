@@ -12,7 +12,7 @@ header
   #items
     .item(ng-repeat='slide in slideShows')
       .slideshowItemInfo
-        h1 {{slide.slideName | uppercase}}
+        h1 {{slide.slideName}}
         .row
           .col-xs-6
             a(ng-click='setSearch(slide.author)') {{slide.author}}

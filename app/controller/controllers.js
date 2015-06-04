@@ -250,6 +250,9 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
     $('#graphModal select').val(null);
     $('#graphModal').data('graph', '');
     $('#graphModal').modal('hide');
+    $('.graph').dblclick(function() {
+      $(this).remove();
+    });
   };
   $scope.showConfig = function() {
     $('#config').removeClass('ng-hide');
@@ -277,11 +280,13 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
         });
         deferred.resolve();
       } else {
-        $timeout(function() {
-          $('.slides').append('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
-          CKEDITOR.inline($('.slides section').get(0));
-          deferred.resolve();
-        }, 500);
+        $('.slides').append('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
+        var ck = CKEDITOR.inline($('.slides section').get(0));
+        ck.on('instanceReady', function(ev) {
+          var editor = ev.editor;
+          editor.setReadOnly(false);
+        });
+        deferred.resolve();
       }
     });
     return deferred.promise;
