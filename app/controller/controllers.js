@@ -225,7 +225,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       str += ' x="xFunction()" ' + 'y="yFunction()"';
     }
     if ($scope.graph.option && $scope.graph.option.date) str += ' xAxisTickFormat="xAxisTickFormatFunction()"';
-    str += ' noData="No Data Found!" height="600"></nvd3-' + $scope.graph.graphType + '><p>&nbsp</p>';
+    str += ' noData="No Data Found!" height="500"></nvd3-' + $scope.graph.graphType + '><p>&nbsp</p>';
     if ($('.slides .present').hasClass('stack')) {
         $('.slides .present > .present').append(str);
         $compile($('.slides .present > .present .graph'))($scope);
