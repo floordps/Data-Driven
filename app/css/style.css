@@ -378,3 +378,9 @@ ul.slideConfig {
   min-height: 30em;
   height: 30em;
 }
+
+/* Slides */
+.reveal .slides section img {
+  border: 0;
+  box-shadow: 0;
+}
