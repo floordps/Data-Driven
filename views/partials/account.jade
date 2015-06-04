@@ -19,12 +19,13 @@ header
           .col-xs-6
             .date {{slide.date | date:'MMMM d, yyyy' : 'UTC'}}
       .slideshowItemControl
-        a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
-          i.fa.fa-play
-        a.btn.btn-warning.btn-sm(href='/account#/{{slide.slideName}}/editor') Edit&nbsp
-          i.fa.fa-pencil-square-o
-        a.btn.btn-danger.btn-sm(ng-click='deleteSlide(slide.slideName)') Delete&nbsp
-          i.fa.fa-trash-o
+        .row
+          a.col-xs-4(href='/#/view/{{slide.username}}/{{slide.slideName}}')
+            i.fa.fa-play-circle-o.fa-2x
+          a.col-xs-4(href='/account#/{{slide.slideName}}/editor')
+            i.fa.fa-pencil-square-o.fa-2x
+          a.col-xs-4(ng-click='deleteSlide(slide.slideName)')
+            i.fa.fa-trash-o.fa-2x
 #newSlideshowModal.modal(role='dialog')
   .modal-dialog
     .modal-content.slideWindow

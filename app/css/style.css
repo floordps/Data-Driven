@@ -144,11 +144,8 @@ ol{
   padding: 10px 0px;
 }
 
-.slideshowItemInfo .col-xs-6:nth-child(odd) {
-  padding-right: 0;
-}
-.slideshowItemInfo .col-xs-6:nth-child(even) {
-  padding-left: 0;
+.slideshowItemControl .col-xs-4 {
+  padding: 0;
 }
 
 .slideshowItemInfo h1 {
@@ -211,9 +208,9 @@ ol{
   text-align: right;
 }
 
-.slideshowItemControl a:nth-child(even) {
+/*.slideshowItemControl a:nth-child(even) {
   margin: 0 5px;
-}
+}*/
 
 /* Editor */
 .medium .modal-content {

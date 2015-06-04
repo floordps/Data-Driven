@@ -1,15 +1,17 @@
-app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, SocketIO, $compile, $filter, $timeout) {
+app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, SocketIO, $compile, $filter, $timeout, $q, $location) {
   var uname = $routeParams.username,
     sname = $routeParams.slidename;
   $scope.slideShows = [];
-  if(uname && sname) {
+  var revealOptions;
+  var getViews = function() {
+    var deferred = $q.defer();
     $http.get('/api/view/' + uname + '/' + sname).success(function(data) {
       if(!data) {
-        $location.path('/view/'+uname);
-        return;
+        $location.path('/');
+        deferred.reject();
       }
       $scope.slideshow = data;
-      var revealOptions = data.reveal;
+      revealOptions = data.reveal;
       revealOptions.multiplex = {
         secret: null,
         id: data.multiplex.id,
@@ -24,6 +26,12 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
         { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
       ];
       $('.slides').html(data.slides);
+      deferred.resolve(data);
+    });
+    return deferred.promise;
+  };
+  if(uname && sname) {
+    getViews().then(function(data) {
       Reveal.initialize(revealOptions);
       Reveal.addEventListener('ready', function(event) {
         if($rootScope.room) SocketIO.emit('leave', $rootScope.room);
@@ -35,6 +43,7 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
         $('#theme').prop('disabled', false);
         SocketIO.emit('join', $rootScope.room);
       });
+      $('.slides section').attr('contenteditable', 'false');
     });
     SocketIO.on('slideupdated', function(data) {
       var pos = {
@@ -90,29 +99,38 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
   };
 });
 
-app.controller('masterCtrl', function($scope, $http, $location, $routeParams, $rootScope, SocketIO) {
+app.controller('masterCtrl', function($scope, $http, $location, $routeParams, $rootScope, SocketIO, $q) {
   var sname = $routeParams.slidename;
-  $http.get('/api/account/' + sname).success(function(data) {
-    if(!data) {
-      $location.path('/');
-      return;
-    }
-    $scope.slideshow = data;
-    var revealOptions = data.reveal;
-    revealOptions.multiplex = {
-      secret: data.multiplex.secret,
-      id: data.multiplex.id,
-      url: ''
-    };
-    revealOptions.dependencies = [
-      { src: '/app/plugin/multiplex/master.js' },
-      { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-      { src: '/app/plugin/zoom-js/zoom.js', async: true },
-      { src: '/app/plugin/math/math.js', async: true },
-      { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
-    ];
-    $('.slides').html(data.slides);
+  var revealOptions;
+  var getSlideshow = function() {
+    var deferred = $q.defer();
+    $http.get('/api/account/' + sname).success(function(data) {
+      if(!data) {
+        $location.path('/');
+        deferred.reject();
+      }
+      $scope.slideshow = data;
+      revealOptions = data.reveal;
+      revealOptions.multiplex = {
+        secret: data.multiplex.secret,
+        id: data.multiplex.id,
+        url: ''
+      };
+      revealOptions.dependencies = [
+        { src: '/app/plugin/multiplex/master.js' },
+        { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: '/app/plugin/zoom-js/zoom.js', async: true },
+        { src: '/app/plugin/math/math.js', async: true },
+        { src: '/app/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: '/app/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
+      ];
+      $('.slides').html(data.slides);
+      deferred.resolve(data);
+    });
+    return deferred.promise;
+  };
+  getSlideshow().then(function(data) {
+    $('.slides section').attr('contenteditable', 'false');
     Reveal.initialize(revealOptions);
     Reveal.addEventListener('ready', function(event) {
       if($rootScope.room) SocketIO.emit('leave', $rootScope.room);
@@ -180,7 +198,7 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
   };
 });
 
-app.controller('editorCtrl', function($scope, $http, $routeParams, $location, SocketIO, userProfile, graphs, $compile) {
+app.controller('editorCtrl', function($scope, $http, $routeParams, $location, SocketIO, userProfile, graphs, $compile, $q) {
   $scope.showDetails = true;
   $scope.reportDetails = true;
   $scope.graphError = true;
@@ -239,24 +257,31 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
     $('#editor').removeClass('ng-hide');
     $('#config').addClass('ng-hide');
   };
-  $http.get('/api/account/' + $routeParams.slidename).success(function(data) {
-    $scope.slideshow = data || { slideName: $routeParams.slidename, username: userProfile.username };
-    if (data) {
-      $scope.currentTransition = data.reveal.transition;
-      $scope.currentTheme = data.theme;
-      $scope.autoSlide = data.reveal.autoSlide / 1000;
-      $('.slides').append(data.slides);
-      $('[contenteditable="true"]').each(function() {
-        var ck = CKEDITOR.inline(this);
-        ck.on('instanceReady', function(ev) {
-          var editor = ev.editor;
-          editor.setReadOnly(false);
+  var getSlideshow = function() {
+    var deferred = $q.defer();
+    $http.get('/api/account/' + $routeParams.slidename).success(function(data) {
+      $scope.slideshow = data || { slideName: $routeParams.slidename, username: userProfile.username };
+      if (data) {
+        $scope.currentTransition = data.reveal.transition;
+        $scope.currentTheme = data.theme;
+        $scope.autoSlide = data.reveal.autoSlide / 1000;
+        $('.slides').append(data.slides);
+        $('[contenteditable="true"]').each(function() {
+          var ck = CKEDITOR.inline(this);
+          ck.on('instanceReady', function(ev) {
+            var editor = ev.editor;
+            editor.setReadOnly(false);
+          });
         });
-      });
-    } else {
-      $('.slides').append('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
-      CKEDITOR.inline($('.slides section').get(0));
-    }
+      } else {
+        $('.slides').append('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
+        CKEDITOR.inline($('.slides section').get(0));
+      }
+      deferred.resolve();
+    });
+    return deferred.promise;
+  };
+  getSlideshow().then(function() {
     Reveal.initialize({
       transition: 'convex',
       transitionSpeed: 'slow'
@@ -305,7 +330,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
         }
       };
     });
- });
+  });
   $scope.updateMarkdown = function() {
     $scope.loading = true;
     var reveal = {

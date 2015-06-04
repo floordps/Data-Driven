@@ -17,6 +17,7 @@ app.directive('slides', function($compile, $http, charts, graphs) {
           graphs.makeGraph(id, x , y, rid, scope.slideshow.slideName, scope.slideshow.username, graphType, qType)
             .then(function(data) {
               scope.graph[graphData] = data;
+              $compile($('.graph'))(scope);
             });
           // $http.post('/force' + (!!$(this).attr('reportId') ? '/report/' : '/sob/')+ id, { username: scope.slideshow.username, slidename: scope.slideshow.slideName, xColumn: x, yColumn: y }).success(function(data) {
           //   var row = [], column = [], xPos, yPos;

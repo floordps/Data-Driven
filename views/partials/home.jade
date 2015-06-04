@@ -14,6 +14,5 @@ header
             a(ng-click='setSearch(slide.author)') {{slide.author}}
           .col-xs-6
             .date {{slide.date | date:'MMMM d, yyyy' : 'UTC'}}
-      .slideshowItemControl
-        a.btn.btn-info(href='/#/view/{{slide.username}}/{{slide.slideName}}') PLAY&nbsp
-          i.fa.fa-play
+      a.slideshowItemControl(href='/#/view/{{slide.username}}/{{slide.slideName}}', style='display: block;')
+        i.fa.fa-play-circle-o.fa-2x
