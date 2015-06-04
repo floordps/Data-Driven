@@ -225,7 +225,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       str += ' x="xFunction()" ' + 'y="yFunction()"';
     }
     if ($scope.graph.option && $scope.graph.option.date) str += ' xAxisTickFormat="xAxisTickFormatFunction()"';
-    str += ' noData="No Data Found!" height="400"></nvd3-' + $scope.graph.graphType + '><p>&nbsp</p>';
+    str += ' noData="No Data Found!" height="600"></nvd3-' + $scope.graph.graphType + '><p>&nbsp</p>';
     if ($('.slides .present').hasClass('stack')) {
         $('.slides .present > .present').append(str);
         $compile($('.slides .present > .present .graph'))($scope);
@@ -287,53 +287,55 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
     return deferred.promise;
   };
   getSlideshow().then(function() {
-    Reveal.initialize({
-      transition: 'convex',
-      transitionSpeed: 'slow'
-    });
-    Reveal.addEventListener('ready', function() {
-      $scope.addRightSlide = function() {
-        var newSlide = $('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
-        newSlide.insertAfter('.slides > .present');
-        CKEDITOR.inline($(newSlide).get(0));
-        Reveal.right();
-      };
-      $scope.addDownSlide = function() {
-        var section = $('.slides > .present');
-        if (!section.hasClass('stack')) {
-          $('.slides > .present').wrap('<section class="stack present"></section>');
-        }
-        var newSlide = $('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
-        newSlide.insertAfter('.slides > .present > .present');
-        CKEDITOR.inline($(newSlide).get(0));
-        Reveal.down();
-      };
-      $scope.deleteSlide = function() {
-        if (Reveal.getTotalSlides() == 1) {
-          alert("Delete slideshow from account page");
-          return 0;
-        }
-        if (Reveal.getIndices().h == 0 && Reveal.getIndices().v == 0) {
-          if($('.slides > .present').next().length) {
-            Reveal.right();
-            $('.slides > .present').prev().remove();
-            Reveal.left();
-            Reveal.down();
-            Reveal.up();
-          } else {
-            $scope.addRightSlide();
-            $('.slides > .present').prev().remove();
-            Reveal.left();
-            $('.slides > section').addClass('present');
+    $timeout(function() {
+      Reveal.initialize({
+        transition: 'convex',
+        transitionSpeed: 'slow'
+      });
+      Reveal.addEventListener('ready', function() {
+        $scope.addRightSlide = function() {
+          var newSlide = $('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
+          newSlide.insertAfter('.slides > .present');
+          CKEDITOR.inline($(newSlide).get(0));
+          Reveal.right();
+        };
+        $scope.addDownSlide = function() {
+          var section = $('.slides > .present');
+          if (!section.hasClass('stack')) {
+            $('.slides > .present').wrap('<section class="stack present"></section>');
           }
-        } else if ($('.slides > .present > .present').index() == 0 || ($('.slides > .present') && Reveal.getIndices().v == 0)) {
-          $('.slides > .present').remove();
-          Reveal.left();
-        } else {
-          $('.slides > .present > .present').remove();
-          Reveal.up();
-        }
-      };
+          var newSlide = $('<section class="future inlineEditor" contenteditable="true"><p>New Slide</p></section>');
+          newSlide.insertAfter('.slides > .present > .present');
+          CKEDITOR.inline($(newSlide).get(0));
+          Reveal.down();
+        };
+        $scope.deleteSlide = function() {
+          if (Reveal.getTotalSlides() == 1) {
+            alert("Delete slideshow from account page");
+            return 0;
+          }
+          if (Reveal.getIndices().h == 0 && Reveal.getIndices().v == 0) {
+            if($('.slides > .present').next().length) {
+              Reveal.right();
+              $('.slides > .present').prev().remove();
+              Reveal.left();
+              Reveal.down();
+              Reveal.up();
+            } else {
+              $scope.addRightSlide();
+              $('.slides > .present').prev().remove();
+              Reveal.left();
+              $('.slides > section').addClass('present');
+            }
+          } else if ($('.slides > .present > .present').index() == 0 || ($('.slides > .present') && Reveal.getIndices().v == 0)) {
+            $('.slides > .present').remove();
+            Reveal.left();
+          } else {
+            $('.slides > .present > .present').remove();
+            Reveal.up();
+          }
+        };
+      }, 500);
     });
   });
   $scope.updateMarkdown = function() {
