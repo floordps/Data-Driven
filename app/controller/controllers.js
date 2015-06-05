@@ -213,7 +213,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
   $scope.autoSlide = 0;
   $scope.createGraph = function() {
     var str = '<nvd3-' + $scope.graph.graphType
-      + ' class="graph" reportId="' + ($scope.graph.reportId || '') + '" '
+      + ' class="graph center-block" reportId="' + ($scope.graph.reportId || '') + '" '
       + 'sobId="' + ($scope.graph.sobId || '') + '" '
       + 'xValue="' + $scope.graph.xValue +'" '
       + 'yValue="' + $scope.graph.yValue +'" '
@@ -225,7 +225,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
       str += ' x="xFunction()" ' + 'y="yFunction()"';
     }
     if ($scope.graph.option && $scope.graph.option.date) str += ' xAxisTickFormat="xAxisTickFormatFunction()"';
-    str += ' noData="No Data Found!" height="500"></nvd3-' + $scope.graph.graphType + '><p>&nbsp</p>';
+    str += ' noData="No Data Found!" width="600" height="350"></nvd3-' + $scope.graph.graphType + '><p>&nbsp</p>';
     if ($('.slides .present').hasClass('stack')) {
         $('.slides .present > .present').append(str);
         $compile($('.slides .present > .present .graph'))($scope);
