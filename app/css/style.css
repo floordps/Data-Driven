@@ -78,10 +78,10 @@ menu .dropdown .dropdown-menu {
 .formcontainer {
 	width:100% ;
 	padding:5px;
-	background-color:#cccccc;
+	background-color: #CED9BC;
 }
 
-ol{
+ol {
 	border-radius:0 ;
 	width:200px ;
 	height:25px ;
@@ -94,6 +94,10 @@ ol{
 
 .formcontainer > form > input.search {
   width: 100%;
+  text-align: center;
+}
+
+.formcontainer > .row > .col-xs-6 {
   text-align: center;
 }
 
@@ -119,7 +123,9 @@ ol{
   width: auto;
   padding-top: 1%;
   padding-left: 1%;
+  color: #000;
 }
+
 #items:after {
   content: '';
   display:block;
@@ -129,9 +135,10 @@ ol{
 .item {
   width: 24%;
   float: left;
-  background-color: #f5f5f5;
-  border: 2px solid #333;
-  border-color: hsla(0, 0%, 0%, 0.5);
+  background-color: #C9BEB4;
+  /*border: 2px solid #333;
+  border-color: hsla(0, 0%, 0%, 0.5);*/
+  border-color: #C9BEB4;
   border-radius: 5px;
   margin-bottom: 10px;
 }
@@ -162,7 +169,8 @@ ol{
 .slideshowItemControl {
   border-top: 1px solid #cccccc;
   text-align: center;
-  background-color: white;
+  background-color: #FFF;
+  border: 2px solid #C9BEB4;
 }
 
 @media (max-width: 414px) {

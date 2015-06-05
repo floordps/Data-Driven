@@ -6,7 +6,7 @@ header
       .col-xs-6
         h1 {{username}}
       .col-xs-6.newSlideshow
-        button#newSlideshow.btn.btn-primary(data-toggle='modal', data-target='#newSlideshowModal') New Slideshow&nbsp
+        button#newSlideshow.btn.btn-danger(data-toggle='modal', data-target='#newSlideshowModal') New Slideshow&nbsp
           span.fa.fa-plus
 .wrapper
   #items
@@ -15,7 +15,8 @@ header
         h1 {{slide.slideName}}
         .row
           .col-xs-6
-            a(ng-click='setSearch(slide.author)') {{slide.author}}
+            a 
+            | {{slide.author}}
           .col-xs-6
             .date {{slide.date | date:'MMMM d, yyyy' : 'UTC'}}
       .slideshowItemControl
