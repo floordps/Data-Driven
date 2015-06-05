@@ -353,7 +353,7 @@ app.controller('editorCtrl', function($scope, $http, $routeParams, $location, So
     };
     var theme = $($('.slideConfig input[type="radio"]:checked')[1]).val();
     $('svg').remove();
-    $($('.slides').children()).removeClass('stack past present future');
+    $('.slides section').removeClass('stack past present future');
     var md = $('.slides').html();
     $http.post('/api/account/' + $scope.slideshow.slideName, { slides: md, reveal: reveal, theme: theme }).success(function(data) {
       $scope.loading = false;
