@@ -163,17 +163,19 @@ app.controller('userCtrl', function($scope, $http, userProfile, SocketIO, $timeo
   $scope.slideShows = [];
   $('#theme').prop('disabled', true);
   $scope.deleteSlide = function(sname) {
-    $http.delete('/api/account/' + sname).success(function(data) {
-      if(data && data.success) {
-        $scope.slideShows = $.grep($scope.slideShows, function(obj, i) {
-          return obj.slideName === sname;
-        }, true);
-      }
-    }).then(function() {
-      $timeout(function() {
-        $scope.items.masonry();
-      }, 500);
-    });
+    if (confirm('Are you sure?')) {
+      $http.delete('/api/account/' + sname).success(function(data) {
+        if(data && data.success) {
+          $scope.slideShows = $.grep($scope.slideShows, function(obj, i) {
+            return obj.slideName === sname;
+          }, true);
+        }
+      }).then(function() {
+        $timeout(function() {
+          $scope.items.masonry();
+        }, 500);
+      });
+    }
   };
   $http.get('/api/account').success(function(data) {
     $scope.slideShows = data;
