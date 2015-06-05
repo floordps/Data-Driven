@@ -20,7 +20,7 @@ header
             .date {{slide.date | date:'MMMM d, yyyy' : 'UTC'}}
       .slideshowItemControl
         .row
-          a.col-xs-4(href='/#/view/{{slide.username}}/{{slide.slideName}}')
+          a.col-xs-4(href='/account#/{{slide.slideName}}')
             i.fa.fa-play-circle-o.fa-2x
           a.col-xs-4(href='/account#/{{slide.slideName}}/editor')
             i.fa.fa-pencil-square-o.fa-2x
