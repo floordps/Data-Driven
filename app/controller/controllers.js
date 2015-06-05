@@ -12,6 +12,7 @@ app.controller('clientCtrl', function($scope, $http, $routeParams, $rootScope, S
       }
       $scope.slideshow = data;
       revealOptions = data.reveal;
+      revealOptions.transition = revealOptions.transition.toLowerCase();
       revealOptions.multiplex = {
         secret: null,
         id: data.multiplex.id,
@@ -113,6 +114,7 @@ app.controller('masterCtrl', function($scope, $http, $location, $routeParams, $r
       }
       $scope.slideshow = data;
       revealOptions = data.reveal;
+      revealOptions.transition = revealOptions.transition.toLowerCase();
       revealOptions.multiplex = {
         secret: data.multiplex.secret,
         id: data.multiplex.id,
